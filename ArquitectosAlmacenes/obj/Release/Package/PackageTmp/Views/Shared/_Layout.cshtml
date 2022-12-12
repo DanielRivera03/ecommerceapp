@@ -1,0 +1,664 @@
+﻿@{
+    string imgsrc = System.Configuration.ConfigurationManager.AppSettings["ServidorFotos"];
+    string ValorBusqueda = Request.QueryString["search"];
+}
+<!DOCTYPE html>
+<html lang="ES-SV">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <meta name="description" content="Tienda en linea arquitectos almacenes s.a de c.v">
+    <meta name="author" content="Arquitectos Almacenes S.A de C.V">
+    <title>Arquitecto Almacenes - @ViewBag.Title</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="@imgsrc/images/logos/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="@imgsrc/images/logos/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="@imgsrc/images/logos/favicon-16x16.png">
+    <link rel="manifest" href="@imgsrc/images/logos/site.webmanifest">
+    <link rel="mask-icon" href="@imgsrc/images/logos/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+    @*
+        -> ESTILOS DE TIENDA EN LINEA
+        * NO TOCAR CONFIGURACIONES *
+    *@
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Scripts/tienda/css/vendor/bootstrap.min.css")
+    @Styles.Render("~/Scripts/tienda/css/vendor/vendor.min.css")
+    @Styles.Render("~/Content/Estilos_Tienda.css")
+    @Styles.Render("~/Content/fonts/icomoon/icons.css")
+    @Styles.Render("~/Scripts/assets/plugins/sweet-alert2/sweetalert2.min.css")
+    @Styles.Render("~/Scripts/assets/plugins/alertify/css/alertify.css")
+    @Styles.Render("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap")
+    @Styles.Render("https://fonts.googleapis.com/css2?family=Open%20Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap")
+    <style>
+        .s-alert-box {
+            z-index: 9999;
+        }
+
+        .alertify-logs {
+            z-index: 999999 !important;
+        }
+
+        a:hover {
+            color: #fff;
+        }
+    </style>
+</head>
+<body class="has-smround-btns has-loader-bg equal-height">
+    <!--header-->
+    <header class="hdr-wrap">
+        <div class="hdr-content hdr-content-sticky">
+            <div class="container">
+                <div class="row">
+                    <div class="col-auto show-mobile">
+                        <!-- Menu Toggle -->
+                        <div class="menu-toggle"> <a href="#" class="mobilemenu-toggle"><i class="icon-menu"></i></a> </div>
+                        <!-- /Menu Toggle -->
+                    </div>
+                    <div class="col-auto hdr-logo">
+                        <a style="width: 150px; height: 41px;" href="@Url.Action("Index")" class="logo"><img srcset="@imgsrc/images/logos/facebook_cover_photo_1.png" alt="Logo"></a>
+                    </div>
+                    <!--navigation-->
+                    <div class="hdr-nav hide-mobile nav-holder-s">
+                    </div>
+                    <!--//navigation-->
+                    <div class="hdr-links-wrap col-auto ml-auto">
+                        <div class="hdr-inline-link">
+                            <!-- Header Search -->
+                            <div class="search_container_desktop">
+                                <div class="dropdn dropdn_search dropdn_fullwidth">
+                                    <a href="#" class="dropdn-link  js-dropdn-link only-icon"><i class="icon-search"></i><span class="dropdn-link-txt">Search</span></a>
+                                    <div class="dropdn-content">
+                                        <div class="container">
+                                            <form method="get" action="@imgsrc/Home/ListarProductosBuscador?search=@ValorBusqueda" class="search search-off-popular">
+                                                <input name="search" type="text" class="search-input input-empty" placeholder="¿Qu&eacute; deseas buscar?">
+                                                <button type="submit" class="search-button"><i class="icon-search"></i></button>
+                                                <a href="#" class="search-close js-dropdn-close"><i class="icon-close-thin"></i></a>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /Header Search -->
+                            <!-- Header Wishlist -->
+                            @*
+                                <div class="dropdn dropdn_wishlist">
+                                    <a href="account-wishlist.html" class="dropdn-link only-icon wishlist-link ">
+                                        <i class="icon-heart"></i><span class="dropdn-link-txt">Wishlist</span><span class="wishlist-qty">3</span>
+                                    </a>
+                                </div>
+                            *@
+                            <!-- /Header Wishlist -->
+                            <!-- Header Account -->
+                            <div class="dropdn dropdn_account dropdn_fullheight">
+                                <a href="#" class="dropdn-link js-dropdn-link js-dropdn-link only-icon" data-panel="#dropdnAccount"><i class="icon-user"></i><span class="dropdn-link-txt">Account</span></a>
+                            </div>
+                            <!-- /Header Account -->
+                            <div class="dropdn dropdn_fullheight minicart">
+                                <a href="@Url.Action("CarritoComprasClientes")" class="dropdn-link js-dropdn-link minicart-link only-icon" data-panel="#dropdnMinicart">
+                                    <i class="icon-basket"></i>
+                                    <span class="minicart-qty" id="cantidadcarrito">0</span>
+                                    @{
+                                        if (Session["IdUsuario"] == null)
+                                        {
+                                            <span class="minicart-total hide-mobile">$0.00</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="minicart-total hide-mobile">$0.00</span>
+                                        }
+                                    }
+
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="hdr">
+            <div class="hdr-topline hdr-topline--dark js-hdr-top">
+                <div class="container">
+                    <div class="row flex-nowrap">
+                        <div class="col hdr-topline-left hide-mobile">
+                            <!-- Header Social -->
+                            <div class="hdr-line-separate">
+                                <ul class="social-list list-unstyled">
+                                    <li>
+                                        <a href="#"><i class="icon-facebook"></i></a>
+                                    </li>
+                                    <li>
+                                        <a href="#"><i class="icon-twitter"></i></a>
+                                    </li>
+                                    <li>
+                                        <a href="#"><i class="icon-instagram"></i></a>
+                                    </li>
+                                    <li>
+                                        <a href="#"><i class="icon-vimeo"></i></a>
+                                    </li>
+                                    <li>
+                                        <a href="#"><i class="icon-youtube"></i></a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="icon icon-pinterest"></a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!-- /Header Social -->
+                        </div>
+                        <div class="col hdr-topline-center">
+                            <div class="custom-text js-custom-text-carousel" data-slick='{"speed": 1000, "autoplaySpeed": 3000}'>
+                                <div class="custom-text-item"><i class="icon-fox"></i> Bienvenido(a) <span>Arquitectos Almacenes</span></div>
+                                <div class="custom-text-item"><i class="icon-air-freight"></i> <span>Compra de Manera</span> F&aacute;cil, R&aacute;pida y Segura <span></span></div>
+                                <div class="custom-text-item"><i class="icon-card"></i> Aceptamos Todo Tipo de Tarjetas <span></span></div>
+                                <div class="custom-text-item"><i class="icon-checkout"></i> Amplias Instalaciones <span>Seguridad Garantizada</span></div>
+                            </div>
+                        </div>
+                        <div class="col hdr-topline-right hide-mobile">
+                            <div class="hdr-inline-link">
+
+
+                                <div class="hdr_container_desktop">
+                                    <!-- Header Account -->
+                                    @{
+                                        if (Session["UsuarioUnico"] == null)
+                                        {
+                                            <div class="dropdn dropdn_account dropdn_fullheight">
+                                                <a href="@Url.Action("IniciarSesion")" class="dropdn-link js-dropdn-link"><i class="icon-user"></i><span class="dropdn-link-txt">Iniciar Sesi&oacute;n</span></a>
+                                            </div>
+                                            <div class="dropdn dropdn_account dropdn_fullheight">
+                                                <a href="@Url.Action("RegistroNuevosClientes")" class="dropdn-link js-dropdn-link"><i class="icon-phone1"></i><span class="dropdn-link-txt">¿Eres Nuevo? Reg&iacute;strate</span></a>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="dropdn dropdn_account dropdn_fullheight">
+                                                <a href="#" class="dropdn-link js-dropdn-link" data-panel="#dropdnAccount"><i class="icon-user"></i><span class="dropdn-link-txt"><strong>Hola, </strong> @Session["UsuarioUnico"]</span></a>
+                                            </div>
+                                        }
+                                    }
+
+                                    <!-- /Header Account -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="hdr-content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-auto show-mobile">
+                            <!-- Menu Toggle -->
+                            <div class="menu-toggle"> <a href="#" class="mobilemenu-toggle"><i class="icon-menu"></i></a> </div>
+                            <!-- /Menu Toggle -->
+                        </div>
+                        <div class="col-auto hdr-logo">
+                            <a href="@Url.Action("Index")" style="width: 120px; height: 50px;" class="logo"><img srcset="@imgsrc/images/logos/facebook_cover_photo_1.png" alt="Logo"></a>
+                        </div>
+                        <!--navigation-->
+                        <div class="hdr-nav hide-mobile nav-holder justify-content-center px-4">
+                            <!--mmenu-->
+                            <ul class="mmenu mmenu-js">
+                                <li class="mmenu-item--simple">
+                                    <a href="@Url.Action("Index")">Inicio</a>
+                                </li>
+                                <li class="mmenu-item--simple">
+                                    <a href="#">Categor&iacute;as</a>
+                                    <div class="mmenu-submenu">
+                                        <ul class="submenu-list">
+                                            <li>
+                                                <a href="@Url.Action("ProductosCategoriaJoyeria")">Joyer&iacute;a</a>
+                                            </li>
+                                            <li>
+                                                <a href="@Url.Action("ProductosCategoriaRelojeria")">Relojer&iacute;a</a>
+                                            </li>
+                                            <li>
+                                                <a href="@Url.Action("ProductosCategoriaCalzado")">Calzado</a>
+                                            </li>
+                                            <li>
+                                                <a href="@Url.Action("ProductosCategoriaTecnologia")">Tecnolog&iacute;a</a>
+                                            </li>
+                                            <li>
+                                                <a href="@Url.Action("ProductosCategoriaLineaBlanca")">L&iacute;nea Blanca</a>
+                                            </li>
+                                            <li>
+                                                <a href="@Url.Action("ProductosCategoriaElectrodomesticos")">Electrodom&eacute;sticos</a>
+                                            </li>
+                                            <li>
+                                                <a href="@Url.Action("ProductosCategoriaBelleza")">Belleza</a>
+                                            </li>
+                                            <li>
+                                                <a href="@Url.Action("ProductosCategoriaJuguetes")">Juguetes</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="mmenu-item--simple">
+                                    <a href="#">Nuestra Empresa</a>
+                                    <div class="mmenu-submenu">
+                                        <ul class="submenu-list">
+                                            <li>
+                                                <a href="@Url.Action("")">Qui&eacute;nes Somos</a>
+                                            </li>
+                                            <li>
+                                                <a href="@Url.Action("")">Nuestra Historia</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                @{
+                                    if (Convert.ToUInt32(Session["Privilegio"]) >= 1 && Convert.ToUInt32(Session["Privilegio"]) <= 4)
+                                    {
+                                        <li class="mmenu-item--simple">
+                                            <a href="@Url.Action("RetornoSistemaArquitectosAlmacenes","Administracion")">Panel Administraci&oacute;n</a>
+                                        </li>
+                                    }
+                                }
+                            </ul>
+                            <!--/mmenu-->
+                        </div>
+                        <!--//navigation-->
+                        <div class="hdr-links-wrap col-auto ml-auto">
+                            <div class="hdr-inline-link">
+                                <!-- Header Search -->
+                                <div class="search_container_desktop">
+                                    <div class="dropdn dropdn_search dropdn_fullwidth">
+                                        <a href="#" class="dropdn-link  js-dropdn-link only-icon"><i class="icon-search"></i><span class="dropdn-link-txt">Search</span></a>
+                                        <div class="dropdn-content">
+                                            <div class="container">
+                                                <form method="get" action="@imgsrc/Home/ListarProductosBuscador?search=@ValorBusqueda" class="search search-off-popular">
+                                                    <input name="search" type="text" class="search-input input-empty" placeholder="¿Qu&eacute; deseas buscar?">
+                                                    <button type="submit" class="search-button"><i class="icon-search"></i></button>
+                                                    <a href="#" class="search-close js-dropdn-close"><i class="icon-close-thin"></i></a>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /Header Search -->
+                                <!-- Header Wishlist -->
+                                @*
+                                    <div class="dropdn dropdn_wishlist">
+                                        <a href="account-wishlist.html" class="dropdn-link only-icon wishlist-link ">
+                                            <i class="icon-heart"></i><span class="dropdn-link-txt">Wishlist</span><span class="wishlist-qty">3</span>
+                                        </a>
+                                    </div>
+                                *@
+                                <!-- /Header Wishlist -->
+                                <div class="hdr_container_mobile show-mobile">
+                                    <!-- Header Account -->
+                                    <div class="dropdn dropdn_account dropdn_fullheight">
+                                        <a href="#" class="dropdn-link js-dropdn-link" data-panel="#dropdnAccount"><i class="icon-user"></i><span class="dropdn-link-txt">Account</span></a>
+                                    </div>
+                                    <!-- /Header Account -->
+                                </div>
+                                <div class="dropdn dropdn_fullheight minicart">
+                                    <a href="@Url.Action("CarritoComprasClientes")" class="dropdn-link js-dropdn-link minicart-link" data-panel="#dropdnMinicart">
+                                        <i class="icon-basket"></i>
+                                        <span class="minicart-qty" id="cantidadcarrito_inicial">0</span>
+                                        @{
+                                            if (Session["IdUsuario"] == null)
+                                            {
+                                                <span class="minicart-total hide-mobile">$0.00</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="minicart-total hide-mobile" id="totalcarrito">$0.00</span>
+                                            }
+                                        }
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="header-side-panel">
+        <!-- Mobile Menu -->
+        <div class="mobilemenu js-push-mbmenu">
+            <div class="mobilemenu-content">
+                <div class="mobilemenu-close mobilemenu-toggle">Cerrar</div>
+                <div class="mobilemenu-scroll">
+                    <div class="mobilemenu-search"></div>
+                    <div class="nav-wrapper show-menu">
+                        <div class="nav-toggle">
+                            <span class="nav-back"><i class="icon-angle-left"></i></span>
+                            <span class="nav-title"></span>
+                        </div>
+                        <ul class="nav nav-level-1">
+                            <li>
+                                <a href="@Url.Action("Index")">Inicio</a>
+
+                            </li>
+                            <li>
+                                <a href="#">Categor&iacute;as<span class="arrow"><i class="icon-angle-right"></i></span></a>
+                                <ul class="nav-level-2">
+                                    <li>
+                                        <a href="@Url.Action("ProductosCategoriaJoyeria")">Joyer&iacute;a<span class="arrow"><i class="icon-angle-right"></i></span></a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("ProductosCategoriaRelojeria")">Relojer&iacute;a<span class="arrow"><i class="icon-angle-right"></i></span></a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("ProductosCategoriaCalzado")">Calzado<span class="arrow"><i class="icon-angle-right"></i></span></a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("ProductosCategoriaTecnologia")">Tecnolog&iacute;a<span class="arrow"><i class="icon-angle-right"></i></span></a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("ProductosCategoriaLineaBlanca")">L&iacute;nea Blanca<span class="arrow"><i class="icon-angle-right"></i></span></a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("ProductosCategoriaElectrodomesticos")">Electrodom&eacute;sticos<span class="arrow"><i class="icon-angle-right"></i></span></a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("ProductosCategoriaBelleza")">Belleza<span class="arrow"><i class="icon-angle-right"></i></span></a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("ProductosCategoriaJuguetes")">Juguetes<span class="arrow"><i class="icon-angle-right"></i></span></a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#">Nuestra Empresa<span class="arrow"><i class="icon-angle-right"></i></span></a>
+                                <ul class="nav-level-2">
+                                    <li>
+                                        <a href="@Url.Action("")">Qui&eacute;nes Somos<span class="arrow"><i class="icon-angle-right"></i></span></a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("")">Nuestra Historia<span class="arrow"><i class="icon-angle-right"></i></span></a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mobilemenu-bottom">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Mobile Menu -->
+        <div class="dropdn-content account-drop" id="dropdnAccount">
+            <div class="dropdn-content-block">
+                <div class="dropdn-close"><span class="js-dropdn-close">Cerrar</span></div>
+                <ul>
+                    @{
+                        if (Session["UsuarioUnico"] == null)
+                        {
+                            <li><a href="@Url.Action("IniciarSesion")"><span>Iniciar Sesi&oacute;n</span><i class="icon-login"></i></a></li>
+                            <li><a href="@Url.Action("RegistroNuevosClientes")"><span>Registrate Ac&aacute;</span><i class="icon-ribbon"></i></a></li>
+                        }
+                        else
+                        {
+                            <li><a class="btn-gradient-danger" href="@Url.Action("CerrarSesion")"><span style="margin-left: .7rem;">Cerrar Sesi&oacute;n</span><i style="margin-right: .7rem" class="icon-login"></i></a></li>
+                            <li><a href="@Url.Action("CarritoComprasClientes")"><span>Mi Carrito</span><i class="icon-cart"></i></a></li>
+                            <li><a href="@Url.Action("PerfilClientes")"><span>Mi Perfil</span><i class="icon-eye"></i></a></li>
+                            <li><a href="@Url.Action("ListadoMisComprasProcesadas")"><span>Mis Compras</span><i class="icon-wallet"></i></a></li>
+                            <li><a href="@Url.Action("ReporteProblemasPedidosClientes")"><span>Problemas Compras</span><i class="icon-wallet"></i></a></li>
+                        }
+                    }
+
+                    <li><a href="@Url.Action("FAQ")"><span>F.A.Q</span><i class="icon-guarantee"></i></a></li>
+
+                </ul>
+            </div>
+
+        </div>
+        <div class="page-content">
+            @*
+                -> CONTENIDO DINAMICO DE TODA LA TIENDA EN LINEA
+            *@
+            @RenderBody()
+        </div>
+        <footer class="page-footer footer-style-6 ">
+            <div class="holder ">
+                <div class="footer-shop-info">
+                    <div class="container">
+                        <div class="text-icn-blocks-bg-row">
+                            <div class="text-icn-block-footer">
+                                <div class="icn">
+                                    <i class="icon-trolley"></i>
+                                </div>
+                                <div class="text">
+                                    <h4>Excelente Gesti&oacute;n de Env&iacute;os</h4>
+                                    <p>Paga tu orden, y rec&iacute;bela en menos de 72 horas en tu direcci&oacute;n de env&iacute;o</p>
+                                </div>
+                            </div>
+                            <div class="text-icn-block-footer">
+                                <div class="icn">
+                                    <i class="icon-currency"></i>
+                                </div>
+                                <div class="text">
+                                    <h4>Mejores Precios</h4>
+                                    <p>Ofrecemos calidad y confianza, a excelentes precios. Solo en Arquitectos Almacenes</p>
+                                </div>
+                            </div>
+                            <div class="text-icn-block-footer">
+                                <div class="icn">
+                                    <i class="icon-diplom"></i>
+                                </div>
+                                <div class="text">
+                                    <h4>Garant&iacute;a</h4>
+                                    <p>Todos nuestros productos tienen garant&iacute;a, respaldo que garantizan tus compras</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-top">
+                <div class="container">
+                    <div class="row mt-0">
+                        <div class="col-lg col-xl last-mobile">
+                            <div class="footer-block">
+                                <div class="footer-logo">
+                                    <a href="@Url.Action("Index")"><img class="lazyload fade-up" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-srcset="@imgsrc/images/logos/facebook_cover_photo_1.png" alt="Logo"></a>
+                                </div>
+                                <div class="collapsed-content">
+                                    <ul>
+                                        <li><strong>Arquitectos Almacenes S.A de C.V</strong></li>
+                                        <li>Nuestros Horarios:</li>
+                                        <li>09:00 - 21:00, Lun - Vie</li>
+                                        <li>09:00 - 23:00, Sab</li>
+                                        <li>09:00 - 19:00, Dom</li>
+                                    </ul>
+                                </div>
+                                <ul class="social-list">
+                                    <li>
+                                        <a href="#" class="icon icon-facebook"></a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="icon icon-twitter"></a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="icon icon-instagram"></a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="icon icon-vimeo"></a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="icon icon-youtube"></a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="icon icon-pinterest"></a>
+                                    </li>
+                                </ul>
+                                <div class="d-lg-none mt-3">
+                                    <div class="box-coupon">
+                                        <div class="box-coupon-icon"><i class="icon-scissors"></i></div>
+                                        @*<div class="box-coupon-text"><span class="custom-color">FOXIC</span> THEME</div>*@
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg col-xl">
+                            <div class="footer-block collapsed-mobile">
+                                <div class="title">
+                                    <h4>Nuestra Empresa</h4>
+                                    <span class="toggle-arrow"><span></span><span></span></span>
+                                </div>
+                                <div class="collapsed-content">
+                                    <ul>
+                                        <li><a href="#">Nuestra Historia</a></li>
+                                        <li><a href="#">Qui&eacute;nes Somos</a></li>
+                                        <li><a href="@Url.Action("TerminosCondiciones")">T&eacute;rminos y Condiciones</a></li>
+                                        <li><a href="@Url.Action("FAQ")">F.A.Q</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg col-xl">
+                            <div class="footer-block collapsed-mobile">
+                                <div class="title">
+                                    <h4>Mi Cuenta</h4>
+                                    <span class="toggle-arrow"><span></span><span></span></span>
+                                </div>
+                                <div class="collapsed-content">
+                                    <ul>
+                                        @{
+                                            if (Session["IdUsuario"] == null)
+                                            {
+                                                <li><a href="@Url.Action("IniciarSesion")">Mi Perfil</a></li>
+                                                <li><a href="@Url.Action("IniciarSesion")">Mi Carrito</a></li>
+                                                <li><a href="@Url.Action("IniciarSesion")">Mis Compras</a></li>
+                                            }
+                                            else
+                                            {
+                                                <li><a href="@Url.Action("PerfilClientes")">Mi Perfil</a></li>
+                                                <li><a href="@Url.Action("CarritoComprasClientes")">Mi Carrito</a></li>
+                                                <li><a href="@Url.Action("ListadoMisComprasProcesadas")">Mis Compras</a></li>
+                                            }
+                                        }
+
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg col-xl">
+                            <div class="footer-block collapsed-mobile">
+                                <div class="title">
+                                    <h4>M&eacute;todos de Pago</h4>
+                                    <span class="toggle-arrow"><span></span><span></span></span>
+                                </div>
+                                <div class="collapsed-content">
+                                    <ul class="payment-link">
+                                        <li><i class="icon-paypal-logo"></i></li>
+                                        <li><i class="icon-visa-pay-logo"></i></li>
+                                        <li><i class="icon-apple-pay-logo"></i></li>
+                                    </ul>
+                                </div>
+                                @*
+                                    <div class="d-none d-lg-block">
+                                        <div class="box-coupon">
+                                            <div class="box-coupon-icon"><i class="icon-scissors"></i></div>
+                                            <div class="box-coupon-text"><span class="custom-color">FOXIC</span> THEME</div>
+                                        </div>
+                                    </div>
+                                *@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom footer-bottom--bg">
+                <div class="container">
+                    <div class="footer-copyright text-center">
+                        @DateTime.Now.Year &copy; Copyright | <a href="#">Arquitecto Almacenes S.A de C.V - </a> Todos Los Derechos Reservados<br />
+                        D.I.E.K.Z & Soluciones Inform&aacute;ticas - Dpto Desarrollo
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <div class="footer-sticky">
+
+
+            <!-- back to top -->
+            <a class="back-to-top js-back-to-top compensate-for-scrollbar" href="#" title="Scroll To Top">
+                <i class="icon icon-angle-up"></i>
+            </a>
+            <!-- loader -->
+            <div class="loader-horizontal js-loader-horizontal">
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 100%"></div>
+                </div>
+            </div>
+        </div>
+
+        @*
+            -> SCRIPTS DE TIENDA EN LINEA
+            * NO TOCAR CONFIGURACIONES EXISTENTES
+              SI SE DESEAN AGREGAR NUEVOS ELEMENTOS, REFERENCIARLOS GLOBALMENTE
+              SEGUN SEA EL CASO.
+              *
+        *@
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/bootstrap")
+        @Scripts.Render("~/Scripts/vendor-special/lazysizes.min.js")
+        @Scripts.Render("~/Scripts/vendor-special/ls.bgset.min.js")
+        @Scripts.Render("~/Scripts/vendor-special/ls.aspectratio.min.js")
+        @Scripts.Render("~/Scripts/vendor-special/jquery.min.js")
+        @Scripts.Render("~/Scripts/vendor-special/jquery.ez-plus.js")
+        @Scripts.Render("~/Scripts/vendor-special/instafeed.min.js")
+        @Scripts.Render("~/Scripts/vendor/vendor.min.js")
+        @Scripts.Render("~/Scripts/app-html.js")
+        @Scripts.Render("~/Scripts/loadingoverlay/loadingoverlay.min.js")
+        @Scripts.Render("~/Scripts/assets/plugins/sweet-alert2/sweetalert2.min.js")
+        @Scripts.Render("~/Scripts/assets/plugins/alertify/js/alertify.js")
+        @Scripts.Render("~/Scripts/assets/plugins/bootstrap-inputmask/bootstrap-inputmask.min.js")
+        @Scripts.Render("https://cdn.jsdelivr.net/npm/jarallax@2/dist/jarallax.min.js")
+        @RenderSection("scripts", required: false)
+
+
+        <script>
+        $(document).ready(function () {
+            MostrarCantidadCarrito();
+            MostrarSumatoriaProductosCarrito();
+        })
+        // MOSTRAR CANTIDAD DE PRODUCTOS AGREGADOS EN EL CARRITO DE COMPRAS
+        function MostrarCantidadCarrito() {
+            if ($("#cantidadcarrito").length > 0) {
+                jQuery.ajax({
+                    url: '@Url.Action("CantidadEnCarrito","Home")',
+                    type: 'get',
+                    dataType: 'json',
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        $("#cantidadcarrito").text(data.cantidad);
+                        $("#cantidadcarrito_inicial").text(data.cantidad);
+                    }
+                });
+            }
+        }
+
+        // MOSTRAR TOTAL [SUMATORIA] DE PRODUCTOS AGREGADOS EN EL CARRITO DE COMPRAS
+        function MostrarSumatoriaProductosCarrito() {
+            if ($("#cantidadcarrito").length > 0) {
+                jQuery.ajax({
+                    url: '@Url.Action("CantidadEnCarrito_TotalCancelar", "Home")',
+                    type: 'get',
+                    dataType: 'json',
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        TotalCancelarClientes = data.cantidad;
+                        const FormatoDolar_USD = TotalCancelarClientes.toLocaleString("en", {
+                            style: "currency",
+                            currency: "USD"
+                        });
+                        $("#totalcarrito").text(FormatoDolar_USD);
+                    }
+                });
+            }
+        }
+
+
+        </script>
+
+
+</body>
+</html>
+

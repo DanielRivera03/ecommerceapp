@@ -1,0 +1,623 @@
+﻿@{
+    string imgsrc = System.Configuration.ConfigurationManager.AppSettings["ServidorFotos"];
+}
+@{
+    ViewBag.Title = "Productos";
+    Layout = "~/Views/Shared/_Administracion.cshtml";
+    // BLOQUEAR SISTEMA, SI POSEE PROCESO DE RECUPERACION DE CUENTAS ACTIVO
+    if (Session["ComprobarRecuperacion"] != null)
+    {
+        bool HabilitarSistema = Convert.ToBoolean(Session["ComprobarRecuperacion"]);
+        if (HabilitarSistema)
+        {
+            <script>
+                location.href = "@Url.Action("CambioCredencialesAcceso","Home")"
+            </script>
+        }
+    }
+}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="page-title-box">
+                <div class="btn-group float-right">
+                    <ol class="breadcrumb hide-phone p-0 m-0">
+                        <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+                        <li class="breadcrumb-item"><a href="#">Productos</a></li>
+                        <li class="breadcrumb-item active">Gesti&oacute;n de Productos</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">
+                    <!-- MODAL MANTENIMIENTO PRODUCTOS -->
+                    @{
+                        // REGISTRO DE MARCAS DE PRODUCTOS VALIDO UNICAMENTE PARA ADMINISTRADORES
+                        if (Convert.ToUInt32(Session["Privilegio"]) == 1)
+                        {
+                            <!-- MODAL MANTENIMIENTO USUARIOS -->
+                            <button style="background-color: var(--cyan); color: var(--white);" type="button" class="btn btn-animation" data-animation="bounce" data-toggle="modal" onclick="abrirModal()">
+                                Registrar Productos
+                            </button>
+                        }
+                    }
+                    <div class="modal fade bs-example-modal-lg" id="exampleModalLong-1" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div style="background: var(--cyan);" class="modal-header">
+                                    <h6 style="color: #fff;" class="modal-title" id="exampleModalLongTitle-1">Productos</h6>
+                                </div>
+                                <div class="modal-body">
+                                    <span class="badge badge-pill badge-primary"><i class="mdi mdi-alert-outline"></i> Todos los campos son requeridos. <span style="color: var(--red);">(*)</span></span>
+                                    <form class="form-valide" autocomplete="off">
+                                        <div class="row form-validation">
+
+                                        </div>
+                                        @* ID DE PRODUCTO REGISTRADO **@
+                                        <input id="txtid" type="hidden" value="0" />
+                                        <div class="row g-2">
+                                            @* IMAGEN ADJUNTA DE PRODUCTO REGISTRADO **@
+                                            <div class="col-sm-12">
+                                                <div class="input-group mt-2">
+                                                </div>
+                                                <label for="input-file-now" class="form-label">Fotograf&iacute;a de Producto <span style="color: var(--red);"><strong>(*)</strong></span></label>
+                                                <div id="contenedorfotosproductos">
+                                                    <input type="file" id="input-file-now" class="dropify" />
+                                                </div>
+                                                <div style="width: 100%;" class="img-fluid" id="fotoproducto"></div>
+                                            </div>
+                                            @* NOMBRE DE PRODUCTO REGISTRADO **@
+                                            <div class="col-sm-12">
+                                                <div class="input-group mt-2">
+                                                </div>
+                                                <label for="txtnombreproducto" class="form-label">Nombre de Producto <span style="color: var(--red);"><strong>(*)</strong></span></label>
+                                                <input type="text" class="form-control" id="txtnombreproducto" name="txtnombreproducto" maxlength="255" placeholder="Ingrese el nombre del producto..." autocomplete="off" onchange="ComprobarPrivilegio()" required>
+                                            </div>
+                                            @* DESCRIPCION DE PRODUCTO REGISTRADO **@
+                                            <div class="col-sm-12">
+                                                <div class="input-group mt-2">
+                                                </div>
+                                                <label for="txtdescripcionproducto" class="form-label">Descripci&oacute;n Completa de Producto <span style="color: var(--red);"><strong>(*)</strong></span></label>
+                                                <textarea class="form-control" id="txtdescripcionproducto" name="txtdescripcionproducto" maxlength="500" placeholder="Ingrese la descripci&oacute;n del producto..." onchange="ComprobarPrivilegio()" autocomplete="off" required></textarea>
+                                            </div>
+                                            @* PRECIO DE PRODUCTO REGISTRADO **@
+                                            <div class="col-sm-6">
+                                                <div class="input-group mt-2">
+                                                </div>
+                                                <label for="txtprecioproducto" class="form-label">Precio de Producto - $ USD <span style="color: var(--red);"><strong>(*)</strong></span></label>
+                                                <input type="text" class="form-control" id="txtprecioproducto" name="txtprecioproducto" maxlength="8" placeholder="Ingrese el precio del producto (##.##)..." onkeypress="return soloNumeros(event)" onchange="ComprobarPrivilegio()" autocomplete="off" required>
+                                            </div>
+                                            @* STOCK DE PRODUCTO REGISTRADO **@
+                                            <div class="col-sm-6">
+                                                <div class="input-group mt-2">
+                                                </div>
+                                                <label for="txtstockproducto" class="form-label">Stock de Producto - Existencias <span style="color: var(--red);"><strong>(*)</strong></span></label>
+                                                <input type="text" class="form-control" id="txtstockproducto" name="txtstockproducto" maxlength="10" placeholder="Ingrese el stock del producto..." onkeypress="return soloNumeros(event)" onchange="ComprobarPrivilegio()" autocomplete="off" required>
+                                            </div>
+                                            @* MARCA DE PRODUCTO REGISTRADO **@
+                                            <div class="col-sm-6">
+                                                <div class="input-group mt-2">
+                                                </div>
+                                                <label for="cbomarcaproducto" class="form-label">Seleccione una marca <span style="color: var(--red);"><strong>(*)</strong></span></label>
+                                                <select class="form-control" id="cbomarcaproducto" onchange="ComprobarPrivilegio()">
+                                                </select>
+                                            </div>
+                                            @* CATEGORIA DE PRODUCTO REGISTRADO **@
+                                            <div class="col-sm-6">
+                                                <div class="input-group mt-2">
+                                                </div>
+                                                <label for="cbocategoriaproducto" class="form-label">Seleccione una categor&iacute;a <span style="color: var(--red);"><strong>(*)</strong></span></label>
+                                                <select class="form-control" id="cbocategoriaproducto" onchange="ComprobarPrivilegio()">
+                                                </select>
+                                            </div>
+                                            @* GARANTIA DE PRODUCTO REGISTRADO **@
+                                            <div class="col-sm-6">
+                                                <div class="input-group mt-2">
+                                                </div>
+                                                <label for="cbogarantiaproducto" class="form-label">Seleccione una garant&iacute;a <span style="color: var(--red);"><strong>(*)</strong></span></label>
+                                                <select class="form-control" id="cbogarantiaproducto" onchange="ComprobarPrivilegio()">
+                                                </select>
+                                            </div>
+                                            @* ESTADO DE PRODUCTO REGISTRADO **@
+                                            <div class="col-sm-6">
+                                                <div class="input-group mt-2">
+                                                </div>
+                                                <label for="cboactivo" class="form-label">¿Activo? <span style="color: var(--red);"><strong>(*)</strong></span></label>
+                                                <select class="form-control" id="cboactivo" onchange="ComprobarPrivilegio()">
+                                                    <option value="1">Producto Activo</option>
+                                                    <option value="0">Producto Inactivo</option>
+                                                </select>
+                                            </div>
+
+                                        </div>
+                                    </form>
+                                    <div class="row">
+                                        <div class="col-12 mt-2">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar Ventana</button>
+                                    <button id="EnvioDatos" type="button" class="btn btn-primary" onclick="Guardar()">Grabar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    @*MODAL CON DETALLES DE PRODUCTOS*@
+
+                    <div class="modal animation-modal fade" id="exampleModalLong-2" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div style="background: var(--cyan);" class="modal-header">
+                                    <h5 style="color: #fff;" class="modal-title" id="exampleModalLongTitle-1">Detalle Productos</h5>
+                                </div>
+                                <div class="modal-body">
+                                    @*ID DE PRODUCTO*@
+                                    <input id="iddetalleproducto" type="hidden" value="0" />
+                                    <div class="card">
+                                        <h6 style="font-size: 1rem;" class="card-title font-10 mt-0"><span class="badge badge-primary">Fotograf&iacute;a Producto:</span></h6>
+                                        <div style="width: 100%;" class="card-img-top img-fluid" id="fotoproductos"></div>
+                                        <div class="card-body">
+                                            <h6 style="font-size: 1rem;" class="card-title font-10 mt-0"><span class="badge badge-primary">Nombre Producto:</span></h6>
+                                            <p id="nombreproductosdescripcion" class="font-13 text-muted"></p>
+                                            <h6 style="font-size: 1rem;" class="card-title font-10 mt-0"><span class="badge badge-primary">Descripci&oacute;n Producto:</span></h6>
+                                            <p id="productosdescripcion" class="font-13 text-muted"></p>
+                                            <h6 style="font-size: 1rem;" class="card-title font-10 mt-0"><span class="badge badge-primary">Marca Asociada:</span></h6>
+                                            <p id="marcaproductodescripcion" class="font-13 text-muted"></p>
+                                            <h6 style="font-size: 1rem;" class="card-title font-10 mt-0"><span class="badge badge-primary">Categor&iacute;a Asociada:</span></h6>
+                                            <p id="categoriaproductodescripcion" class="font-13 text-muted"></p>
+                                            <h6 style="font-size: 1rem;" class="card-title font-10 mt-0"><span class="badge badge-primary">Per&iacute;odo Garant&iacute;a:</span></h6>
+                                            <p id="garantiaproductodescripcion" class="font-13 text-muted"></p>
+                                            <h6 style="font-size: 1rem;" class="card-title font-10 mt-0"><span class="badge badge-primary">Precio: $ USD</span></h6>
+                                            <p id="precioproductodescripcion" class="font-13 text-muted"></p>
+                                            <h6 style="font-size: 1rem;" class="card-title font-10 mt-0"><span class="badge badge-primary">Stock:</span></h6>
+                                            <p id="stockproductodescripcion" class="font-13 text-muted"></p>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" onclick="CerrarModalProductos()">Cerrar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+                </h4>
+            </div>
+        </div>
+    </div>
+    <!-- end page title end breadcrumb -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body bootstrap-select-1">
+                    <blockquote class="blockquote font-16">
+                        <h4 class="mt-0 header-title">Gesti&oacute;n de Productos</h4>
+                    </blockquote>
+                    <div class="alert bg-gradient4 text-white b-round" role="alert">
+                        <span class="text-white mb-4 font-16">
+                            <span style="font-size: 18px;"><i class="dripicons-lightbulb"></i></span> Estimado(a) @Session["UsuarioUnico"]. A continuaci&oacute;n usted podr&aacute; gestionar todos productos registrados
+                            en esta plataforma. <strong>
+                                Por favor tome en cuenta de seguir todas las indicaciones presentadas, existen algunos campos en los cu&aacute;les solamente debe ingresar n&uacute;meros
+                                y/o letras. Adem&aacute;s de respetar el formato de precios ##.## (NO INGRESAR COMAS , POR FAVOR)
+                            </strong>
+                        </span>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap table-hover" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th><i class="mdi mdi-book-open"></i> Nombre Producto</th>
+                                        @*<th><i class="mdi mdi-book-open-page-variant"></i> Descripci&oacute;n Producto</th>*@
+                                        <th><i class="mdi mdi-cash-usd"></i> Precio</th>
+                                        <th><i class="mdi mdi-cart"></i> Stock</th>
+                                        <th><i class="dripicons-ticket"></i> ¿Activo?</th>
+                                        <th><i class="dripicons-gear"></i> Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- end col -->
+    </div> <!-- end row -->
+</div><!-- container -->
+
+@section scripts{
+    @*----- EJECUCION DE MANTENIMIENTOS AJAX -----*@
+    <script>
+    var Privilegio = @Convert.ToUInt32(Session["Privilegio"]);
+    // VARIABLES GLOBALES
+    var tabladata;
+    var filaseleccionada;
+    if (Privilegio >= 1 && Privilegio <= 2) {
+        tabladata = $("#datatable-buttons").DataTable({
+            responsive: true,
+            ordering: true,
+            dom: 'BfrZltip',
+            buttons: [
+                'copyHtml5',
+                'excelHtml5',
+                'csvHtml5',
+                'pdfHtml5'
+            ],
+            "ajax": {
+                url: '@Url.Action("ListarProductos","Administracion")',
+                        type: "GET",
+                        dataType: "JSON"
+                    },
+                    "columns": [
+                        { "data": "Nombre" },
+                        //{ "data": "Descripcion" },
+                        { "data": "Precio", "width": "20px", },
+                        { "data": "Stock", "width": "20px",  },
+                        {
+                            "data": "Activo", "render": function (valor) {
+                                if (valor) {
+                                    return '<h6><span class="badge badge-success">Activo</span></h6>';
+                                } else {
+                                    return '<span class="badge rounded-pill bg-danger text-white">Inactivo</span>';
+                                }
+                            },
+                            "width": "20px"
+                        },
+                        {
+                            "defaultContent": '<button type="button" class="btn btn-sm btn btn-gradient-primary waves-effect waves-light btn-editar"><i class="fas fa-edit"></i> Modificar</button>' +
+                                '<button style="margin: 0 0 0 .7rem;" type="button" class="btn btn-sm btn btn-gradient-primary waves-effect waves-light btn-verproductos" data-animation="wobble" data-toggle="modal" onclick="abrirModalVerProductos()"><i class="fas fa-search"></i> Visualizar</button>',
+                            "orderable": true,
+                            "searchable": true,
+                            "width": "90px"
+                        }
+                    ],
+                    "language": {
+                        "url": "//cdn.datatables.net/plug-ins/1.12.1/i18n/es-ES.json"
+                    }
+        });
+    } else {
+        tabladata = $("#datatable-buttons").DataTable({
+        responsive: true,
+        ordering: true,
+        dom: 'BfrZltip',
+        buttons: [
+            'copyHtml5',
+            'excelHtml5',
+            'csvHtml5',
+            'pdfHtml5'
+        ],
+        "ajax": {
+            url: '@Url.Action("ListarProductos","Administracion")',
+                    type: "GET",
+                    dataType: "JSON"
+                },
+                "columns": [
+                    { "data": "Nombre" },
+                    //{ "data": "Descripcion" },
+                    { "data": "Precio", "width": "20px", },
+                    { "data": "Stock", "width": "20px",  },
+                    {
+                        "data": "Activo", "render": function (valor) {
+                            if (valor) {
+                                return '<h6><span class="badge badge-success">Activo</span></h6>';
+                            } else {
+                                return '<span class="badge rounded-pill bg-danger text-white">Inactivo</span>';
+                            }
+                        },
+                        "width": "20px"
+                    },
+                    {
+                        "defaultContent": '<button type="button" class="btn btn-sm btn btn-gradient-primary waves-effect waves-light btn-verproductos" data-animation="wobble" data-toggle="modal" onclick="abrirModalVerProductos()"><i class="fas fa-search"></i> Visualizar</button>',
+                        "orderable": true,
+                        "searchable": true,
+                        "width": "90px"
+                    }
+                ],
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.12.1/i18n/es-ES.json"
+                }
+    });
+    }
+
+
+    // BLOQUEAR SCROLL USUARIOS
+    function BloquearScroll() {
+        window.scrollTo(0, 0);
+    }
+
+    // NO PERMITIR ACCIONES SI PRIVILEGIO NO ES EL ASIGNADO
+    function ComprobarPrivilegio() {
+        if (Privilegio != 1) {
+            if ($("#txtid").val() == 0) {
+                $('#txtnombreproducto').prop('disabled', true);
+                $('#txtdescripcionproducto').prop('disabled', true);
+                $('#txtprecioproducto').prop('disabled', true);
+                $('#txtstockproducto').prop('disabled', true);
+                $('#input-file-now').prop('disabled', true);
+                $('#cboactivo').prop('disabled', true);
+                $('#EnvioDatos').hide();
+                $('body').addClass("efectobloqueo");
+                window.addEventListener('scroll', BloquearScroll);
+            }
+        }
+    }
+
+   // MODAL REGISTRAR PRODUCTOS
+    function abrirModal(json) {
+        // COMPROBAR SI SE REGISTRA UN NUEVO PRODUCTO, O SE DESEA EDITAR SU INFORMACION
+        $("#txtid").val(0);
+        // LIMPIAR VALORES SI EXISTEN REGISTROS A MODIFICAR
+        $("#txtnombreproducto").val("");
+        $("#txtdescripcionproducto").val("");
+        $("#txtprecioproducto").val("");
+        $("#txtstockproducto").val("");
+        $("#cboactivo").val(1);
+        $("#input-file-now").val("");
+        $("#mensajeError").hide(); // OCULTAR MENSAJE DE ERRORES
+        // OBTENER DATOS DE REPORTE A MODIFICAR
+        if (json != null) {
+            $("#txtid").val(json.IdProducto);
+            $("#txtnombreproducto").val(json.Nombre);
+            $("#txtdescripcionproducto").val(json.Descripcion);
+            $("#cbomarcaproducto").val(json.oMarcas.IdMarcas);
+            $("#cbocategoriaproducto").val(json.oCategorias.IdCategorias);
+            $("#cbogarantiaproducto").val(json.oGarantias.IdControlGarantias);
+            $("#txtprecioproducto").val(json.Precio);
+            $("#txtstockproducto").val(json.Stock);
+            $("#cboactivo").val(json.Activo == true ? 1 : 0);
+        }
+        $("#exampleModalLong-1").modal("show");
+    }
+
+    function CerrarModalProductos(){
+        $("#exampleModalLong-2").modal("hide");
+    }
+
+    function abrirModalVerProductos(json) {
+        $("#iddetalleproducto").val(0);
+        // OBTENER DATOS DE PRODUCTOS A CONSULTAR
+        if (json != null) {
+            $("#fotoproductos").html('<img style="width: 100%;" src="@imgsrc/images/FotosProductos/' + json.NombreImagen + ' " >');
+            $("#iddetalleproducto").val(json.IdProducto);
+            $("#nombreproductosdescripcion").html(json.Nombre);
+            $("#productosdescripcion").html(json.Descripcion);
+            $("#marcaproductodescripcion").html(json.oMarcas.Descripcion);
+            $("#categoriaproductodescripcion").html(json.oCategorias.CodigoCategoria);
+            $("#garantiaproductodescripcion").html(json.oGarantias.DuracionDiasGarantia + " Días");
+            $("#precioproductodescripcion").html("$ " + json.Precio + " USD");       
+            $("#stockproductodescripcion").html(json.Stock + " Unidades");
+
+        }
+        $("#exampleModalLong-2").modal("show");
+    }
+
+    // MODAL MODIFICAR PRODUCTOS -> SELECCIONAR TODA LA TABLA
+    $("#datatable-buttons tbody").on("click", '.btn-editar', function () {
+        // SELECCIONAR LA FILA QUE LOS USUARIOS SELECCIONEN
+        filaseleccionada = $(this).closest("tr");
+        data = tabladata.row(filaseleccionada).data();
+        // ABRIR MODAL CON INFORMACION OBTENIDA
+        abrirModal(data);
+    })
+
+    // VER DETALLE DE PRODUCTOS REGISTRADOS
+    $("#datatable-buttons tbody").on("click", '.btn-verproductos', function () {
+        // SELECCIONAR LA FILA QUE LOS USUARIOS SELECCIONEN
+        filaseleccionada = $(this).closest("tr");
+        data = tabladata.row(filaseleccionada).data();
+        // ABRIR MODAL CON INFORMACION OBTENIDA
+        abrirModalVerProductos(data);
+    })
+
+    // MOSTAR LISTADO DE MARCAS REGISTRADAS <SELECT>
+        jQuery.ajax({
+            url: '@Url.Action("ListarMarcas", "Administracion")',
+            type: "GET",
+            data: null,
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                $("<option>").attr({ "value": "0", "disabled": "true" }).text("Seleccione una marca...").appendTo("#cbomarcaproducto");
+                $.each(data.data, function (index, valor) {
+                    $("<option>").attr({ "value": valor.IdMarcas }).text(valor.Descripcion).appendTo("#cbomarcaproducto");
+                })
+            },
+            error: function (error) {
+            console.log(error)
+            },
+        });
+
+    // MOSTAR LISTADO DE CATEGORIAS REGISTRADAS <SELECT>
+        jQuery.ajax({
+            url: '@Url.Action("ListarCategorias", "Administracion")',
+            type: "GET",
+            data: null,
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                $("<option>").attr({ "value": "0", "disabled": "true" }).text("Seleccione una categoria...").appendTo("#cbocategoriaproducto");
+                $.each(data.data, function (index, valor) {
+                    $("<option>").attr({ "value": valor.IdCategorias }).text(valor.CodigoCategoria).appendTo("#cbocategoriaproducto");
+                })
+            },
+            error: function (error) {
+            console.log(error)
+            },
+        });
+
+    // MOSTAR LISTADO DE GARANTIAS DE PRODUCTOS REGISTRADAS <SELECT>
+        jQuery.ajax({
+            url: '@Url.Action("ListarGarantiasProductos", "Administracion")',
+            type: "GET",
+            data: null,
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                $("<option>").attr({ "value": "0", "disabled": "true" }).text("Seleccione una garantia...").appendTo("#cbogarantiaproducto");
+                $.each(data.data, function (index, valor) {
+                    $("<option>").attr({ "value": valor.IdControlGarantias }).text(valor.DuracionDiasGarantia + " días" + " [" + valor.oMarcas.Descripcion + "]").appendTo("#cbogarantiaproducto");
+                })
+            },
+            error: function (error) {
+            console.log(error)
+            },
+        });
+
+    function Guardar() {
+        // IMAGEN DE PRODUCTO
+        var ImagenSeleccionada = $("#input-file-now")[0].files[0];
+        // PRODUCTOS
+        var Productos = {
+            IdProducto: $("#txtid").val(),
+            Nombre: $("#txtnombreproducto").val(),
+            Descripcion: $("#txtdescripcionproducto").val(),
+            oMarcas: {
+                IdMarcas: $("#cbomarcaproducto option:selected").val(),
+                DescripcionMarca: $("#cbomarcaproducto option:selected").text()
+            },
+            oCategorias: {
+                IdCategorias: $("#cbocategoriaproducto option:selected").val(),
+                DescripcionCategoria: $("#cbocategoriaproducto option:selected").text()
+            },
+            oGarantias: {
+                IdControlGarantias: $("#cbogarantiaproducto option:selected").val(),
+                DuracionDiasGarantiaTexto: $("#cbogarantiaproducto option:selected").text(),
+            },
+            Precio: $("#txtprecioproducto").val(),
+            PrecioTexto: $("#txtprecioproducto").val(),
+            Stock: $("#txtstockproducto").val(),
+            Activo: $("#cboactivo").val() == 1 ? true : false
+
+        }
+        // OBTENER ARCHIVO ADJUNTO -> IMAGEN DE PRODUCTO
+        var request = new FormData();
+        request.append("objeto", JSON.stringify(Productos))
+        request.append("archivoImagen", ImagenSeleccionada)
+
+        if ($("#txtprecioproducto").val() == "") {
+            alertify.logPosition("top right");
+            alertify.error("<strong><i class='ion-alert-circled'></i> Lo sentimos, debes ingresar un precio al producto</strong>");
+
+        } else if ($("#txtstockproducto").val() == "") {
+            alertify.logPosition("top right");
+            alertify.error("<strong><i class='ion-alert-circled'></i> Lo sentimos, debes ingresar una cantidad en stock del producto</strong>");
+
+        }else {
+            jQuery.ajax({
+            url: '@Url.Action("GuardarNuevosProductos", "Administracion")',
+            type: "POST",
+            data: request,
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                $(".modal-body").LoadingOverlay("hide"); // OCULTAR PANTALLA DE ESPERA
+                // COMPROBAR SI SE AGREGA O EDITA PRODUCTOS
+                if (Productos.IdProducto == 0) {// NUEVOS REGISTROS
+                    if (data.idGenerado != 0) {
+                        Productos.IdProducto = data.resultado;
+                        // IMPRIMIR EN TABLA NUEVO REGISTRO
+                        tabladata.row.add(Productos).draw(false);
+                        // OCULTAR FORMULARIO
+                        $("#exampleModalLong-1").modal("hide");
+                    } else {
+                        alertify.logPosition("top right");
+                        alertify.error("<strong><i class='ion-alert-circled'></i> Campo incompleto</strong> " + data.mensaje);
+                    }
+
+                } else {// EDITAR PRODUCTOS
+                    if (data.operacion_exitosa) {
+                        tabladata.row(filaseleccionada).data(Productos).draw(false);
+                        filaseleccionada = null;
+                        // OCULTAR FORMULARIO
+                        $("#exampleModalLong-1").modal("hide");
+                    } else {
+                        alertify.logPosition("top right");
+                        alertify.error("<strong><i class='ion-alert-circled'></i> Campo incompleto</strong> " + data.mensaje);
+                    }
+
+                }
+                //console.log(data);
+            },
+            error: function (data) {
+                $(".modal-body").LoadingOverlay("hide"); // OCULTAR PANTALLA DE ESPERA
+                $("#mensajeError").text("Lo sentimos, en estos momentos no podemos procesar tu solicitud.");
+                $("#mensajeError").show(); // MOSTRAR MENSAJES DE ERRORES
+            },
+            // REALIZAR EJECUCION DURANTE LA EJECUCION DEL PROCESAMIENTO DATOS FORMULARIOS --> MOSTRAR PANTALLA DE ESPERA
+            beforeSend: function () {
+                $(".modal-body").LoadingOverlay("show", {
+                    imageResizeFactor: 2,
+                    text: "Espere un momento...",
+                    size: 14
+                })
+            }
+        });
+        }
+
+
+    }
+
+    // VALIDACION SOLO TEXTO
+    function soloLetras(e) {
+        var key = e.keyCode || e.which,
+            tecla = String.fromCharCode(key).toLowerCase(),
+            letras = " áéíóúabcdefghijklmnñopqrstuvwxyz",
+            especiales = [8, 37, 39, 46],
+            tecla_especial = false;
+
+        for (var i in especiales) {
+            if (key == especiales[i]) {
+                tecla_especial = true;
+                break;
+            }
+        }
+
+        if (letras.indexOf(tecla) == -1 && !tecla_especial) {
+            alertify.logPosition("top right");
+            alertify.error("<strong><i class='ion-alert-circled'></i> Lo sentimos, solo debe ingresar texto</strong>");
+            return false;
+        }
+    }
+
+    // VALIDACION SOLO NUMEROS
+    function soloNumeros(e) {
+        var key = e.keyCode || e.which,
+            tecla = String.fromCharCode(key).toLowerCase(),
+            letras = "1234567890",
+            especiales = [8, 37, 39, 46],
+            tecla_especial = false;
+
+        for (var i in especiales) {
+            if (key == especiales[i]) {
+                tecla_especial = true;
+                break;
+            }
+        }
+
+        if (letras.indexOf(tecla) == -1 && !tecla_especial) {
+            alertify.logPosition("top right");
+            alertify.error("<strong><i class='ion-alert-circled'></i> Lo sentimos, solo debe ingresar numeros</strong>");
+            return false;
+        }
+    }
+
+
+    // FUNCION PARA MOSTRAR ALERTAS A USUARIOS -> SWEETALERT
+    function AlertaUsuarioMostrar(titulo, descripcion, icono) {
+        swal(
+            titulo, // ENCABEZADO
+            descripcion, // CUERPO
+            icono // ICONO DE ALERTA
+        );
+    }
+    </script>
+
+}
+

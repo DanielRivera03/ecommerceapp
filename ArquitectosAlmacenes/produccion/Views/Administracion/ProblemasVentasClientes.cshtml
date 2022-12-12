@@ -1,0 +1,417 @@
+﻿
+@{
+    ViewBag.Title = "Problemas Ventas Clientes";
+    Layout = "~/Views/Shared/_Administracion.cshtml";
+    string imgsrc = System.Configuration.ConfigurationManager.AppSettings["ServidorFotos"];
+    // BLOQUEAR SISTEMA, SI POSEE PROCESO DE RECUPERACION DE CUENTAS ACTIVO
+    if (Session["ComprobarRecuperacion"] != null)
+    {
+        bool HabilitarSistema = Convert.ToBoolean(Session["ComprobarRecuperacion"]);
+        if (HabilitarSistema)
+        {
+            <script>
+                location.href = "@Url.Action("CambioCredencialesAcceso","Home")"
+            </script>
+        }
+    }
+}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="page-title-box">
+                <div class="btn-group float-right">
+                    <ol class="breadcrumb hide-phone p-0 m-0">
+                        <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+                        <li class="breadcrumb-item"><a href="#">Ventas</a></li>
+                        <li class="breadcrumb-item active">Mantenimiento Problemas Ventas</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">
+                    <!-- MODAL MANTENIMIENTO USUARIOS -->
+                    <button style="background-color: var(--cyan); color: var(--white);" type="button" class="btn btn-animation" data-animation="bounce" data-toggle="modal" onclick="abrirModal()">
+                        Registrar Nuevo Reporte Venta
+                    </button>
+                    <div class="modal fade bs-example-modal-lg" id="exampleModalLong-1" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div style="background: var(--cyan);" class="modal-header">
+                                    <h6 style="color: #fff;" class="modal-title" id="exampleModalLongTitle-1">Roles de Usuario</h6>
+                                </div>
+                                <div class="modal-body">
+                                    <span class="badge badge-pill badge-primary"><i class="mdi mdi-alert-outline"></i> Todos los campos son requeridos. <span style="color: var(--red);">(*)</span></span>
+                                    @* ID DE USUARIO REGISTRADO **@
+                                    <input id="txtid" type="hidden" value="0" />
+                                    <input id="txtidusuario" type="hidden" value="0" />
+                                    <div class="row g-2">
+                                        <div id="contenedor_datosregistro" style="width: 100%;">
+                                            @* ID DE TRANSACCION VENTA REGISTRADA **@
+                                            <div class="col-sm-12">
+                                                <div class="input-group mt-2">
+                                                </div>
+                                                <label for="cbolistadoventasclientes" class="form-label">Seleccione el ID de la Transacci&oacute;n <span style="color: var(--red);"><strong>(*)</strong></span></label>
+                                                <select class="select2 form-control mb-3 custom-select" style="width: 100%; height:36px;" id="cbolistadoventasclientes" name="cbolistadoventasclientes"></select>
+                                            </div>
+                                            @* DUI DE CLIENTEs **@
+                                            <div class="col-sm-12">
+                                                <div class="input-group mt-2">
+                                                </div>
+                                                <label for="cbolistadoduiclientes" class="form-label">Seleccione el Dui del cliente <span style="color: var(--red);"><strong>(*)</strong></span></label>
+                                                <select class="select2 form-control mb-3 custom-select" style="width: 100%; height:36px;" id="cbolistadoduiclientes" name="cbolistadoduiclientes"></select>
+                                            </div>
+                                            @* DESCRIPCION DE PROBLEMA DE VENTA **@
+                                            <div class="col-sm-12">
+                                                <div class="input-group mt-2">
+                                                </div>
+                                                <label for="txtdescripcionrol" class="form-label">Descripci&oacute;n Problema <span style="color: var(--red);"><strong>(*)</strong></span></label>
+                                                <textarea class="form-control" id="txtdescripcionproblemaventa" name="txtdescripcionproblemaventa" rows="4" maxlength="500" placeholder="Ingrese la descripci&oacute;n..." autocomplete="on"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12 mt-2" id="cartapresentacionclientes">
+                                            <div class="card bg-gradient4 text-white">
+                                                <div class="card-body">
+                                                    <div class="d-sm-flex align-self-center">
+                                                        <img src="@imgsrc/images/logos/logo_administracion.png" alt="" class="thumb-lg rounded-circle">
+                                                        <div class="media-body ml-2 align-self-center">
+                                                            <p class="mb-0" id="idtransaccioncliente"></p>
+                                                            <span class="font-12 text-light" id="duicliente"></span><br />
+                                                            <span class="font-12 text-light" id="nombrecliente"></span><br />
+                                                            <span class="font-12 text-light" id="direccioncliente"></span><br />
+                                                            <span class="font-12 text-light" id="telefonocliente"></span><br />
+                                                            <span class="font-12 text-light" id="destinocliente"></span><br />
+                                                            <span class="font-12 text-light" id="cantidadarticuloscliente"></span><br />
+                                                            <span class="font-12 text-light" id="montocliente"></span><br />
+                                                            <span class="font-12 text-light" id="descripcionproblema"></span><br />
+                                                            <div>
+                                                                <span id="fecharegistro" class="badge badge-light"></span>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div style="width: 100%;" id="contenedor_datosmodificar col-sm-12">
+                                            @* DESCRIPCION DE COMENTARIO RETROALIMENTACION DE VENTA **@
+                                            <div class="col-sm-12">
+                                                <label id="lbltxtdescripcionretroalimentacionproblemaventa" for="txtdescripcionretroalimentacionproblemaventa" class="form-label">Comentario Actualizaci&oacute;n <span style="color: var(--red);"><strong>(*)</strong></span></label>
+                                                <textarea class="form-control" id="txtdescripcionretroalimentacionproblemaventa" name="txtdescripcionretroalimentacionproblemaventa" rows="4" maxlength="500" placeholder="Ingrese la retroalimentaci&oacute;n a este reporte..." autocomplete="on"></textarea>
+                                            </div>
+                                        </div>
+
+                                        @* ESTADO DE REPORTE PROBLEMA VENTA REGISTRADO **@
+                                        <div class="col-sm-12">
+                                            <div class="input-group mt-2">
+                                            </div>
+                                            <label for="cboactivo" class="form-label">¿Activo? <span style="color: var(--red);"><strong>(*)</strong></span></label>
+                                            <select class="form-control" id="cboactivo">
+                                                <option value="1">Reporte Activo</option>
+                                                <option value="0">Reporte Inactivo</option>
+
+                                            </select>
+                                        </div>
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12 mt-2">
+                                            @*---- MENSAJES DE ERROR -----*@
+                                            <div style="font-size: .7rem;" id="mensajeError" class="alert bg-gradient1 text-white alert-dismissible fade show" role="alert">
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                                You successfully read this important alert message.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar Ventana</button>
+                                    <button type="button" class="btn btn-primary" onclick="Guardar()">Grabar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </h4>
+            </div>
+        </div>
+    </div>
+    <!-- end page title end breadcrumb -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body bootstrap-select-1">
+                    <blockquote class="blockquote font-16">
+                        <h4 class="mt-0 header-title">Gesti&oacute;n Problemas Ventas Clientes</h4>
+                    </blockquote>
+                    <div class="alert bg-gradient4 text-white b-round" role="alert">
+                        <span class="text-white mb-4 font-16">
+                            <span style="font-size: 18px;"><i class="dripicons-lightbulb"></i></span> Estimado(a) @Session["UsuarioUnico"]. A continuaci&oacute;n usted podr&aacute; gestionar todos los reportes que los clientes han ingresado a la plataforma respecto
+                            a problemas en sus compras. <strong>
+                                Es su deber y obligaci&oacute;n comunicarse con el cliente e informar el progreso de la situaci&oacute;n, hasta dar por finalizada la gesti&oacute;n. S&iacute; un cliente decide reportar su problema, ya sea
+                                por qu&eacute; el plazo establecido en su portal, ha excedido la condici&oacute;n de registro, o bien el mismo as&iacute; lo considera factible. Es usted qui&eacute;n debe de registrar dicho reporte. Por favor haga uso de las b&uacute;squedas, y solicite
+                                al cliente el ID de Transacci&oacute;n y n&uacute;mero de Dui.
+                            </strong>
+                        </span>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap table-hover" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th><i class="mdi mdi-book-open"></i> Id Transacci&oacute;n</th>
+                                        <th><i class="mdi mdi-book-open-page-variant"></i> Estado</th>
+                                        <th><i class="dripicons-gear"></i> Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- end col -->
+    </div> <!-- end row -->
+</div><!-- container -->
+
+@section scripts{
+
+
+
+    @*----- EJECUCION DE MANTENIMIENTOS AJAX -----*@
+    <script>
+    // VARIABLES GLOBALES
+    var tabladata;
+    var filaseleccionada;
+    tabladata = $("#datatable-buttons").DataTable({
+        responsive: true,
+        ordering: true,
+        dom: 'BfrZltip',
+        buttons: [
+            'copyHtml5',
+            'excelHtml5',
+            'csvHtml5',
+            'pdfHtml5'
+        ],
+        "ajax": {
+            url: '@Url.Action("ListarProblemasComprasClientes", "Administracion")',
+                    type: "GET",
+                    dataType: "JSON"
+                },
+                "columns": [
+                    {
+                        "data": "oVentas", "render": function (data) {
+                            return data.IdTransaccion
+                        }
+                    },
+                    {
+                        "data": "Estado", "render": function (valor) {
+                            if (valor) {
+                                return '<h6><span class="badge badge-success">Activo</span></h6>';
+                            } else {
+                                return '<span class="badge rounded-pill bg-danger text-white">Inactivo</span>';
+                            }
+                        }
+                    },
+                    {
+                        "defaultContent": '<button type="button" class="btn btn-sm btn btn-gradient-primary waves-effect waves-light btn-editar"><i class="fas fa-edit"></i> Modificar</button>',
+                        "orderable": true,
+                        "searchable": true,
+                        "width": "90px"
+                    }
+                ],
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.12.1/i18n/es-ES.json"
+                }
+    });
+
+    // MODAL REGISTRAR ROLES DE USUARIOS
+    function abrirModal(json) {
+        // COMPROBAR SI SE REGISTRA UN NUEVO ROL DE USUARIO, O SE DESEA EDITAR SU INFORMACION
+        $("#txtid").val(0);
+        // LIMPIAR VALORES SI EXISTEN REGISTROS A MODIFICAR
+        $("#txtdescripcionproblemaventa").val("");
+        $("#cboactivo").val(1);
+        $("#txtdescripcionretroalimentacionproblemaventa").val("");
+        $("#contenedor_datosregistro").show();
+        $("#txtdescripcionretroalimentacionproblemaventa").hide();
+        $("#lbltxtdescripcionretroalimentacionproblemaventa").hide();
+        $("#mensajeError").hide(); // OCULTAR MENSAJE DE ERRORES
+        // OCULTAR RESULTADOS DE CLIENTES, AL MOMENTO DE REGISTRAR
+        // MENSAJES ASOCIADOS
+        $("#cartapresentacionclientes").hide();
+        // CAMPOS DE TEXTO
+        $("#duicliente").hide();
+        $("#nombrecliente").hide();
+        $("#idtransaccioncliente").hide();
+        $("#telefonocliente").hide();
+        $("#direccioncliente").hide();
+        $("#destinocliente").hide();
+        $("#cantidadarticuloscliente").hide();
+        $("#montocliente").hide();
+        $("#descripcionproblema").hide();
+        $("#fecharegistro").hide();
+        // OBTENER DATOS DE ROLES DE USUARIO A MODIFICAR
+        if (json != null) {
+            $("#txtid").val(json.IdReporteProblema);
+            // MOSTRAR RESULTADOS DEL CLIENTE, AL MOMENTO DE EDITAR
+            // MENSAJES ASOCIADOS
+            $("#cartapresentacionclientes").show();
+            // CAMPOS DE TEXTO
+            $("#duicliente").show();
+            $("#nombrecliente").show();
+            $("#idtransaccioncliente").show();
+            $("#telefonocliente").show();
+            $("#direccioncliente").show();
+            $("#destinocliente").show();
+            $("#cantidadarticuloscliente").show();
+            $("#montocliente").show();
+            $("#descripcionproblema").show();
+            $("#fecharegistro").show();
+            $("#contenedor_datosregistro").hide();
+            $("#txtdescripcionretroalimentacionproblemaventa").show();
+            $("#lbltxtdescripcionretroalimentacionproblemaventa").show();
+
+            $("#contenedor_datosmodificar").show();
+            $("#txtdescripcionretroalimentacionproblemaventa").val(json.ActualizacionComentariosReporteProblemaVenta);
+            $("#duicliente").html("Dui: "+ json.DuiCliente);
+            $("#telefonocliente").html("Telefono Contacto: "+ json.TelefonoCliente);
+            $("#nombrecliente").html("Nombre Completo: " + json.oUsuarios.Nombres + " " + json.oUsuarios.Apellidos);
+            $("#idtransaccioncliente").html("Id Transaccion: "+ json.oVentas.IdTransaccion);
+            $("#direccioncliente").html("Direccion: "+ json.DireccionCliente);
+            $("#destinocliente").html("Departamento / Municipio: "+json.DepartamentoCliente + " ," + json.MunicipioCliente + ", El Salvador");
+            $("#cantidadarticuloscliente").html("Cantidad Articulos: "+ json.oVentas.TotalProducto);
+            $("#montocliente").html("Monto Cancelado: $ "+json.oVentas.MontoTotal + " USD");
+            $("#descripcionproblema").html("Descripcion Ingresada Por Cliente: " + json.DescripcionReporteProblemaVenta);
+            $("#fecharegistro").html("Fecha Registro: " + json.ConversionFechaRegistro);
+            $("#contenedor_datosregistro").hide();
+            $("#contenedor_datosmodificar").show();
+
+        }
+        $("#exampleModalLong-1").modal("show");
+    }
+
+    // MODAL MODIFICAR ROLES DE USUARIOS -> SELECCIONAR TODA LA TABLA
+    $("#datatable-buttons tbody").on("click", '.btn-editar', function () {
+        // SELECCIONAR LA FILA QUE LOS USUARIOS SELECCIONEN
+        filaseleccionada = $(this).closest("tr");
+        data = tabladata.row(filaseleccionada).data();
+        // ABRIR MODAL CON INFORMACION OBTENIDA
+        abrirModal(data);
+    })
+
+    // GUARDAR NUEVOS ROLES DE USUARIOS
+    function Guardar() {
+        var ProblemasVentas = {
+            IdReporteProblema: $("#txtid").val(),
+            oVentas: {
+                IdVenta: $("#cbolistadoventasclientes option:selected").val(),
+                IdTransaccion: $("#cbolistadoventasclientes option:selected").text()
+            },
+            oUsuarios: {
+                IdUsuario: $("#cbolistadoduiclientes option:selected").val(),
+                DuiCliente: $("#cbolistadoduiclientes option:selected").text()
+            },
+            DescripcionReporteProblemaVenta: $("#txtdescripcionproblemaventa").val(),
+            Estado: $("#cboactivo").val() == 1 ? true : false,
+            ActualizacionComentariosReporteProblemaVenta: $("#txtdescripcionretroalimentacionproblemaventa").val(),
+
+        }
+        jQuery.ajax({
+            url: '@Url.Action("RegistroProblemasVentasClientes", "Administracion")',
+            type: "POST",
+            data: JSON.stringify({ objeto: ProblemasVentas }),
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                $(".modal-body").LoadingOverlay("hide"); // OCULTAR PANTALLA DE ESPERA
+                // COMPROBAR SI SE AGREGA O EDITA ROLES DE USUARIOS --> NUEVOS ROLES USUARIOS NUEVOS
+                if (ProblemasVentas.IdReporteProblema == 0) {// NUEVO ROL DE USUARIO
+                    if (data.resultado != 0) {
+                        ProblemasVentas.IdReporteProblema = data.resultado;
+                        // IMPRIMIR EN TABLA NUEVO REGISTRO
+                        tabladata.row.add(ProblemasVentas).draw(false);
+                        // OCULTAR FORMULARIO
+                        $("#exampleModalLong-1").modal("hide");
+                    } else {
+                        alertify.logPosition("top right");
+                        alertify.error("<strong><i class='ion-alert-circled'></i> Campo incompleto</strong> " + data.mensaje);
+                    }
+
+                } else {// EDITAR ROL DE USUARIO
+                    if (data.resultado) {
+                        tabladata.row(filaseleccionada).data(ProblemasVentas).draw(false);
+                        filaseleccionada = null;
+                        // OCULTAR FORMULARIO
+                        $("#exampleModalLong-1").modal("hide");
+                    } else {
+                        alertify.logPosition("top right");
+                        alertify.error("<strong><i class='ion-alert-circled'></i> Campo incompleto</strong> " + data.mensaje);
+                    }
+
+                }
+                //console.log(data);
+            },
+            error: function (data) {
+                $(".modal-body").LoadingOverlay("hide"); // OCULTAR PANTALLA DE ESPERA
+                $("#mensajeError").text("Lo sentimos, en estos momentos no podemos procesar tu solicitud.");
+                $("#mensajeError").show(); // MOSTRAR MENSAJES DE ERRORES
+            },
+            // REALIZAR EJECUCION DURANTE LA EJECUCION DEL PROCESAMIENTO DATOS FORMULARIOS --> MOSTRAR PANTALLA DE ESPERA
+            beforeSend: function () {
+                $(".modal-body").LoadingOverlay("show", {
+                    imageResizeFactor: 2,
+                    text: "Espere un momento...",
+                    size: 12
+                })
+            }
+        });
+    }
+
+    // PROBLEMA DE NO BUSQUEDA CORREGIDO
+    $(document).ready(function () {
+        $("#cbolistadoventasclientes").select2({
+            dropdownParent: $("#exampleModalLong-1")
+        });
+        $("#cbolistadoduiclientes").select2({
+            dropdownParent: $("#exampleModalLong-1")
+        });
+    });
+
+    // LISTAR TODAS LAS VENTAS PROCESADAS DE CLIENTES
+    jQuery.ajax({
+            url: '@Url.Action("ObtenerIDTransacciones_VentasProcesadas_ReportesProblemas_Administracion", "Administracion")',
+            type: "GET",
+            data: null,
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                $("<option>").attr({ "value": "0", "disabled": "true" }).text("Seleccione una opcion...").appendTo("#cbolistadoventasclientes");
+                $.each(data.data, function (index, valor) {
+                    $("<option>").attr({ "value": valor.IdVenta }).text(valor.IdTransaccion).appendTo("#cbolistadoventasclientes");
+                })
+            },
+            error: function (error) {
+            console.log(error)
+            },
+        });
+    // LISTAR DUI DE CLIENTES -> ASOCIADAS A TODAS LAS VENTAS PROCESADAS DE CLIENTES
+    jQuery.ajax({
+            url: '@Url.Action("ListadoUsuariosVentas", "Administracion")',
+            type: "GET",
+            data: null,
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                $("<option>").attr({ "value": "0", "disabled": "true" }).text("Seleccione una opcion...").appendTo("#cbolistadoduiclientes");
+                $.each(data.data, function (index, valor) {
+                    $("<option>").attr({ "value": valor.IdUsuario }).text(valor.Dui).appendTo("#cbolistadoduiclientes");
+                })
+            },
+            error: function (error) {
+            console.log(error)
+            },
+        });
+    </script>
+
+}
+

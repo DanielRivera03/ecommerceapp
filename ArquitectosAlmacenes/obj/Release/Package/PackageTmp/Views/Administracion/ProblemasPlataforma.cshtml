@@ -1,0 +1,325 @@
+﻿@{
+    string imgsrc = System.Configuration.ConfigurationManager.AppSettings["ServidorFotos"];
+}
+@{
+    ViewBag.Title = "Gestión de Problemas Plataforma";
+    Layout = "~/Views/Shared/_Administracion.cshtml";
+    // BLOQUEAR SISTEMA, SI POSEE PROCESO DE RECUPERACION DE CUENTAS ACTIVO
+    if (Session["ComprobarRecuperacion"] != null)
+    {
+        bool HabilitarSistema = Convert.ToBoolean(Session["ComprobarRecuperacion"]);
+        if (HabilitarSistema)
+        {
+            <script>
+                location.href = "@Url.Action("CambioCredencialesAcceso","Home")"
+            </script>
+        }
+    }
+}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="page-title-box">
+                <div class="btn-group float-right">
+                    <ol class="breadcrumb hide-phone p-0 m-0">
+                        <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+                        <li class="breadcrumb-item"><a href="#">Problemas</a></li>
+                        <li class="breadcrumb-item active">Gestionar Problemas</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">
+                    <!-- MODAL MANTENIMIENTO USUARIOS -->
+                    <button style="background-color: var(--cyan); color: var(--white);" type="button" class="btn btn-animation" data-animation="bounce" data-toggle="modal" onclick="abrirModal()">
+                        Registrar Nuevo Reporte
+                    </button>
+                    <div class="modal fade bs-example-modal-lg" id="exampleModalLong-1" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div style="background: var(--cyan);" class="modal-header">
+                                    <h6 style="color: #fff;" class="modal-title" id="exampleModalLongTitle-1">Problemas de Plataforma</h6>
+                                </div>
+                                <div class="modal-body">
+                                    <span class="badge badge-pill badge-primary"><i class="mdi mdi-alert-outline"></i> Todos los campos son requeridos. <span style="color: var(--red);">(*)</span></span>
+                                    @* ID DE USUARIO REGISTRADO **@
+                                    <input id="txtid" type="hidden" value="0" />
+                                    @* FECHA ACTUAL AL MOMENTO DE DESPLEGAR MODAL **@
+                                    <input id="fechaactual" type="hidden" value="@DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss")" />
+                                    <div class="row g-2">
+                                        @* NOMBRES DE PROBLEMA´PLATAFORMA DE USUARIO REGISTRADO **@
+                                        <div class="col-sm-12">
+                                            <div class="input-group mt-2">
+                                            </div>
+                                            <label for="txtnombreproblema" class="form-label">Nombre de Problema Reportado <span style="color: var(--red);"><strong>(*)</strong></span></label>
+                                            <input type="text" class="form-control" id="txtnombreproblema" name="txtnombreproblema" maxlength="40" placeholder="Ingrese el nombre del problema a registrar..." autocomplete="off">
+                                        </div>
+                                        @* DESCRIPCION DE PROBLEMA´PLATAFORMA DE USUARIO REGISTRADO **@
+                                        <div class="col-sm-12">
+                                            <div class="input-group mt-2">
+                                            </div>
+                                            <label for="txtdescripcionproblema" class="form-label">Descripci&oacute;n de Problema Reportado <span style="color: var(--red);"><strong>(*)</strong></span></label>
+                                            <textarea class="form-control" id="txtdescripcionproblema" name="txtdescripcionproblema" maxlength="255" rows="3" placeholder="Ingrese la descripci&oacute;n del problema..." autocomplete="off"></textarea>
+                                        </div>
+                                        @* ESTADO DE PROBLEMA PLATAFORMA DE USUARIO REGISTRADO **@
+                                        <div class="col-sm-12">
+                                            <div class="input-group mt-2">
+                                            </div>
+                                            <label for="cboestadoproblema" id="lbcboestadoproblema" class="form-label">Estado de Problema Reportado <span style="color: var(--red);"><strong>(*)</strong></span></label>
+                                            <select class="form-control" id="cboestadoproblema">
+                                                <option value="">Seleccione una opci&oacute;n</option>
+                                                <option value="activo">Activo</option>
+                                                <option value="en curso">En Curso</option>
+                                                <option value="resuelto">Resuelto</option>
+                                            </select>
+                                        </div>
+                                        @* IMAGEN ADJUNTA PROBLEMA PLATAFORMA DE USUARIO REGISTRADO **@
+                                        <div class="col-sm-12">
+                                            <div class="input-group mt-2">
+                                            </div>
+                                            <label for="input-file-now" class="form-label">Captura de Problema Reportado <span style="color: var(--red);"><strong>(*)</strong></span></label>
+                                            <div id="contenedorfotosreportes">
+                                                <input type="file" id="input-file-now" class="dropify" />
+                                            </div>
+                                            <div style="width: 100%;" class="img-fluid" id="fotoreporte"></div>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12 mt-2">
+                                            @*---- MENSAJES DE ERROR -----*@
+                                            <div style="font-size: .7rem;" id="mensajeError" class="alert bg-gradient1 text-white alert-dismissible fade show" role="alert">
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                                You successfully read this important alert message.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar Ventana</button>
+                                    <button type="button" class="btn btn-primary" onclick="Guardar()">Grabar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </h4>
+            </div>
+        </div>
+    </div>
+    <!-- end page title end breadcrumb -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body bootstrap-select-1">
+                    <blockquote class="blockquote font-16">
+                        <h4 class="mt-0 header-title">Gesti&oacute;n de Problemas Plataforma</h4>
+                    </blockquote>
+                    <div class="alert bg-gradient4 text-white b-round" role="alert">
+                        <span class="text-white mb-4 font-16">
+                            <span style="font-size: 18px;"><i class="dripicons-lightbulb"></i></span> Estimado(a) @Session["UsuarioUnico"]. A continuaci&oacute;n usted podr&aacute; gestionar los diferentes problemas presentados en esta plataforma, por cada uno de los usuarios registrados
+                        </span>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap table-hover" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th><i class="mdi mdi-book-open"></i> Nombre Problema</th>
+                                        @*<th><i class="mdi mdi-calendar-clock"></i> Descripci&oacute;n</th>*@
+                                        <th><i class="mdi mdi-calendar-clock"></i> Fecha</th>
+                                        <th><i class="mdi mdi-book-open-page-variant"></i> Estado</th>
+                                        <th><i class="mdi mdi-book-open-page-variant"></i> ¿Qui&eacute;n Registro?</th>
+                                        <th><i class="dripicons-gear"></i> Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- end col -->
+    </div> <!-- end row -->
+</div><!-- container -->
+@section scripts{
+    @*----- EJECUCION DE MANTENIMIENTOS AJAX -----*@
+    <script>
+    // VARIABLES GLOBALES
+    var tabladata;
+    var filaseleccionada;
+    tabladata = $("#datatable-buttons").DataTable({
+        responsive: true,
+        ordering: true,
+        scrollX: true,
+        dom: 'BfrZltip',
+        buttons: [
+            'copyHtml5',
+            'excelHtml5',
+            'csvHtml5',
+            'pdfHtml5'
+        ],
+        "ajax": {
+            url: '@Url.Action("ListarReportesProblemasUsuarios", "Administracion")',
+                    type: "GET",
+                    dataType: "JSON"
+                },
+                "columns": [
+                    { "data": "NombreReporte" },
+                    //{ "data": "DescripcionReporte" },
+                    {
+                        "data": "ConversionFechaRegistro",
+                    },
+                    { "data": "EstadoReporte" },
+                    {
+                        "data": "oUsuarios", "render": function (data) {
+                            if (data == null) {
+                                return "Usuario" // LUEGO SE CAMBIARA SEGUN LA SESION DE USUARIO
+                            } else {
+                                return data.Usuario
+                            }
+
+                        }
+                    },
+                    {
+                        "defaultContent": '<button type="button" class="btn btn-sm btn btn-gradient-primary waves-effect waves-light btn-editar"><i class="fas fa-edit"></i> Gestionar</button>',
+                        "orderable": true,
+                        "searchable": true,
+                        "width": "90px"
+                    }
+                ],
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.12.1/i18n/es-ES.json"
+                }
+    });
+
+    // MODAL REGISTRAR USUARIOS
+    function abrirModal(json) {
+        // COMPROBAR SI SE REGISTRA UN NUEVO REPORTE, O SE DESEA EDITAR SU INFORMACION
+        $("#txtid").val(0);
+        // LIMPIAR VALORES SI EXISTEN REGISTROS A MODIFICAR
+        $("#txtnombreproblema").val("");
+        $("#txtdescripcionproblema").val("");
+        $("#contenedorfotosreportes").show();
+        $("#fotoreporte").hide();
+        $("#input-file-now").val("");
+        $("#cboestadoproblema").hide();
+        $("#lbcboestadoproblema").hide();
+        //$("<option>").attr({ "value": "activo", "selected": "true" }).text("Activo").appendTo("#cboestadoproblema");
+        //$("<option>").attr({ "value": "en curso", }).text("En Curso").appendTo("#cboestadoproblema");
+        $("#mensajeError").hide(); // OCULTAR MENSAJE DE ERRORES
+        // OBTENER DATOS DE REPORTE A MODIFICAR
+        if (json != null) {
+            $("#txtid").val(json.IdReportePlataforma);
+            $("#txtnombreproblema").val(json.NombreReporte);
+            $("#txtnombreproblema").prop("disabled",true);
+            $("#txtdescripcionproblema").val(json.DescripcionReporte);
+            $("#cboestadoproblema").show();
+            $("#lbcboestadoproblema").show();
+            $("#contenedorfotosreportes").hide();
+            $("#fotoreporte").show();
+            // MOSTRAR IMAGEN DE PROBLEMA REPORTADO
+            $("#fotoreporte").html('<a target="_blank" href="@imgsrc/images/ReportesPlataforma/' + json.NombreImagenReporte + '"><img src="@imgsrc/images/ReportesPlataforma/' + json.NombreImagenReporte + '" alt="" class="img-fluid"></a>');
+
+        }
+        $("#exampleModalLong-1").modal("show");
+    }
+
+    // MODAL MODIFICAR USUARIOS -> SELECCIONAR TODA LA TABLA
+    $("#datatable-buttons tbody").on("click", '.btn-editar', function () {
+        // SELECCIONAR LA FILA QUE LOS USUARIOS SELECCIONEN
+        filaseleccionada = $(this).closest("tr");
+        data = tabladata.row(filaseleccionada).data();
+        // ABRIR MODAL CON INFORMACION OBTENIDA
+        abrirModal(data);
+    })
+
+    // MOSTAR ROLES DE USUARIO <SELECT>
+        jQuery.ajax({
+            url: '@Url.Action("ListarRolesUsuarios", "Administracion")',
+            type: "GET",
+            data: null,
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                $("<option>").attr({ "value": "0", "disabled": "true" }).text("Seleccione un rol...").appendTo("#cborolusuario");
+                $.each(data.data, function (index, valor) {
+                    $("<option>").attr({ "value": valor.IdRolUsuario }).text(valor.NombreRolUsuario).appendTo("#cborolusuario");
+                })
+            },
+            error: function (error) {
+            console.log(error)
+            },
+        });
+
+    function Guardar() {
+        var ImagenSeleccionada = $("#input-file-now")[0].files[0];
+
+        var ProblemasPlataforma = {
+            IdReportePlataforma: $("#txtid").val(),
+            NombreReporte: $("#txtnombreproblema").val(),
+            DescripcionReporte: $("#txtdescripcionproblema").val(),
+            ConversionFechaRegistro: $("#fechaactual").val(),
+            EstadoReporte: $("#cboestadoproblema option:selected").text(),
+            UsuarioReporte: $("#usuariounicoreporte").val()
+
+        }
+
+        var request = new FormData();
+        request.append("objeto", JSON.stringify(ProblemasPlataforma))
+        request.append("archivoImagen", ImagenSeleccionada)
+
+        jQuery.ajax({
+            url: '@Url.Action("GuardarProblemasReportesPlataforma", "Administracion")',
+            type: "POST",
+            data: request,
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                $(".modal-body").LoadingOverlay("hide"); // OCULTAR PANTALLA DE ESPERA
+                // COMPROBAR SI SE AGREGA O EDITA PROBLEMAS DE PLATAFORMA
+                if (ProblemasPlataforma.IdReportePlataforma == 0) {// NUEVOS REGISTROS
+                    if (data.idGenerado != 0) {
+                        ProblemasPlataforma.IdReportePlataforma = data.resultado;
+                        // IMPRIMIR EN TABLA NUEVO REGISTRO
+                        tabladata.row.add(ProblemasPlataforma).draw(false);
+                        // OCULTAR FORMULARIO
+                        $("#exampleModalLong-1").modal("hide");
+                    } else {
+                        alertify.logPosition("top right");
+                        alertify.error("<strong><i class='ion-alert-circled'></i> Campo incompleto</strong> " + data.mensaje);
+                    }
+
+                } else {// EDITAR REPORTES PLATAFORMA
+                    if (data.operacion_exitosa) {
+                        tabladata.row(filaseleccionada).data(ProblemasPlataforma).draw(false);
+                        filaseleccionada = null;
+                        // OCULTAR FORMULARIO
+                        $("#exampleModalLong-1").modal("hide");
+                    } else {
+                        alertify.logPosition("top right");
+                        alertify.error("<strong><i class='ion-alert-circled'></i> Campo incompleto</strong> " + data.mensaje);
+                    }
+
+                }
+                //console.log(data);
+            },
+            error: function (data) {
+                $(".modal-body").LoadingOverlay("hide"); // OCULTAR PANTALLA DE ESPERA
+                $("#mensajeError").text("Lo sentimos, en estos momentos no podemos procesar tu solicitud.");
+                $("#mensajeError").show(); // MOSTRAR MENSAJES DE ERRORES
+            },
+            // REALIZAR EJECUCION DURANTE LA EJECUCION DEL PROCESAMIENTO DATOS FORMULARIOS --> MOSTRAR PANTALLA DE ESPERA
+            beforeSend: function () {
+                $(".modal-body").LoadingOverlay("show", {
+                    imageResizeFactor: 2,
+                    text: "Espere un momento...",
+                    size: 14
+                })
+            }
+        });
+    }
+    </script>
+
+}

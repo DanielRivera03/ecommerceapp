@@ -1,0 +1,118 @@
+﻿@{
+    string imgsrc = System.Configuration.ConfigurationManager.AppSettings["ServidorFotos"];
+}
+@{
+    ViewBag.Title = "ProblemasPlataformaResueltos";
+    Layout = "~/Views/Shared/_Administracion.cshtml";
+    // BLOQUEAR SISTEMA, SI POSEE PROCESO DE RECUPERACION DE CUENTAS ACTIVO
+    if (Session["ComprobarRecuperacion"] != null)
+    {
+        bool HabilitarSistema = Convert.ToBoolean(Session["ComprobarRecuperacion"]);
+        if (HabilitarSistema)
+        {
+            <script>
+                location.href = "@Url.Action("CambioCredencialesAcceso","Home")"
+            </script>
+        }
+    }
+}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="page-title-box">
+                <div class="btn-group float-right">
+                    <ol class="breadcrumb hide-phone p-0 m-0">
+                        <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+                        <li class="breadcrumb-item"><a href="#">Problemas</a></li>
+                        <li class="breadcrumb-item active">Gestionar Problemas</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">
+                </h4>
+            </div>
+        </div>
+    </div>
+    <!-- end page title end breadcrumb -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body bootstrap-select-1">
+                    <blockquote class="blockquote font-16">
+                        <h4 class="mt-0 header-title">Consulta de Problemas Plataforma Activos</h4>
+                    </blockquote>
+                    <div class="alert bg-gradient4 text-white b-round" role="alert">
+                        <span class="text-white mb-4 font-16">
+                            <span style="font-size: 18px;"><i class="dripicons-lightbulb"></i></span> Estimado(a) @Session["UsuarioUnico"]. A continuaci&oacute;n usted podr&aacute; gestionar los diferentes problemas presentados en esta plataforma, por cada uno de los usuarios registrados
+                        </span>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap table-hover" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th><i class="mdi mdi-book-open"></i> Nombre Problema</th>
+                                        <th><i class="mdi mdi-book-open-page-variant"></i> Descripci&oacute;n</th>
+                                        <th><i class="mdi mdi-calendar-clock"></i> Fecha</th>
+                                        <th><i class="mdi mdi-book-open-page-variant"></i> Estado</th>
+                                        <th><i class="mdi mdi-book-open-page-variant"></i> ¿Qui&eacute;n Registro?</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- end col -->
+    </div> <!-- end row -->
+</div><!-- container -->
+@section scripts{
+    @*----- EJECUCION DE MANTENIMIENTOS AJAX -----*@
+    <script>
+    // VARIABLES GLOBALES
+    var tabladata;
+    var filaseleccionada;
+    tabladata = $("#datatable-buttons").DataTable({
+        responsive: true,
+        ordering: true,
+        dom: 'BfrZltip',
+        buttons: [
+            'copyHtml5',
+            'excelHtml5',
+            'csvHtml5',
+            'pdfHtml5'
+        ],
+        "ajax": {
+            url: '@Url.Action("ListarReportesProblemasUsuariosResueltos", "Administracion")',
+                    type: "GET",
+                    dataType: "JSON"
+                },
+                "columns": [
+                    { "data": "NombreReporte" },
+                    { "data": "DescripcionReporte" },
+                    {
+                        "data": "ConversionFechaRegistro",
+                    },
+                    { "data": "EstadoReporte" },
+                    {
+                        "data": "oUsuarios", "render": function (data) {
+                            if (data == null) {
+                                return "Usuario" // LUEGO SE CAMBIARA SEGUN LA SESION DE USUARIO
+                            } else {
+                                return data.Usuario
+                            }
+
+                        }
+                    },
+                ],
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.12.1/i18n/es-ES.json"
+                }
+    });
+    </script>
+
+}
+
+
+

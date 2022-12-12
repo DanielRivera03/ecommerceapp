@@ -1,0 +1,101 @@
+/* =============
+   Alerts
+============= */
+
+.alert {
+  position: relative;
+  border: 0;
+
+  .alert-link {
+    font-weight: 600;
+  }
+  &.alert-outline-success{
+    border:1px solid $success;
+    background-color: transparent;
+    color: $success;
+  }
+  &.alert-outline-danger{
+    border:1px solid $danger;
+    background-color: transparent;
+    color: $danger;
+  }
+  &.alert-outline-primary{
+    border:1px solid $primary;
+    background-color: transparent;
+    color: $primary;
+  }
+  &.alert-outline-warning{
+    border:1px solid $warning;
+    background-color: transparent;
+    color: $warning;
+  }
+  &.alert-outline-info{
+    border:1px solid $info;
+    background-color: transparent;
+    color: $info;
+  }
+  &.alert-outline-pink{
+    border:1px solid $pink;
+    background-color: transparent;
+    color: $pink;
+  }
+  &.alert-outline-purple{
+    border:1px solid $purple;
+    background-color: transparent;
+    color: $purple;
+  }
+  &.alert-outline-secondary{
+    border:1px solid $secondary;
+    background-color: transparent;
+    color: $secondary;
+  }
+  &.alert-outline-dark{
+    border:1px solid $dark;
+    background-color: transparent;
+    color: $dark;
+  }
+}
+
+.alert-success {
+  color: $success;
+  background-color: lighten($success,30%);
+  .alert-link {
+    color: darken($success,10%);
+  }
+  hr {
+    border-top-color: darken($success,10%);
+  }
+}
+
+.alert-info {
+  color: $info;
+  background-color: lighten($info,25%);
+  .alert-link {
+    color: darken($info,10%);
+  }
+  hr {
+    border-top-color: darken($info,10%);
+  }
+}
+
+.alert-warning {
+  color: $warning;
+  background-color: lighten($warning, 32%);
+  .alert-link {
+    color: darken($warning, 10%);
+  }
+  hr {
+    border-top-color: darken($warning, 10%);
+  }
+}
+
+.alert-danger {
+  color: $danger;
+  background-color: lighten($danger,25%);
+  .alert-link {
+    color: darken($danger,10%);
+  }
+  hr {
+    border-top-color: darken($danger,10%);
+  }
+}

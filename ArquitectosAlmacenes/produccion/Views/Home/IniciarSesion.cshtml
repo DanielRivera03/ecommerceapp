@@ -1,0 +1,96 @@
+﻿@{
+    string imgsrc = System.Configuration.ConfigurationManager.AppSettings["ServidorFotos"];
+}
+@{
+    ViewBag.Title = "Iniciar Sesión";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    // NO PERMITIR ACCESO, SI USUARIO YA HA INICIADO SESION
+    if (Session["IdUsuario"] != null)
+    {
+        <script>
+            location.href = "@Url.Action("Index")"
+        </script>
+    }
+}
+<div class="page-content">
+    <div class="holder breadcrumbs-wrap mt-0">
+        <div class="container">
+            <ul class="breadcrumbs">
+                <li><a href="@Url.Action("Index")">Inicio</a></li>
+                <li><span>Iniciar Sesi&oacute;n</span></li>
+            </ul>
+        </div>
+    </div>
+    <div class="holder">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-18 col-lg-12">
+                    <h2 class="text-center"><i class="icon-login"></i> Iniciar Sesi&oacute;n</h2>
+                    <div class="form-wrapper">
+                        <form action="@Url.Action("IniciarSesion","Home")" method="post" autocomplete="off">
+                            <div class="form-group">
+                                <i class="icon-fox icon--lg"></i><b> Usuario y/o correo:</b>
+                                @{
+                                    // VALIDACION SI AMBAS COOKIES NO SE ENCUENTRAN VACIAS
+                                    if (System.Web.HttpContext.Current.Request.Cookies["Usuario"] != null || System.Web.HttpContext.Current.Request.Cookies["Correo"] != null)
+                                    {
+
+                                        // RECORDAR UNICAMENTE USUARIO UNICO, PARA FACILITAR INGRESO DE USUARIOS
+                                        // -> DE IGUAL MODO SE PUEDE CONFIGURAR POR CORREO ELECTRONICO DE USUARIOS
+                                        <input type="text" class="form-control mt-2" name="usuario" placeholder="Ingrese su usuario y/o correo" value="@Request.Cookies["Usuario"].Value">
+                                    }
+                                    else
+                                    {
+                                        // COOKIES VACIAS
+                                        <input type="text" class="form-control" name="usuario" placeholder="Ingrese su usuario y/o correo">
+                                    }
+                                }
+
+                            </div>
+                            <div class="form-group">
+                                <i class="icon-signboard icon--lg"></i><b> Contrase&ntilde;a:</b>
+                                <input type="password" class="form-control mt-2" name="contrasenia" placeholder="Ingrese su contrase&ntilde;a">
+                            </div>
+                            @{
+                                // MOSTRAR OPCION DE RECORDAR USUARIO -> SOLAMENTE CUANDO NO EXISTAN COOKIES GUARDADAS
+                                if (System.Web.HttpContext.Current.Request.Cookies["Usuario"] == null || System.Web.HttpContext.Current.Request.Cookies["Correo"] == null)
+                                {
+                                    <div class="clearfix">
+                                        <input id="recordarusuario" name="recordarusuario" type="checkbox" checked="checked">
+                                        <label for="recordarusuario">Recordar Usuario</label>
+                                    </div>
+                                }
+                            }
+                            <div class="clearfix">
+                                <label for="olvidecredencial"><a href="@Url.Action("RecuperacionCuentasUsuarios","Home")" class="custom-color">¿Olvide mi contrase&ntilde;a?</a></label>
+                            </div>
+                            <div class="text-center">
+                                <button class="btn btn-gradient-warning" type="submit">Ingresar</button>
+                            </div>
+                            <!-- MENSAJE ERROR -->
+                            @{
+                                if (ViewBag.Error != null)
+                                {
+                                    <div class="form-floating mb-3">
+                                        <div class="alert btn-gradient-danger rounded-pill" role="alert">
+                                            <img class="img-fluid" style="width: 45px;" src="@imgsrc/images/icon-gif/21-avatar-outline.gif" /> @ViewBag.Error
+                                        </div>
+                                    </div>
+                                }
+                                if (ViewBag.Success != null)
+                                {
+                                    <div class="form-floating mb-3">
+                                        <div class="alert btn-gradient-success rounded-pill" role="alert">
+                                            <img class="img-fluid" style="width: 45px;" src="@imgsrc/images/icon-gif/21-avatar-outline.gif" /> @ViewBag.Success
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

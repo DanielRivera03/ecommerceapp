@@ -1,0 +1,44 @@
+/* ==============
+  Card
+===================*/
+.card {
+  border: none;
+  box-shadow: $shadow-md;
+  margin-bottom: 30px;
+  .card-header{
+    background-color: $gray-200;
+    font-size: 18px;
+    font-weight: 500;
+  }
+  .card-footer{
+    background-color: $gray-200;
+  }
+  .card-title{
+    font-size: 18px;
+  }
+}
+
+.card-primary {
+  background-color: $primary;
+  border-color: $primary;
+}
+.card-success {
+  background-color: $success;
+  border-color: $success;
+}
+.card-info {
+  background-color: $info;
+  border-color: $info;
+}
+.card-warning {
+  background-color: $warning;
+  border-color: $warning;
+}
+.card-danger {
+  background-color: $danger;
+  border-color: $danger;
+}
+
+.card-header {
+  border-bottom: 1px solid rgba($dark,0.05);
+}

@@ -1,0 +1,338 @@
+﻿
+@{
+    ViewBag.Title = "Productos Categoria Calzado";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string imgsrc = System.Configuration.ConfigurationManager.AppSettings["ServidorFotos"];
+    // BLOQUEAR SISTEMA, SI POSEE PROCESO DE RECUPERACION DE CUENTAS ACTIVO
+    if (Session["ComprobarRecuperacion"] != null)
+    {
+        bool HabilitarSistema = Convert.ToBoolean(Session["ComprobarRecuperacion"]);
+        if (HabilitarSistema)
+        {
+            <script>
+                location.href = "@Url.Action("CambioCredencialesAcceso","Home")"
+            </script>
+        }
+    }
+}
+
+@*
+    -> BANNER PROMOCIONAL PRODUCTO DESTACADO DE BIENVENIDA CATEGORIA CALZADO
+*@
+<div class="page-content">
+    <div class="holder breadcrumbs-wrap mt-0">
+        <div class="container">
+            <ul class="breadcrumbs">
+                <li><a href="@Url.Action("Index")">Inicio</a></li>
+                <li><span>Productos</span></li>
+                <li><span>Categor&iacute;a</span></li>
+                <li><span>Calzado</span></li>
+            </ul>
+        </div>
+    </div>
+    <div class="holder holder-mt-medium">
+        <div class="container">
+            <div class="row vert-margin">
+                <div class="col">
+                    <div class="title-wrap text-center">
+                        <h2 class="lookbook-bnr-title1">CATEGORIA</h2>
+                        <h3 class="lookbook-bnr-title2">CALZADO</h3>
+                    </div>
+                    <div class="lookbook-bnr">
+                        <div class="lookbook-bnr-image image-container" style="padding-bottom: 18.72%">
+                            <img class="fade-up w-100 lazyload" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="@imgsrc/images/bannercalzado.jpg" alt="Product">
+                        </div>
+                        <div class="lookbook-bnr-point" style="left: 39%; top: 22%;">
+                            <span data-toggle="popover" class="lookbook-popup-btn-lg" data-original-title=""><i class="icon-close-bold"></i></span>
+                            <div class="lookbook-popup js-popover-content">
+                                <div class="prd-lookbook d-flex flex-column">
+                                    <a href="@imgsrc/Home/DetallesProductos?idproducto=12" class="prd-img" title="Calzado deportivo casual Vans para damas blanco con negro">
+                                        <img src="@imgsrc/images/FotosProductos/12.jpg" alt="Calzado deportivo casual Vans para damas blanco con negro">
+                                    </a>
+                                    <div class="prd-info">
+                                        <h2 class="prd-title"><a title="Calzado deportivo casual Vans para damas blanco con negro" href="@imgsrc/Home/DetallesProductos?idproducto=12">Calzado deportivo casual Vans para damas blanco con negro</a></h2>
+                                        <div class="prd-price">
+                                            <div class="price-new">$79.99</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="lookbook-bnr-point" style="left: 65%; top: 51%;">
+                            <span data-toggle="popover" class="lookbook-popup-btn-lg" data-original-title=""><i class="icon-close-bold"></i></span>
+                            <div class="lookbook-popup js-popover-content">
+                                <div class="prd-lookbook d-flex flex-column">
+                                    <a href="@imgsrc/Home/DetallesProductos?idproducto=13" class="prd-img" title="Calzado deportivo Adidas duramo 10 color negro para caballero">
+                                        <img src="@imgsrc/images/FotosProductos/13.jpg" alt="Calzado deportivo Adidas duramo 10 color negro para caballero">
+                                    </a>
+                                    <div class="prd-info">
+                                        <h2 class="prd-title"><a title="Calzado deportivo Adidas duramo 10 color negro para caballeroo" href="@imgsrc/Home/DetallesProductos?idproducto=13">Calzado deportivo Adidas duramo 10 color negro para caballero</a></h2>
+                                        <div class="prd-price">
+                                            <div class="price-new">$100.99</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="lookbook-bnr-point" style="left: 79%; top: 22%;">
+                            <span data-toggle="popover" class="lookbook-popup-btn-lg" data-original-title=""><i class="icon-close-bold"></i></span>
+                            <div class="lookbook-popup js-popover-content">
+                                <div class="prd-lookbook d-flex flex-column">
+                                    <a href="@imgsrc/Home/DetallesProductos?idproducto=14" class="prd-img" title="Calzado deportivo atlético Nike Revolution 6 navy para caballero">
+                                        <img src="@imgsrc/images/FotosProductos/14.jpg" alt="Calzado deportivo atlético Nike Revolution 6 navy para caballero">
+                                    </a>
+                                    <div class="prd-info">
+                                        <h2 class="prd-title"><a title="Calzado deportivo atlético Nike Revolution 6 navy para caballero" href="@imgsrc/Home/DetallesProductos?idproducto=14">Calzado deportivo atlético Nike Revolution 6 navy para caballero</a></h2>
+                                        <div class="prd-price">
+                                            <div class="price-new">$110.99</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg aside">
+                <div class="row mt-3">
+                    <!-- Left column -->
+                    <div class="col-lg-4 aside aside--left filter-col filter-mobile-col filter-col--sticky js-filter-col filter-col--opened-desktop" data-grid-tab-content>
+                        <div class="filter-col-content filter-mobile-content">
+                            <div class="sidebar-block_title">
+                                <span><i class="icon-filter"></i> Filtros de B&uacute;squeda</span>
+                            </div>
+
+                            @*
+                                -> FILTRO DE CATEGORIAS DE PRODUCTOS
+                            *@
+                            <div style="margin:1rem 0 0 0;" class="sidebar-block filter-group-block open">
+                                <div class="sidebar-block_title">
+                                    <span><i class="icon-box-2"></i> Categor&iacute;as</span>
+                                    <span class="toggle-arrow"><span></span><span></span></span>
+                                </div>
+                                <div class="sidebar-block_content">
+                                    <div id="contenedor_categoria">
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            @*
+                                -> FILTRO DE MARCAS DE PRODUCTOS
+                            *@
+
+                            <div class="sidebar-block filter-group-block open">
+                                <div class="sidebar-block_title">
+                                    <span><i class="icon-online-shopping"></i> Marcas</span>
+                                    <span class="toggle-arrow"><span></span><span></span></span>
+                                </div>
+                                <div class="sidebar-block_content">
+                                    <div id="contenedor_marca">
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            @*
+                                -> TODOS LOS PRODUCTOS [TIENDA EN LINEA]
+                            *@
+
+                            <div class="sidebar-block filter-group-block open">
+                                <div class="sidebar-block_title">
+                                </div>
+                                <div class="sidebar-block_content">
+                                    <button id="btnaplicarfiltro" class="btn btn-gradient-primary waves-effect btn-block" type="button"><i class="icon-scissors"></i> Aplicar Filtros</button>
+                                </div>
+                            </div>
+
+
+
+
+                        </div>
+                    </div>
+
+                    <!-- /Left column -->
+                    <!-- Center column -->
+                    <div class="col-lg aside">
+                        <div class="prd-grid-wrap">
+                            <!-- Products Grid -->
+                            <div class="row row-cols-1 row-cols-lg-3 row-cols-md-2 g-4 justify-content-center" id="contenedor_producto" data-grid-tab-content>
+                            </div>
+                        </div>
+                        <!-- /Center column -->
+                    </div>
+                    <!-- /Two columns -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    @section scripts{
+        <script>
+            // EJECUCION AL INICIAR DOCUMENTO
+            $(document).ready(function () {
+                MostrarProductos(0, 0);
+                MostrarCategorias();
+            });
+            // MOSTRAR TODOS LOS PRODUCTOS REGISTRADOS
+        function MostrarProductos(_idcategoria, _idmarca) {
+            jQuery.ajax({
+                url: "@Url.Action("ListarProductosCategoriaCalzado", "Home")",
+                type: "POST",
+                data: JSON.stringify({ idcategoria : _idcategoria, idmarca : _idmarca}),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+                    $("#contenedor_producto").html("");
+                    $("#contenedor_producto").LoadingOverlay("hide");
+                    $.each(response.data, function (i, element) {
+                        // FORMATO DOLAR USD -> PRECIOS PRODUCTOS
+                        const FormatoDolar_USD = element.Precio.toLocaleString("en", {
+                            style: "currency",
+                            currency: "USD"
+                        });
+                        $("<div>").addClass("col mb-5").append(
+                            $("<div>").addClass("card h-100").append(
+                                $("<div>").addClass("prd-img-area").append(
+                                    $("<a>").addClass("prd-img image-hover-scale image-container").append(
+                                        $("<img>").addClass("js-prd-img lazyload fade-up").attr({ "src": "@imgsrc/images/FotosProductos/" + element.NombreImagen })
+                                    ),
+                                ),
+                                $("<div>").addClass("card-body p-4").append(
+                                    $("<div>").addClass("text-center").append(
+                                        $("<h5>").addClass("prd-title").text(element.Nombre),
+                                        $("<h5>").addClass("prd-tag").text(element.oMarcas.Descripcion),
+                                        $("<h5>").addClass("price-new").text(FormatoDolar_USD + " USD"),
+                                    )
+                                ),
+                                $("<div>").addClass("card-footer p-0 pt-0 border-top-0 bg-transparent").append(
+                                        $("<div>").addClass("d-grid gap-2").append(
+                                           // SI USUARIO HA INICIADO SESION
+                                            @if (Session["UsuarioUnico"] != null)
+                                            {
+                                                @:$("<div>").addClass("col-sm-12").css({ "width": "100%" }).append(
+                                                    @:$("<button>").addClass("btn mt-auto btn-gradient-primary waves-effect waves-light agregarcarrito prd-tag").data("idproducto", element.IdProducto).text("Agregar al Carrito ").append('<i class="icon-currency"></i>'),
+                                                @:),
+
+                                            }
+                                            $("<div>").addClass("col-sm-12").css({ "width": "100%","margin": "1rem auto" }).append(
+                                                $("<a>").addClass("btn btn-gradient-info waves-effect waves-light mt-auto prd-tag").attr({ "href": "@Url.Action("DetallesProductos","Home")" + "?idproducto=" + element.IdProducto }).text("Visualizar ").append('<i class="icon-zoom-plus"></i>')
+                                            ),
+                                        )
+                                    )
+
+                            )
+                        ).appendTo("#contenedor_producto")
+
+                    })
+                },
+                beforeSend: function () {
+                    $("#contenedor_producto").LoadingOverlay("show");
+                }
+            })
+        }
+
+
+        // LISTAR TODAS LAS CATEGORIAS
+        function MostrarCategorias() {
+            jQuery.ajax({
+                url: "@Url.Action("ListaCategorias","Home")",
+                type: "get",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+                    $("#contenedor_categoria").LoadingOverlay("hide");
+                    $("<div>").addClass("form-check").append(
+                    ).appendTo("#contenedor_categoria")
+                    $.each(response.data, function (i, element) {
+                        if (element.IdCategorias === 4) {
+                            $("<div>").addClass("form-check").append(
+                                $("<input>").addClass("form-check-input").attr({ "type": "radio", "name": "categoria", "value": element.IdCategorias, "checked": "checked", "id": "c" + i }),
+                                $("<label>").addClass("form-check-label").text(element.CodigoCategoria).attr({ "for": "c" + i })
+                            ).appendTo("#contenedor_categoria")
+                        }
+
+                    })
+                    MostrarMarca();
+                },
+                beforeSend: function () {
+                    $("#contenedor_categoria").LoadingOverlay("show");
+                }
+            })
+        }
+
+        // LISTAR TODAS LAS MARCAS
+        function MostrarMarca() {
+            var _idcategoria = $("input[name=categoria]:checked").val()
+            jQuery.ajax({
+                url: "@Url.Action("ListaMarcaPorCategoria", "Home")",
+                type: "POST",
+                data: JSON.stringify({ idcategoria : _idcategoria}),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+                    $("#contenedor_marca").html("");
+                    $("#contenedor_marca").LoadingOverlay("hide");
+                    $("<div>").addClass("form-check").append(
+                        $("<input>").addClass("form-check-input").attr({ "type": "radio", "name": "marca", "value": "0", "id": "mx", "checked": "checked" }),
+                        $("<label>").addClass("form-check-label").text("Todos").attr({ "for": "mx"})
+                    ).appendTo("#contenedor_marca")
+                    $.each(response.data, function (i, element) {
+                        $("<div>").addClass("form-check").append(
+                            $("<input>").addClass("form-check-input").attr({ "type": "radio", "name": "marca", "value": element.IdMarcas, "id": "m" + i }),
+                            $("<label>").addClass("form-check-label").text(element.Descripcion).attr({ "for": "m" + i })
+                        ).appendTo("#contenedor_marca")
+                    })
+                },
+                beforeSend: function () {
+                    $("#contenedor_marca").LoadingOverlay("show");
+                }
+            })
+        }
+
+        // LISTAR TODAS LAS MARCAS ASOCIADAS A [XXXX] CATEGORIA
+        $(document).on("change", "input[name=categoria]", function () {
+            MostrarMarca();
+            var _idcategoria = $("input[name=categoria]:checked").val()
+            var _idmarca = $("input[name=marca]:checked").val()
+            MostrarProductos(_idcategoria, _idmarca)
+        })
+
+        // APLICAR FILTROS SOLAMENTE AL HACER CLIC EN EL BOTON [SEGUN X CATEGORIA - X MARCA ASOCIADA]
+        $("#btnaplicarfiltro").click(function () {
+            var _idcategoria = $("input[name=categoria]:checked").val()
+            var _idmarca = $("input[name=marca]:checked").val()
+            MostrarProductos(_idcategoria, _idmarca)
+        })
+
+        // AGREGAR PRODUCTOS AL CARRITO DE COMPRAS
+        $(document).on("click", "button.agregarcarrito", function () {
+            jQuery.ajax({
+                    url: '@Url.Action("AgregarCarrito","Home")',
+                    type: 'post',
+                    data: JSON.stringify({idproducto : $(this).data("idproducto") }),
+                    dataType: 'json',
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        if (data.respuesta) {
+                            // POR SER PAGINA MAESTRA, SE ENCUENTRAN REFERENCIADOS TODOS SUS ELEMENTOS Y METODOS
+                            MostrarCantidadCarrito();
+                            MostrarSumatoriaProductosCarrito();
+                            // MENSAJE USUARIOS
+                            alertify.logPosition("button right");
+                            alertify.success("<strong><i class='icon-credit-card1'></i> Producto agregado en el carrito de compras</strong>");
+                        } else {
+                            alertify.logPosition("button right");
+                            alertify.error("<strong><i class='icon-cart'></i> " + data.mensaje + "</strong>");
+                        }
+                    }
+                });
+        })
+        </script>
+    }
+
+
+</div>
+
+

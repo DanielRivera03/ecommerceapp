@@ -1,0 +1,357 @@
+﻿
+@{
+    ViewBag.Title = "Gestión de Usuarios";
+    Layout = "~/Views/Shared/_Administracion.cshtml";
+    // BLOQUEAR SISTEMA, SI POSEE PROCESO DE RECUPERACION DE CUENTAS ACTIVO
+    if (Session["ComprobarRecuperacion"] != null)
+    {
+        bool HabilitarSistema = Convert.ToBoolean(Session["ComprobarRecuperacion"]);
+        if (HabilitarSistema)
+        {
+            <script>
+                location.href = "@Url.Action("CambioCredencialesAcceso","Home")"
+            </script>
+        }
+    }
+}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="page-title-box">
+                <div class="btn-group float-right">
+                    <ol class="breadcrumb hide-phone p-0 m-0">
+                        <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+                        <li class="breadcrumb-item"><a href="#">Usuarios</a></li>
+                        <li class="breadcrumb-item active">Gesti&oacute;n Usuarios</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">
+                    <!-- MODAL MANTENIMIENTO USUARIOS -->
+                    <button style="background-color: var(--cyan); color: var(--white);" type="button" class="btn btn-animation" data-animation="bounce" data-toggle="modal" onclick="abrirModal()">
+                        Registrar Usuarios
+                    </button>
+                    <div class="modal animation-modal fade" id="exampleModalLong-1" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div style="background: var(--cyan);" class="modal-header">
+                                    <h6 style="color: #fff;" class="modal-title" id="exampleModalLongTitle-1">Usuarios / Clientes</h6>
+                                </div>
+                                <div class="modal-body">
+                                    <span class="badge badge-pill badge-primary"><i class="mdi mdi-alert-outline"></i> Todos los campos son requeridos. <span style="color: var(--red);">(*)</span></span>
+                                    <form class="form-valide" autocomplete="off">
+                                        <div class="row form-validation">
+
+                                        </div>
+                                        @* ID DE USUARIO REGISTRADO **@
+                                        <input id="txtid" type="hidden" value="0" />
+                                        <div class="row g-2">
+                                            @* NOMBRES DE USUARIO REGISTRADO **@
+                                            <div class="col-sm-6">
+                                                <div class="input-group mt-2">
+                                                </div>
+                                                <label for="txtnombres" class="form-label">Nombres <span style="color: var(--red);"><strong>(*)</strong></span></label>
+                                                <input type="text" class="form-control" id="txtnombres" name="txtnombres" maxlength="70" placeholder="Ingrese sus nombres..." autocomplete="off" onkeypress="return soloLetras(event)" required>
+                                            </div>
+                                            @* APELLIDOS DE USUARIO REGISTRADO **@
+                                            <div class="col-sm-6">
+                                                <div class="input-group mt-2">
+                                                </div>
+                                                <label for="txtapellidos" class="form-label">Apellidos <span style="color: var(--red);"><strong>(*)</strong></span></label>
+                                                <input type="text" class="form-control" id="txtapellidos" name="txtapellidos" maxlength="70" placeholder="Ingrese sus apellidos..." onkeypress="return soloLetras(event)" autocomplete="off" required>
+                                            </div>
+                                            @* CORREO DE USUARIO REGISTRADO **@
+                                            <div class="col-sm-6">
+                                                <div class="input-group mt-2">
+                                                </div>
+                                                <label for="txtapellidos" class="form-label">Correo <span style="color: var(--red);"><strong>(*)</strong></span></label>
+                                                <input type="email" class="form-control" id="txtcorreo" name="txtcorreo" maxlength="100" placeholder="Ingrese su correo..." autocomplete="off" required>
+                                            </div>
+                                            @* USUARIO UNICO DE USUARIO REGISTRADO **@
+                                            <div class="col-sm-6">
+                                                <div class="input-group mt-2">
+                                                </div>
+                                                <label for="txtapellidos" class="form-label">Usuario &Uacute;nico <span style="color: var(--red);"><strong>(*)</strong></span></label>
+                                                <input type="text" class="form-control" id="txtusuariounico" name="txtusuariounico" maxlength="30" placeholder="Ingrese su usuario &uacute;nico..." onkeypress="return soloLetras(event)" autocomplete="off" required>
+                                            </div>
+                                            @* ESTADO DE USUARIO REGISTRADO **@
+                                            <div class="col-sm-6">
+                                                <div class="input-group mt-2">
+                                                </div>
+                                                <label for="cboactivo" class="form-label">¿Activo? <span style="color: var(--red);"><strong>(*)</strong></span></label>
+                                                <select class="form-control" id="cboactivo">
+                                                    <option value="1">Usuario Activo</option>
+                                                    <option value="0">Usuario Inactivo</option>
+                                                </select>
+                                            </div>
+                                            @* ROL DE USUARIO REGISTRADO **@
+                                            <div class="col-sm-6">
+                                                <div class="input-group mt-2">
+                                                </div>
+                                                <label for="cborolusuario" class="form-label">Rol de Usuario <span style="color: var(--red);"><strong>(*)</strong></span></label>
+                                                <select class="form-control" id="cborolusuario">
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <div class="row">
+                                        <div class="col-12 mt-2">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar Ventana</button>
+                                    <button type="button" class="btn btn-primary" onclick="Guardar()">Grabar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </h4>
+            </div>
+        </div>
+    </div>
+    <!-- end page title end breadcrumb -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body bootstrap-select-1">
+                    <blockquote class="blockquote font-16">
+                        <h4 class="mt-0 header-title">Gesti&oacute;n de Usuarios / Clientes</h4>
+                    </blockquote>
+                    <div class="alert bg-gradient4 text-white b-round" role="alert">
+                        <span class="text-white mb-4 font-16">
+                            <span style="font-size: 18px;"><i class="dripicons-lightbulb"></i></span> Estimado(a) @Session["UsuarioUnico"]. A continuaci&oacute;n usted podr&aacute; gestionar todos los usuarios y clientes registrados
+                            en esta plataforma. <strong>Por motivos de seguridad, no es posible modificar la contrase&ntilde;a de los mismos.</strong>
+                        </span>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap table-hover" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th><i class="dripicons-user"></i> Nombres</th>
+                                        <th><i class="dripicons-user"></i> Apellidos</th>
+                                        <th><i class="dripicons-inbox"></i> Correo</th>
+                                        <th><i class="dripicons-information"></i> Usuario</th>
+                                        <th><i class="dripicons-network-3"></i> Rol</th>
+                                        <th><i class="dripicons-ticket"></i> ¿Activo?</th>
+                                        <th><i class="dripicons-gear"></i> Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- end col -->
+    </div> <!-- end row -->
+</div><!-- container -->
+
+@section scripts{
+    @*----- EJECUCION DE MANTENIMIENTOS AJAX -----*@
+    <script>
+    // VARIABLES GLOBALES
+    var tabladata;
+    var filaseleccionada;
+    tabladata = $("#datatable-buttons").DataTable({
+        responsive: true,
+        ordering: true,
+        dom: 'BfrZltip',
+        buttons: [
+            'copyHtml5',
+            'excelHtml5',
+            'csvHtml5',
+            'pdfHtml5'
+        ],
+        "ajax": {
+            url: '@Url.Action("ListarUsuarios","Administracion")',
+                    type: "GET",
+                    dataType: "JSON"
+                },
+                "columns": [
+                    { "data": "Nombres" },
+                    { "data": "Apellidos" },
+                    { "data": "Correo" },
+                    { "data": "Usuario" },
+                    {
+                        "data": "oRoles", "render": function (data) {
+                            return data.NombreRolUsuario
+                        }
+                    },
+                    {
+                        "data": "Activo", "render": function (valor) {
+                            if (valor) {
+                                return '<h6><span class="badge badge-success">Activo</span></h6>';
+                            } else {
+                                return '<span class="badge rounded-pill bg-danger text-white">Inactivo</span>';
+                            }
+                        }
+                    },
+                    {
+                        "defaultContent": '<button type="button" class="btn btn-sm btn btn-gradient-primary waves-effect waves-light btn-editar"><i class="fas fa-edit"></i> Modificar</button>',
+                        "orderable": true,
+                        "searchable": true,
+                        "width": "90px"
+                    }
+                ],
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.12.1/i18n/es-ES.json"
+                }
+    });
+
+    // MODAL REGISTRAR USUARIOS
+    function abrirModal(json) {
+        // COMPROBAR SI SE REGISTRA UN NUEVO USUARIO, O SE DESEA EDITAR SU INFORMACION
+        $("#txtid").val(0);
+        // LIMPIAR VALORES SI EXISTEN REGISTROS A MODIFICAR
+        $("#txtnombres").val("");
+        $("#txtapellidos").val("");
+        $("#txtcorreo").val("");
+        $("#txtusuariounico").val("");
+        $("#cboactivo").val(1);
+        //$("#cborolusuario").val();
+        $("#cborolusuario").val($("#cborolusuario option:first").val());
+        $("#mensajeError").hide(); // OCULTAR MENSAJE DE ERRORES
+        // OBTENER DATOS DE USUARIO A MODIFICAR
+        if (json != null) {
+            $("#txtid").val(json.IdUsuario);
+            $("#txtnombres").val(json.Nombres);
+            $("#txtapellidos").val(json.Apellidos);
+            $("#txtcorreo").val(json.Correo);
+            $("#txtusuariounico").val(json.Usuario);
+            $("#cboactivo").val(json.Activo == true ? 1 : 0);
+            $("#cborolusuario").val(json.oRoles.IdRolUsuario);
+        }
+        $("#exampleModalLong-1").modal("show");
+    }
+
+    // MODAL MODIFICAR USUARIOS -> SELECCIONAR TODA LA TABLA
+    $("#datatable-buttons tbody").on("click", '.btn-editar', function () {
+        // SELECCIONAR LA FILA QUE LOS USUARIOS SELECCIONEN
+        filaseleccionada = $(this).closest("tr");
+        data = tabladata.row(filaseleccionada).data();
+        // ABRIR MODAL CON INFORMACION OBTENIDA
+        abrirModal(data);
+    })
+
+    // MOSTAR ROLES DE USUARIO <SELECT>
+        jQuery.ajax({
+            url: '@Url.Action("ListarRolesUsuarios", "Administracion")',
+            type: "GET",
+            data: null,
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                $("<option>").attr({ "value": "0", "disabled": "true" }).text("Seleccione un rol...").appendTo("#cborolusuario");
+                $.each(data.data, function (index, valor) {
+                    $("<option>").attr({ "value": valor.IdRolUsuario }).text(valor.NombreRolUsuario).appendTo("#cborolusuario");
+                })
+            },
+            error: function (error) {
+            console.log(error)
+            },
+        });
+
+    // GUARDAR NUEVOS USUARIOS
+    function Guardar() {
+        var Usuario = {
+            IdUsuario: $("#txtid").val(),
+            Nombres: $("#txtnombres").val(),
+            Apellidos: $("#txtapellidos").val(),
+            Correo: $("#txtcorreo").val(),
+            Usuario: $("#txtusuariounico").val(),
+            Activo: $("#cboactivo").val() == 1 ? true : false,
+            oRoles: {
+                IdRolUsuario: $("#cborolusuario option:selected").val(),
+                NombreRolUsuario: $("#cborolusuario option:selected").text()
+            }
+        }
+        jQuery.ajax({
+            url: '@Url.Action("GuardarUsuario", "Administracion")',
+            type: "POST",
+            data: JSON.stringify({ objeto: Usuario }),
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                $(".modal-body").LoadingOverlay("hide"); // OCULTAR PANTALLA DE ESPERA
+                // COMPROBAR SI SE AGREGA O EDITA USUARIOS --> USUARIOS NUEVOS
+                if (Usuario.IdUsuario == 0) {// NUEVO USUARIO
+                    if (data.resultado != 0) {
+                        Usuario.IdUsuario = data.resultado;
+                        // IMPRIMIR EN TABLA NUEVO REGISTRO
+                        tabladata.row.add(Usuario).draw(false);
+                        // OCULTAR FORMULARIO
+                        $("#exampleModalLong-1").modal("hide");
+                    } else {
+                        //AlertaUsuarioMostrar("Campo Incompleto", "Por favor " + data.mensaje, "warning");
+                        alertify.logPosition("top right");
+                        alertify.error("<strong><i class='ion-alert-circled'></i> Campo incompleto</strong> " + data.mensaje);
+                        //$("#mensajeError").text(data.mensaje);
+                        //$("#mensajeError").show(); // MOSTRAR MENSAJES DE ERRORES
+                    }
+
+                } else {// EDITAR USUARIO
+                    if (data.resultado) {
+                        tabladata.row(filaseleccionada).data(Usuario).draw(false);
+                        filaseleccionada = null;
+                        // OCULTAR FORMULARIO
+                        $("#exampleModalLong-1").modal("hide");
+                    } else {
+                        // MENSAJE DE ERROR
+                        alertify.logPosition("top right");
+                        alertify.error("<strong><i class='ion-alert-circled'></i> Campo incompleto</strong> " + data.mensaje);
+                    }
+
+                }
+                //console.log(data);
+            },
+            error: function (data) {
+                $(".modal-body").LoadingOverlay("hide"); // OCULTAR PANTALLA DE ESPERA
+                $("#mensajeError").text("Lo sentimos, en estos momentos no podemos procesar tu solicitud.");
+                $("#mensajeError").show(); // MOSTRAR MENSAJES DE ERRORES
+            },
+            // REALIZAR EJECUCION DURANTE LA EJECUCION DEL PROCESAMIENTO DATOS FORMULARIOS --> MOSTRAR PANTALLA DE ESPERA
+            beforeSend: function () {
+                $(".modal-body").LoadingOverlay("show", {
+                    imageResizeFactor: 2,
+                    text: "Espere un momento...",
+                    size: 12
+                })
+            }
+        });
+    }
+
+    function soloLetras(e) {
+        var key = e.keyCode || e.which,
+            tecla = String.fromCharCode(key).toLowerCase(),
+            letras = " áéíóúabcdefghijklmnñopqrstuvwxyz",
+            especiales = [8, 37, 39, 46],
+            tecla_especial = false;
+
+        for (var i in especiales) {
+            if (key == especiales[i]) {
+                tecla_especial = true;
+                break;
+            }
+        }
+
+        if (letras.indexOf(tecla) == -1 && !tecla_especial) {
+            alertify.logPosition("top right");
+            alertify.error("<strong><i class='ion-alert-circled'></i> Lo sentimos, solo debe ingresar texto</strong>");
+            return false;
+        }
+    }
+
+    // FUNCION PARA MOSTRAR ALERTAS A USUARIOS -> SWEETALERT
+    function AlertaUsuarioMostrar(titulo, descripcion, icono) {
+        swal(
+            titulo, // ENCABEZADO
+            descripcion, // CUERPO
+            icono // ICONO DE ALERTA
+        );
+    }
+    </script>
+
+}

@@ -1,0 +1,73 @@
+﻿@{
+    string imgsrc = System.Configuration.ConfigurationManager.AppSettings["ServidorFotos"];
+}
+@{
+    ViewBag.Title = "Recuperación de Cuentas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    // NO PERMITIR ACCESO, SI USUARIO YA HA INICIADO SESION
+    if (Session["IdUsuario"] != null)
+    {
+        <script>
+            location.href = "@Url.Action("Index")"
+        </script>
+    }
+}
+<div class="page-content">
+    <div class="holder breadcrumbs-wrap mt-0">
+        <div class="container">
+            <ul class="breadcrumbs">
+                <li><a href="@Url.Action("Index")">Inicio</a></li>
+                <li><span>Recuperaci&oacute;n de Cuentas</span></li>
+            </ul>
+        </div>
+    </div>
+    <div class="holder">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-18 col-lg-12">
+                    <h2 class="text-center">Recuperaci&oacute;n de Cuentas Usuarios</h2>
+                    <p>
+                        Estimado(a) usuario, por favor ingrese su correo electr&oacute;nico, y nuestro sistema verificar&aacute; si su correo se encuentra registrado. Una vez usted
+                        haga clic en el bot&oacute;n <strong>Procesar Informaci&oacute;n, por favor verifique su correo y siga las instrucciones ah&iacute; descritas.</strong> Caso contrario,
+                        se mostrar&aacute; en pantalla el respectivo mensaje de error.
+                    </p>
+                    <div class="form-wrapper">
+                        <form action="@Url.Action("RecuperacionCuentasUsuarios","Home")" method="post" autocomplete="off">
+                            <div class="form-group">
+                                <asp:TextBox runat="server" id="txtusuario"></asp:TextBox>
+                                <input type="text" class="form-control" name="correo" placeholder="Ingrese su correo electr&oacute;nico">
+                            </div>
+                            <div class="clearfix">
+                                <label for="olvidecredencial"><a href="@Url.Action("IniciarSesion")" class="custom-color">Regresar a iniciar sesi&oacute;n</a></label>
+                            </div>
+                            <div class="text-center">
+                                <button class="btn btn-gradient-warning" type="submit">Procesar Informaci&oacute;n</button>
+                            </div>
+                            <!-- MENSAJE ERROR -->
+                            @{
+                                if (ViewBag.Error != null)
+                                {
+                                    <div class="form-floating mb-3">
+                                        <div class="alert btn-gradient-danger rounded-pill" role="alert">
+                                            <img class="img-fluid" style="width: 45px;" src="@imgsrc/images/icon-gif/21-avatar-outline.gif" /> @ViewBag.Error
+                                        </div>
+                                    </div>
+                                }
+
+                                if (ViewBag.Success != null)
+                                {
+                                    <div class="form-floating mb-3">
+                                        <div class="alert btn-gradient-success rounded-pill" role="alert">
+                                            <img class="img-fluid" style="width: 45px;" src="@imgsrc/images/icon-gif/21-avatar-outline.gif" /> @ViewBag.Success
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

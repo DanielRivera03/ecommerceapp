@@ -1,0 +1,133 @@
+﻿@model List<CapaEntidad.Productos>
+@{
+    ViewBag.Title = "Resultados de Busqueda";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string ValorBusqueda = Request.QueryString["search"];
+    string imgsrc = System.Configuration.ConfigurationManager.AppSettings["ServidorFotos"];
+}
+<div class="page-content">
+    <div class="holder breadcrumbs-wrap mt-0">
+        <div class="container">
+            <ul class="breadcrumbs">
+                <li><a href="@Url.Action("Index")">Inicio</a></li>
+                <li><span>Buscador</span></li>
+                <li><span>Resultados de B&uacute;squeda: <strong>" @ValorBusqueda "</strong></span></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="filter-row">
+        <div class="row">
+            <div class="col-lg aside">
+                <div class="prd-grid-wrap">
+                    <!-- Products Grid -->
+                    <div class="prd-listview product-listing data-to-show-3 data-to-show-md-3 data-to-show-sm-2 js-category-grid" data-grid-tab-content>
+
+                        @{
+                            if (Model.Count > 0)
+                            {
+                                foreach (var item in Model)
+                                {
+                                    <div class="prd prd--style2 prd-labels--max prd-labels-shadow ">
+                                        <div class="prd-inside">
+                                            <div class="prd-img-area">
+                                                <a href="@imgsrc/Home/DetallesProductos?idproducto=@item.IdProducto" class="prd-img image-hover-scale image-container">
+                                                    <img src="@imgsrc/images/FotosProductos/@item.NombreImagen" data-src="@imgsrc/images/FotosProductos/@item.NombreImagen" alt="@item.Nombre" class="js-prd-img lazyload fade-up">
+                                                    <div class="foxic-loader"></div>
+                                                    <div class="prd-big-squared-labels">
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <div class="prd-info">
+                                                <div class="prd-info-wrap">
+                                                    <div class="prd-tag"><a href="javascript:void(0)">@item.oMarcas.Descripcion</a></div>
+                                                    <div class="prd-tag"><a href="javascript:void(0)">@item.oCategorias.CodigoCategoria</a></div><br />
+                                                    <h2 class="prd-title"><a href="@imgsrc/Home/DetallesProductos?idproducto=@item.IdProducto">@item.Nombre</a></h2>
+                                                    <div class="prd-description">
+                                                        @item.Descripcion
+                                                    </div>
+                                                    @{
+                                                        // SOLO MOSTRAR SI USUARIO HA INICIADO SESION
+                                                        if (Session["IdUsuario"] != null)
+                                                        {
+                                                            <div class="prd-action">
+                                                                <button class="btn js-prd-addtocart btn-gradient-primary agregarcarrito" data-idproducto="@item.IdProducto">Agregar Al Carrito</button>
+                                                            </div>
+                                                        }
+                                                    }
+
+                                                </div>
+                                                <div class="prd-hovers">
+                                                    <div class="prd-circle-labels">
+                                                        <div class="prd-hide-mobile"><a href="@imgsrc/Home/DetallesProductos?idproducto=@item.IdProducto" class="circle-label-qview"><i class="icon-eye btn-gradient-light text-dark"></i></a></div>
+                                                    </div>
+                                                    <div class="prd-price">
+
+                                                        <div class="price-new">$ @item.Precio USD</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            // SI NO EXISTEN REGISTROS QUE MOSTRAR
+                            if (Model.Count <= 0)
+                            {
+                                <div class="holder mt-0 mb-4 mb-lg-10">
+                                    <div class="container">
+                                        <div class="page404-bg">
+                                            <div class="page404-text">
+                                                <div class="txt1">4<i class="icon-voucher"></i>4</div>
+                                                <div class="txt2">Lo sentimos, no hay nada que mostrar...</div>
+                                            </div>
+                                            <svg id="morphing" xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
+                                                <g transform="translate(50,50)">
+                                                    <path class="p" d="M93.5441 2.30824C127.414 -1.02781 167.142 -4.63212 188.625 21.7114C210.22 48.1931 199.088 86.5178 188.761 119.068C179.736 147.517 162.617 171.844 136.426 186.243C108.079 201.828 73.804 212.713 44.915 198.152C16.4428 183.802 6.66731 149.747 1.64848 118.312C-2.87856 89.9563 1.56309 60.9032 19.4066 38.3787C37.3451 15.7342 64.7587 5.14348 93.5441 2.30824Z" />
+                                                </g>
+                                            </svg>
+                                        </div>
+                                        <div class="page404-info text-center">
+                                            <a href="@Url.Action("Index")" class="btn btn-gradient-warning">Regresar Al Inicio</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{ 
+    <script>
+        // AGREGAR PRODUCTOS AL CARRITO DE COMPRAS
+        $(document).on("click", "button.agregarcarrito", function () {
+            jQuery.ajax({
+                    url: '@Url.Action("AgregarCarrito","Home")',
+                    type: 'post',
+                    data: JSON.stringify({idproducto : $(this).data("idproducto") }),
+                    dataType: 'json',
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        if (data.respuesta) {
+                            // POR SER PAGINA MAESTRA, SE ENCUENTRAN REFERENCIADOS TODOS SUS ELEMENTOS Y METODOS
+                            MostrarCantidadCarrito();
+                            MostrarSumatoriaProductosCarrito();
+                            // MENSAJE USUARIOS
+                            alertify.logPosition("button right");
+                            alertify.success("<strong><i class='icon-credit-card1'></i> Producto agregado en el carrito de compras</strong>");
+                        } else {
+                            alertify.logPosition("button right");
+                            alertify.error("<strong><i class='icon-cart'></i> " + data.mensaje + "</strong>");
+                        }
+                    }
+                });
+        })
+    </script>
+}
+
+

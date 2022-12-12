@@ -1,0 +1,139 @@
+﻿@model List<CapaEntidad.DetalleVenta>
+@{
+    ViewBag.Title = "Detalles Mis Compras Procesadas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string imgsrc = System.Configuration.ConfigurationManager.AppSettings["ServidorFotos"];
+    // BLOQUEAR SISTEMA, SI POSEE PROCESO DE RECUPERACION DE CUENTAS ACTIVO
+    if (Session["ComprobarRecuperacion"] != null)
+    {
+        bool HabilitarSistema = Convert.ToBoolean(Session["ComprobarRecuperacion"]);
+        if (HabilitarSistema)
+        {
+            <script>
+                location.href = "@Url.Action("CambioCredencialesAcceso","Home")"
+            </script>
+        }
+    }
+}
+<div class="holder breadcrumbs-wrap mt-0">
+    <div class="container">
+        <ul class="breadcrumbs">
+            <li><a href="@Url.Action("Index")">Inicio</a></li>
+            <li><span>Mi Compras</span></li>
+            <li><span>Detalle Compra Procesada</span></li>
+        </ul>
+    </div>
+</div>
+<div class="holder">
+    <div class="container">
+        <div class="mt-3"></div>
+        <h2 class="custom-color">Detalles Compra</h2>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="cart-table cart-table--sm pt-3 pt-md-0">
+                    @{
+                        if (Model.Count > 0)
+                        {
+                            <div class="cart-table-prd cart-table-prd--head py-1 d-none d-md-flex">
+                                <div class="cart-table-prd-image text-center">
+                                    Imagen
+                                </div>
+                                <div class="cart-table-prd-content-wrap">
+                                    <div class="cart-table-prd-info">Nombre</div>
+                                    <div class="cart-table-prd-qty">Cantidad</div>
+                                    <div class="cart-table-prd-price">Precio</div>
+                                    <div class="cart-table-prd-qty">Garant&iacute;a</div>
+                                </div>
+                            </div>
+                        }
+                    }
+
+                    @{
+                        if (Model.Count > 0)
+                        {
+                            int ValorProductoSinGarantia = 0;
+                            int CalculoGarantiasProductos = 0;
+                            int ContadorDiasFechaVenta = 0;
+                            int CalculoPeriodoGarantiaVigente = 0;
+                            foreach (var item in Model)
+                            {
+                                CalculoGarantiasProductos = item.oGarantias.DuracionDiasGarantia;
+                                ContadorDiasFechaVenta = item.ContadorDiasGarantias;
+                                CalculoPeriodoGarantiaVigente = CalculoGarantiasProductos - ContadorDiasFechaVenta;
+                                <div class="cart-table-prd">
+                                    <div class="cart-table-prd-image">
+                                        <a href="#" class="prd-img"><img class="lazyload fade-up" src="@imgsrc/images/FotosProductos/@item.oProducto.NombreImagen" data-src="@imgsrc/images/FotosProductos/@item.oProducto.NombreImagen" alt=""></a>
+                                    </div>
+                                    <div class="cart-table-prd-content-wrap">
+                                        <div class="cart-table-prd-info">
+                                            <h2 class="cart-table-prd-name"><a href="javascript:void(0)">@item.oMarcas.Descripcion</a></h2>
+                                            <h2 class="cart-table-prd-name"><a href="javascript:void(0)">@item.oProducto.Nombre</a></h2>
+                                        </div>
+                                        <div class="cart-table-prd-qty">
+                                            <div class="qty qty-changer">
+                                                <input style="cursor: no-drop" type="text" class="qty-input disabled" value="@item.Cantidad" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="cart-table-prd-price-total">
+                                            @item.Total.ToString("C") USD
+                                        </div>
+                                        <div class="cart-table-prd-qty">
+                                            <h6 class="cart-table-prd-name">
+                                                <a href="javascript:void(0)">
+                                                    @{ if (CalculoPeriodoGarantiaVigente > 0)
+                                                        {@CalculoPeriodoGarantiaVigente;
+                                                    }
+                                                    else
+                                                    { @ValorProductoSinGarantia }} d&iacute;as
+                                                </a>
+                                            </h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+
+                        // SI NO EXISTEN REGISTROS, MOSTRAR MENSAJE PERSONALIZADO EN SU DEFECTO
+                        if (Model.Count <= 0)
+                        {
+                            <div class="holder mt-0 mb-4 mb-lg-10">
+                                <div class="container">
+                                    <div class="page404-bg">
+                                        <div class="page404-text">
+                                            <div class="txt1">4<i class="icon-old-sweater"></i>4</div>
+                                            <div class="txt2">Lo sentimos, no hay nada que mostrar...</div>
+                                        </div>
+                                        <svg id="morphing" xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
+                                            <g transform="translate(50,50)">
+                                                <path class="p" d="M93.5441 2.30824C127.414 -1.02781 167.142 -4.63212 188.625 21.7114C210.22 48.1931 199.088 86.5178 188.761 119.068C179.736 147.517 162.617 171.844 136.426 186.243C108.079 201.828 73.804 212.713 44.915 198.152C16.4428 183.802 6.66731 149.747 1.64848 118.312C-2.87856 89.9563 1.56309 60.9032 19.4066 38.3787C37.3451 15.7342 64.7587 5.14348 93.5441 2.30824Z" />
+                                            </g>
+                                        </svg>
+                                    </div>
+                                    <div class="page404-info text-center">
+                                        <a href="@Url.Action("Index")" class="btn btn-gradient-warning">Regresar Al Inicio</a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+
+
+                </div>
+            </div>
+            <div class="col-md-6 mt-2 mt-md-0">
+                <div class="card">
+                    <div class="card-body">
+                        <h3>Estimado(a) Cliente</h3>
+                        <p>
+                            Tome en cuenta el per&iacute;odo de garant&iacute;a disponible en cada uno de los productos adquiridos. <br /><br />S&iacute; este indica 0 d&iacute;as, quiere decir que este producto
+                            ya no cuenta con la garant&iacute;a establecida por el fabricante.
+                        </p>
+                        <img class="img-fluid mt-2" src="@imgsrc/images/logos/facebook_cover_photo_1.png" />
+                    </div>
+                </div>
+                <div class="mt-2"></div>
+
+            </div>
+        </div>
+    </div>
+</div>

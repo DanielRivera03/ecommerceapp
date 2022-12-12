@@ -1,0 +1,54 @@
+.text-gradient-success{
+  background: -webkit-linear-gradient(#42e695, #3bb2b8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-danger{
+  background: -webkit-linear-gradient(#f81f8b, #f56348);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-warning{
+  background: -webkit-linear-gradient(#f6d365, #ff7850);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-primary{
+  background: linear-gradient(to right, #30CFD0 0%, #330867 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.bg-gradient1{
+  background-image: linear-gradient(120deg, #f56348 0%, #f81f8b 100%);
+}
+.bg-gradient2{
+  background-image: linear-gradient(120deg, #00e795 0%, #0095e2 100%);
+}
+.bg-gradient3{
+  background-image: linear-gradient(120deg, #f6d365 0%, #fda085 100%);
+}
+.bg-gradient4{
+  background: linear-gradient(120deg, #606c88 0%, #330867 100%);
+}
+
+.title-border::before{
+  content: "";
+    border-left: 4px solid ;
+    margin-left: -20px;
+    padding-right: 16px;
+    height: 54px;
+    top: 0px;
+    display: inline-block;
+    position: absolute;
+    border-image: linear-gradient(to top, #f81f8b 0%, #ff7850 100%);
+    border-image-slice: 1;
+    border-width: 4px;
+  
+}
+.dashboard-map {
+  height: 290px;
+}

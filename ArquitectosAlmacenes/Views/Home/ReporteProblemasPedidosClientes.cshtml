@@ -1,0 +1,181 @@
+﻿
+@{
+    ViewBag.Title = "ReporteProblemasPedidosClientes";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string imgsrc = System.Configuration.ConfigurationManager.AppSettings["ServidorFotos"];
+    // BLOQUEAR SISTEMA, SI POSEE PROCESO DE RECUPERACION DE CUENTAS ACTIVO
+    if (Session["ComprobarRecuperacion"] != null)
+    {
+        bool HabilitarSistema = Convert.ToBoolean(Session["ComprobarRecuperacion"]);
+        if (HabilitarSistema)
+        {
+            <script>
+                location.href = "@Url.Action("CambioCredencialesAcceso","Home")"
+            </script>
+        }
+    }
+}
+<div class="page-content">
+    <div class="holder breadcrumbs-wrap mt-0">
+        <div class="container">
+            <ul class="breadcrumbs">
+                <li><a href="@Url.Action("Index")">Inicio</a></li>
+                <li><span>Mis Compras</span></li>
+                <li><span>Reportar Problemas Compras</span></li>
+            </ul>
+        </div>
+    </div>
+    <div class="holder">
+        <div class="container">
+            <div class="row vert-margin">
+                <div class="col-sm-10">
+                    <div class="title-wrap">
+                        <h2 class="h1-style"></h2>
+                        <div>
+                            <div class="alert btn-gradient-light">
+                                <strong>Importante!</strong> Por favor tenga a la mano el Id de la Transacci&oacute;n, el cu&aacute;l su venta fue procesada. Posteriormente
+                                ingrese todos los detalles necesarios a reportar. <strong>
+                                    Si el listado se encuentra vac&iacute;o, no existen ventas que cumplan con la condici&oacute;n
+                                    anteriormente mencionada.
+                                </strong>
+                            </div>
+                        </div>
+                    </div>
+                    <form class="contact-form" method="POST" autocomplete="off">
+                        <input type="hidden" name="txtid" id="txtid" value="@TempData["IdUsuario"]" />
+                        <input id="txtidreporteventa" type="hidden" value="0" />
+                        <div class="form-group">
+                            <div class="row vert-margin-middle">
+                                <div class="col-lg">
+                                    <span>ID Transacci&oacute;n</span>
+                                    <select name="cbolistadoventasclientes" id="cbolistadoventasclientes" class="form-control form-control--sm" required></select>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <span>Detalles de Reporte</span>
+                            <textarea class="form-control form-control--sm textarea--height-200" name="txtdescripcionproblema" id="txtdescripcionproblema" placeholder="Ingrese el problema presentado..." required></textarea>
+                        </div>
+                        <button class="btn btn-gradient-warning" type="button" onclick="Guardar()">PROCESAR INFORMACION</button>
+                    </form>
+                </div>
+                <div class="col-sm-8">
+                    <div class="contact-map">
+                        <div class="card">
+                            <div class="card-body">
+                                <h3>Estimado(a) Cliente</h3>
+                                <p>
+                                    En este apartado, usted podr&aacute; reportar cualquier inconveniente que presentar&eacute; su respectiva compra y/o pedido. <strong>
+                                        Por favor tome en cuenta
+                                        que &uacute;nicamente puede reportar compras que no excedan los siete d&iacute;as despu&eacute;s de procesada la venta.
+                                    </strong><br /><br />
+                                    S&iacute; posee inconvenientes posterior a este per&iacute;odo establecido, por favor acerquese a nuestras tiendas, estamos en total disposici&oacute;n de ayudarle.<br /><br />
+                                    <strong>Solo puede registrar un reporte por cada compra procesada.</strong>
+                                </p>
+                                <img class="img-fluid mt-2" src="@imgsrc/images/logos/facebook_cover_photo_1.png" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+
+    <script>
+        // LISTAR TODAS LAS VENTAS PROCESADAS DE CLIENTES
+        ListarVentasProcesadasClientes();
+        function ListarVentasProcesadasClientes() {
+            $("#cbolistadoventasclientes").html("");
+            $("<option>").attr({ "value": "0", "disabled": "disabled", "selected": "true" }).text("Seleccione una opcion...").appendTo("#cbolistadoventasclientes");
+            jQuery.ajax({
+                url: "@Url.Action("ObtenerIDTransacciones_VentasProcesadas_ReportesProblemas")",
+                type: "POST",
+                data: JSON.stringify({ IdUsuario: $("#txtid").val() }), // SEGUN SELECCION DE <SELECT> DEPARTAMENTOS
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    if (data.lista != null) {
+                        $.each(data.lista, function (i, item) {
+                            $("<option>").attr({ "value": item.IdVenta }).text(item.IdTransaccion).appendTo("#cbolistadoventasclientes");
+                        })
+                    }
+                }
+            })
+        }
+
+    // REGISTRAR PROBLEMAS DE PEDIDOS / COMPRAS CLIENTES
+        function Guardar() {
+        var IdTransaccion = $("#cbolistadoventasclientes option:selected").val();
+        var DescripcionProblemaVenta = $("#txtdescripcionproblema").val();
+        var ProblemasVentas = {
+            IdReporteProblema: $("#txtidreporteventa").val(),
+            IdUsuario: $("#txtid").val(),
+            oVentas: {
+                IdVenta: $("#cbolistadoventasclientes option:selected").val(),
+                IdTransaccion: $("#cbolistadoventasclientes option:selected").text()
+            },
+            DescripcionReporteProblemaVenta: $("#txtdescripcionproblema").val(),
+        }
+        if (IdTransaccion == 0) {
+            alertify.logPosition("bottom left");
+            alertify.error("<strong><i class='icon-sadenvelop'></i></strong> Lo sentimos, debe seleccionar una venta procesada");
+        }
+        else if (DescripcionProblemaVenta ==+ "") {
+            alertify.logPosition("bottom left");
+            alertify.error("<strong><i class='icon-sadenvelop'></i></strong> Lo sentimos, debe ingresar el detalle de su reporte");
+        } else {
+            jQuery.ajax({
+            url: '@Url.Action("RegistroProblemasVentasClientes", "Home")',
+            type: "POST",
+            data: JSON.stringify({ objeto: ProblemasVentas }),
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            // REGISTRO DE NUEVOS CLIENTES
+            success: function (data) {
+                $(".page-content").LoadingOverlay("hide"); // OCULTAR PANTALLA DE ESPERA
+                if (ProblemasVentas.IdReporteProblema == 0) {
+                    if (data.resultado != 0) {
+                        ProblemasVentas.IdReporteProblema = data.resultado;
+                        setTimeout(function () {
+                            AlertaUsuarioMostrar("Registro Exitoso", "Su reporte ha sido registrado con exito", "success");
+                        }, 1500);
+                        // LIMPIAR VALORES AL MOMENTO DE REGISTRO EXITOSO
+                        $("#txtdescripcionproblema").val(""); $("#cbolistadoventasclientes option:selected");
+                    } else {
+                        AlertaUsuarioMostrar("Registro Fallido", "Lo sentimos, ha ocurrido un error. Por favor verifique de cumplir con todas las condiciones", "error");
+                    }
+                }
+            },
+            error: function (data) {
+                $("#mensajeError").text("Lo sentimos, en estos momentos no podemos procesar tu solicitud.");
+                $("#mensajeError").show(); // MOSTRAR MENSAJES DE ERRORES
+            },
+            // REALIZAR EJECUCION DURANTE LA EJECUCION DEL PROCESAMIENTO DATOS FORMULARIOS --> MOSTRAR PANTALLA DE ESPERA
+            beforeSend: function () {
+                $(".page-content").LoadingOverlay("show", {
+                    imageResizeFactor: 2,
+                    text: "Espere un momento...",
+                    size: 12
+                })
+            }
+        });
+        }
+
+    }
+
+    // FUNCION PARA MOSTRAR ALERTAS A USUARIOS -> SWEETALERT
+    function AlertaUsuarioMostrar(titulo, descripcion, icono) {
+        swal(
+            titulo, // ENCABEZADO
+            descripcion, // CUERPO
+            icono // ICONO DE ALERTA
+        );
+    }
+
+    </script>
+
+}
+

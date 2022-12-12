@@ -1,0 +1,211 @@
+﻿
+@{
+    string imgsrc = System.Configuration.ConfigurationManager.AppSettings["ServidorFotos"];
+    ViewBag.Title = "RegistroProblemasPlataformaGeneral";
+    Layout = "~/Views/Shared/_Administracion.cshtml";
+    // BLOQUEAR SISTEMA, SI POSEE PROCESO DE RECUPERACION DE CUENTAS ACTIVO
+    if (Session["ComprobarRecuperacion"] != null)
+    {
+        bool HabilitarSistema = Convert.ToBoolean(Session["ComprobarRecuperacion"]);
+        if (HabilitarSistema)
+        {
+            <script>
+                location.href = "@Url.Action("CambioCredencialesAcceso","Home")"
+            </script>
+        }
+    }
+}
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="page-title-box">
+                <div class="btn-group float-right">
+                    <ol class="breadcrumb hide-phone p-0 m-0">
+                        <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+                        <li class="breadcrumb-item"><a href="#">Problemas</a></li>
+                        <li class="breadcrumb-item active">Registrar Problemas</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">Problemas Plataforma</h4>
+            </div>
+
+            <div class="col-md-12 col-lg-12 col-xl-12">
+                <div class="card">
+                    <div class="card-body">
+
+                        <h4 class="mt-0 header-title"></h4>
+
+                        <!-- Nav tabs -->
+                        <ul class="nav nav-pills nav-justified" role="tablist">
+                            <li class="nav-item waves-effect waves-light">
+                                <a class="nav-link active" data-toggle="tab" href="#home-1" role="tab">Nuevo Registro de Problemas Plataforma</a>
+                            </li>
+                        </ul>
+
+                        <!-- Tab panes -->
+                        <div class="tab-content">
+                            <div class="tab-pane active p-3" id="home-1" role="tabpanel">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h4 class="mt-0 header-title">Datos de Problema a Registrar</h4>
+                                                <form method="post" autocomplete="off">
+                                                    <input id="txtid" type="hidden" value="0" />
+                                                    @* ID DE USUARIO REGISTRADO **@
+                                                    <input id="usuariounico" type="hidden" value="@Session["IdUsuario"]" />
+                                                    @* FECHA ACTUAL AL MOMENTO DE DESPLEGAR MODAL **@
+                                                    <input id="fechaactual" type="hidden" value="@DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss")" />
+                                                    @* ESTADO POR DEFECTO DE PROBLEMA A REGISTRAR**@
+                                                    <input id="cboestadoproblema" type="hidden" value="activo" />
+                                                    <div class="row">
+                                                        <div class="col-xl-12">
+                                                            <div class="form-group row">
+                                                                <label for="txtnombreproblema" class="col-sm-2 col-form-label">Nombre del Problema <code class="highlighter-danger">(*)</code></label>
+                                                                <div class="col-sm-10">
+                                                                    <input class="form-control" id="txtnombreproblema" name="txtnombreproblema" maxlength="40" placeholder="Ingrese el nombre del problema a registrar..." autocomplete="off" required>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-xl-12">
+                                                            <div class="form-group row">
+                                                                <label for="txtdescripcionproblema" class="col-sm-2 col-form-label">Descripci&oacute;n del Problema <code class="highlighter-danger">(*)</code></label>
+                                                                <div class="col-sm-10">
+                                                                    <textarea class="form-control" id="txtdescripcionproblema" name="txtdescripcionproblema" maxlength="255" placeholder="Ingrese la descripci&oacute;n del problema..." autocomplete="off" required></textarea>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-xl-12">
+                                                            <div class="form-group row">
+                                                                <label for="input-file-now" class="col-sm-2 col-form-label">Adjunte Captura de Pantalla <code class="highlighter-danger">(*)</code></label>
+                                                                <div class="col-sm-10">
+                                                                    <input type="file" id="input-file-now" class="dropify" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+
+
+                                                        <div class="col-xl-12">
+                                                            <button type="button" class="btn btn-success waves-effect waves-light" onclick="Guardar()"><i class="mdi mdi-check-all mr-2"></i>Procesar Informaci&oacute;n</button>
+                                                        </div>
+
+                                                        <!-- MENSAJE ERROR -->
+                                                        @{
+                                                            if (ViewBag.Error != null)
+                                                            {
+                                                                <div class="form-floating mb-3">
+                                                                    <div class="alert alert-danger" role="alert">
+                                                                        <img class="img-fluid" style="width: 45px;" src="@imgsrc/images/icon-gif/21-avatar-outline.gif" /> @ViewBag.Error
+                                                                    </div>
+                                                                </div>
+                                                            }
+                                                        }
+
+
+                                                    </div>
+                                                </form>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> <!-- end col -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> <!-- end row -->
+        </div>
+    </div>
+<!-- end page title end breadcrumb -->
+</div><!-- container -->
+
+@section scripts{
+    @*----- EJECUCION DE MANTENIMIENTOS AJAX -----*@
+    <script>
+    function Guardar() {
+
+        var NombreReporte = $('#txtnombreproblema').val();
+        var DescripcionReporte = $('#txtdescripcionproblema').val();
+        var FotoReporte = $('#input-file-now').val();
+
+        var ImagenSeleccionada = $("#input-file-now")[0].files[0];
+
+        var ProblemasPlataforma = {
+            IdReportePlataforma: $("#txtid").val(),
+            NombreReporte: $("#txtnombreproblema").val(),
+            DescripcionReporte: $("#txtdescripcionproblema").val(),
+            ConversionFechaRegistro: $("#fechaactual").val(),
+            EstadoReporte: $("#cboestadoproblema").val(),
+            UsuarioReporteID: $("#usuariounico").val()
+
+        }
+
+        var request = new FormData();
+        request.append("objeto", JSON.stringify(ProblemasPlataforma))
+        request.append("archivoImagen", ImagenSeleccionada)
+
+        if (NombreReporte == "") {
+            alertify.logPosition("bottom left");
+            alertify.error("<strong><i class='ion-alert-circled'></i></strong> Lo sentimos, debe ingresar un nombre a su reporte");
+        } else if (DescripcionReporte == "") {
+            alertify.logPosition("bottom left");
+            alertify.error("<strong><i class='ion-alert-circled'></i></strong> Lo sentimos, debe ingresar una descripción a su reporte");
+        } else if (FotoReporte == "") {
+            alertify.logPosition("bottom left");
+            alertify.error("<strong><i class='ion-alert-circled'></i></strong> Lo sentimos, debe ingresar una captura de pantalla de su reporte");
+        } else {
+            jQuery.ajax({
+            url: '@Url.Action("GuardarProblemasReportesPlataforma", "Administracion")',
+            type: "POST",
+            data: request,
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                if (data.resultado != 0) {
+                        ProblemasPlataforma.IdReportePlataforma = data.resultado;
+                        AlertaUsuarioMostrar("Registro Exitoso", "Su reporte ha sido ingresado con exito", "success");
+                        setTimeout(function () {
+                            location.reload();
+                        }, 1500);
+                    } else {
+                        alertify.logPosition("bottom left");
+                        alertify.error("<strong><i class='ion-alert-circled'></i></strong> " + data.mensaje);
+                    }
+            },
+            error: function (data) {
+                $(".modal-body").LoadingOverlay("hide"); // OCULTAR PANTALLA DE ESPERA
+                $("#mensajeError").text("Lo sentimos, en estos momentos no podemos procesar tu solicitud.");
+                $("#mensajeError").show(); // MOSTRAR MENSAJES DE ERRORES
+            },
+            // REALIZAR EJECUCION DURANTE LA EJECUCION DEL PROCESAMIENTO DATOS FORMULARIOS --> MOSTRAR PANTALLA DE ESPERA
+            beforeSend: function () {
+                $(".modal-body").LoadingOverlay("show", {
+                    imageResizeFactor: 2,
+                    text: "Espere un momento...",
+                    size: 14
+                })
+            }
+        });
+
+        }
+    }
+
+
+
+    // FUNCION PARA MOSTRAR ALERTAS A USUARIOS -> SWEETALERT
+    function AlertaUsuarioMostrar(titulo, descripcion, icono) {
+        swal(
+            titulo, // ENCABEZADO
+            descripcion, // CUERPO
+            icono // ICONO DE ALERTA
+        );
+    }
+    </script>
+}

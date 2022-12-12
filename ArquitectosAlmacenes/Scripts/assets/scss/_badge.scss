@@ -1,0 +1,48 @@
+.badge {
+  
+  &.badge-outline-success{
+    border:1px solid $success;
+    background-color: transparent;
+    color: $success;
+  }
+  &.badge-outline-danger{
+    border:1px solid $danger;
+    background-color: transparent;
+    color: $danger;
+  }
+  &.badge-outline-primary{
+    border:1px solid $primary;
+    background-color: transparent;
+    color: $primary;
+  }
+  &.badge-outline-warning{
+    border:1px solid $warning;
+    background-color: transparent;
+    color: $warning;
+  }
+  &.badge-outline-info{
+    border:1px solid $info;
+    background-color: transparent;
+    color: $info;
+  }
+  &.badge-outline-pink{
+    border:1px solid $pink;
+    background-color: transparent;
+    color: $pink;
+  }
+  &.badge-outline-purple{
+    border:1px solid $purple;
+    background-color: transparent;
+    color: $purple;
+  }
+  &.badge-outline-secondary{
+    border:1px solid $secondary;
+    background-color: transparent;
+    color: $secondary;
+  }
+  &.badge-outline-dark{
+    border:1px solid $dark;
+    background-color: transparent;
+    color: $dark;
+  }
+}

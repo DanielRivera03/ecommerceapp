@@ -1,0 +1,184 @@
+﻿@model  CapaEntidad.Usuarios
+@{
+    ViewBag.Title = "Perfil Clientes";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    // BLOQUEAR SISTEMA, SI POSEE PROCESO DE RECUPERACION DE CUENTAS ACTIVO
+    if (Session["ComprobarRecuperacion"] != null)
+    {
+        bool HabilitarSistema = Convert.ToBoolean(Session["ComprobarRecuperacion"]);
+        if (HabilitarSistema)
+        {
+            <script>
+                location.href = "@Url.Action("CambioCredencialesAcceso","Home")"
+            </script>
+        }
+    }
+}
+<div class="page-content">
+    <div class="holder breadcrumbs-wrap mt-0">
+        <div class="container">
+            <ul class="breadcrumbs">
+                <li><a href="@Url.Action("Index")">Inicio</a></li>
+                <li><span>Mi Perfil Clientes</span></li>
+            </ul>
+        </div>
+    </div>
+
+
+
+    <div class="holder">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 aside aside--left">
+                    <div class="list-group">
+                        <a href="@Url.Action("PerfilClientes")" class="list-group-item active btn-gradient-success">Mi Cuenta</a>
+                        <a href="@Url.Action("ListadoMisComprasProcesadas")" class="list-group-item">Mis Compras</a>
+                    </div>
+                </div>
+                <div class="col-md-14 aside">
+                    <h1 class="mb-3">Detalles Cuenta Cliente</h1>
+                    <div class="row vert-margin">
+                        <div class="col-sm-9">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h3>Informaci&oacute;n</h3>
+                                    <p>
+                                        <b>Nombres:</b> @Html.DisplayTextFor(usuario => usuario.Nombres)<br>
+                                        <b>Apellidos:</b> @Html.DisplayTextFor(usuario => usuario.Apellidos)<br>
+                                        <b>Correo:</b> @Html.DisplayTextFor(usuario => usuario.Correo)<br>
+                                    </p>
+                                    <div class="mt-2 clearfix">
+                                        <a href="#" class="link-icn js-show-form" data-form="#updateDetails"><i class="icon-pencil"></i>Editar Informaci&oacute;n</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card mt-3 d-none" id="updateDetails">
+                        <div class="card-body">
+                            <h3>Actualizar Informaci&oacute;n</h3>
+                            <form method="post" autocomplete="off">
+                                <input type="hidden" value="@Html.DisplayTextFor(usuario => usuario.IdUsuario)" id="txtid" name="txtid">
+                                <div class="row mt-2">
+                                    <div class="col-sm-9">
+                                        <label class="text-uppercase">Nombres:</label>
+                                        <div class="form-group">
+                                            <input class="form-control" type="text" value="@Html.DisplayTextFor(usuario => usuario.Nombres)" id="txtnombresperfil" name="txtnombresperfil" placeholder="Ingrese sus nombres..." required>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <label class="text-uppercase">Apellidos:</label>
+                                        <div class="form-group">
+                                            <input class="form-control" type="text" value="@Html.DisplayTextFor(usuario => usuario.Apellidos)" id="txtapellidosperfil" name="txtapellidosperfil" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mt-2">
+                                    <div class="col-sm-9">
+                                        <label class="text-uppercase">Correo:</label>
+                                        <div class="form-group">
+                                            <input class="form-control" type="text" value="@Html.DisplayTextFor(usuario => usuario.Correo)" id="txtcorreoperfil" name="txtcorreoperfil" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <label class="text-uppercase">Nueva Contrase&ntilde;a:</label>
+                                        <div class="form-group">
+                                            <input class="form-control" type="password" placeholder="Ingrese su nueva contrase&ntilde;a" id="txtnuevaclaveperfil" name="txtnuevaclaveperfil" required>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <label class="text-uppercase mt-2">Repita Nueva Contrase&ntilde;a:</label>
+                                <div class="form-group">
+                                    <input class="form-control" type="password" placeholder="Ingrese su nueva contrase&ntilde;a" id="txtrepetirnuevaclaveperfil" name="txtrepetirnuevaclaveperfil" required>
+                                </div>
+                                <div class="mt-2">
+                                    <button type="reset" class="btn btn--alt js-close-form btn-gradient-danger" data-form="#updateDetails">Cancelar</button>
+                                    <button type="button" class="btn ml-1 btn-gradient-success" onclick="Guardar()">Actualizar Datos</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    @*----- EJECUCION DE MANTENIMIENTOS AJAX -----*@
+    <script>
+        // GUARDAR NUEVOS USUARIOS
+    function Guardar() {
+        var ContraseniaUsuarios = $('#txtnuevaclaveperfil').val(); // CONTRASENIA DE USUARIO
+        var ValidarContraseniaUsuarios = $('#txtrepetirnuevaclaveperfil').val(); // VERIFICAR CONTRASENIA
+        var Usuario = {
+            IdUsuario: $("#txtid").val(),
+            Nombres: $("#txtnombresperfil").val(),
+            Apellidos: $("#txtapellidosperfil").val(),
+            Correo: $("#txtcorreoperfil").val(),
+            Contrasenia: $("#txtnuevaclaveperfil").val()
+        }
+        if (ContraseniaUsuarios === "") {
+            alertify.logPosition("bottom left");
+            alertify.error("<strong><i class='ion-alert-circled'></i></strong> Lo sentimos, debe ingresar una nueva contraseña");
+        } else if (ValidarContraseniaUsuarios === "") {
+            alertify.logPosition("bottom left");
+            alertify.error("<strong><i class='ion-alert-circled'></i></strong> Lo sentimos, debe repetir la nueva contraseña ingresada");
+        } else if (ContraseniaUsuarios != ValidarContraseniaUsuarios) {
+            alertify.logPosition("bottom left");
+            alertify.error("<strong><i class='ion-alert-circled'></i></strong> Lo sentimos, las contraseñas ingresadas no son iguales");
+        }else {
+            jQuery.ajax({
+            url: '@Url.Action("EditarMiPerfilClientes")',
+            type: "POST",
+            data: JSON.stringify({ objeto: Usuario }),
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            // REGISTRO DE NUEVOS CLIENTES
+            success: function (data) {
+                $(".page-content").LoadingOverlay("hide"); // OCULTAR PANTALLA DE ESPERA
+
+                    if (data.resultado != 0) {
+                        Usuario.IdUsuario = data.resultado;
+                        AlertaUsuarioMostrar("Registro Exitoso", "Los datos de su cuenta se han modificado con éxito", "success");
+                        setTimeout(function () {
+                            location.reload();
+                        }, 2800);
+                    } else {
+                        alertify.logPosition("bottom left");
+                        alertify.error("<strong><i class='ion-alert-circled'></i></strong> " + data.mensaje);
+                    }
+
+            },
+            error: function (data) {
+                $("#mensajeError").text("Lo sentimos, en estos momentos no podemos procesar tu solicitud.");
+                $("#mensajeError").show(); // MOSTRAR MENSAJES DE ERRORES
+            },
+            // REALIZAR EJECUCION DURANTE LA EJECUCION DEL PROCESAMIENTO DATOS FORMULARIOS --> MOSTRAR PANTALLA DE ESPERA
+            beforeSend: function () {
+                $(".page-content").LoadingOverlay("show", {
+                    imageResizeFactor: 2,
+                    text: "Espere un momento...",
+                    size: 12
+                })
+            }
+        });
+        }
+
+    }
+
+
+
+    // FUNCION PARA MOSTRAR ALERTAS A USUARIOS -> SWEETALERT
+    function AlertaUsuarioMostrar(titulo, descripcion, icono) {
+        swal(
+            titulo, // ENCABEZADO
+            descripcion, // CUERPO
+            icono // ICONO DE ALERTA
+        );
+    }
+    </script>
+}
+
+

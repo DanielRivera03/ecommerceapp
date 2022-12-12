@@ -1,0 +1,526 @@
+﻿@{
+    string imgsrc = System.Configuration.ConfigurationManager.AppSettings["ServidorFotos"];
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <title>Arquitecto Almacenes - @ViewBag.Title</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="@imgsrc/images/logos/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="@imgsrc/images/logos/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="@imgsrc/images/logos/favicon-16x16.png">
+    <link rel="manifest" href="@imgsrc/images/logos/site.webmanifest">
+    <link rel="mask-icon" href="@imgsrc/images/logos/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+    @*
+        -> ESTILOS DE PANEL DE ADMINISRACION TIENDA EN LINEA
+        * NO TOCAR CONFIGURACIONES *
+    *@
+    @Styles.Render("~/Scripts/assets/css/bootstrap.min.css")
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Scripts/assets/plugins/timepicker/tempusdominus-bootstrap-4.css")
+    @Styles.Render("~/Scripts/assets/plugins/timepicker/bootstrap-material-datetimepicker.css")
+    @Styles.Render("~/Scripts/assets/plugins/clockpicker/jquery-clockpicker.min.css")
+    @Styles.Render("~/Scripts/assets/plugins/colorpicker/asColorPicker.min.css")
+    @Styles.Render("~/Scripts/assets/plugins/select2/select2.min.css")
+    @Styles.Render("~/Scripts/assets/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css")
+    @Styles.Render("~/Scripts/assets/plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css")
+    @Styles.Render("~/Scripts/assets/plugins/bootstrap-touchspin/css/jquery.bootstrap-touchspin.min.css")
+    @Styles.Render("~/Content/Estilos_Administracion.css")
+    @Styles.Render("~/Scripts/assets/plugins/animate/animate.css")
+    @Styles.Render("~/Scripts/assets/plugins/datatables/dataTables.bootstrap4.min.css")
+    @Styles.Render("~/Scripts/assets/plugins/datatables/buttons.bootstrap4.min.css")
+    @Styles.Render("~/Scripts/assets/plugins/datatables/responsive.bootstrap4.min.css")
+    @Styles.Render("~/Scripts/assets/css/icons.css")
+    @Styles.Render("~/Scripts/assets/plugins/dropify/css/dropify.min.css")
+    @Styles.Render("~/Scripts/assets/plugins/sweet-alert2/sweetalert2.min.css")
+    @Styles.Render("~/Scripts/assets/plugins/alertify/css/alertify.css")
+    @Styles.Render("~/Scripts/assets/plugins/magnific-popup/magnific-popup.css")
+    <link href="https://fonts.googleapis.com/css2?family=Inter+Tight&display=swap" rel="stylesheet">
+    <style>
+        .s-alert-box {
+            z-index: 9999;
+        }
+
+        .alertify-logs {
+            z-index: 999999 !important;
+        }
+
+        a:hover {
+            color: #fff;
+        }
+    </style>
+</head>
+<body class="fixed-left">
+    <!-- Loader -->
+    <div id="preloader"><div id="status"><div class="spinner"></div></div></div>
+
+    <!-- Begin page -->
+    <div id="wrapper">
+
+        <!-- ========== Left Sidebar Start ========== -->
+        <div class="left side-menu">
+            <button type="button" class="button-menu-mobile button-menu-mobile-topbar open-left waves-effect">
+                <i class="ion-close"></i>
+            </button>
+
+            <!-- LOGO -->
+            <div class="topbar-left">
+                <div class="text-center bg-logo">
+
+                    <a style="font-size: .9rem;" class="logo"><img src="@imgsrc/images/logos/logo_administracion.png" height="44" alt="logo"> Arquitectos Portal</a>
+                </div>
+            </div>
+            <div class="sidebar-user">
+                <img src="@imgsrc/images/FotosPerfil/@Session["FotoPerfil"]" alt="user" class="rounded-circle img-thumbnail mb-1">
+                <h6 style="font-size: .9rem;" class="">
+                    <strong>Hola, </strong>@Session["UsuarioUnico"]
+                </h6>
+                <p class=" online-icon text-dark"><i class="mdi mdi-record text-success"></i>Activo</p>
+                <ul class="list-unstyled list-inline mb-0 mt-2">
+                    <li class="list-inline-item">
+                        <a href="@Url.Action("MiPerfil","Administracion")" class="" data-toggle="tooltip" data-placement="top" title="Mi Perfil"><i class="dripicons-user text-purple"></i></a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="@Url.Action("Index","Home")" class="" data-toggle="tooltip" data-placement="top" title="Ir a Tienda"><i class="dripicons-cart text-success"></i></a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="@Url.Action("CerrarSesion","Home")" class="" data-toggle="tooltip" data-placement="top" title="Cerrar Sesi&oacute;n"><i class="dripicons-power text-danger"></i></a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="sidebar-inner slimscrollleft">
+
+                <div id="sidebar-menu">
+                    @*
+                        --> MENU SERA VALIDADO SEGUN ID DE ROL DE USUARIO LOGUEADO
+                            DEMAS CONTROLES DE ACCESO, SERAN VALIDADOS EN EL RESPECTIVO CONTROLADOR DE ESTA PLANTILLA
+                    *@
+                    <ul>
+                        <li class="menu-title">Bienvenido(a)</li>
+
+                        <li>
+                            <a href="@Url.Action("InicioAdministradores","Administracion")" class="waves-effect">
+                                <i class="dripicons-home"></i>
+                                <span> Inicio <span class="badge badge-pill badge-primary float-right"></span></span>
+                            </a>
+                        </li>
+                        <li>
+                        </li>
+
+                        <li class="menu-title">Mantenimientos</li>
+                        @*
+                            --> USUARIOS
+                        *@
+                        @{
+                            // -> VISTA ITEM DE MENU SOLO ADMINISTRADORES
+                            if (Convert.ToUInt32(Session["Privilegio"]) == 1)
+                            {
+                                <li class="has_sub">
+                                    <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-account-convert"></i> <span> Usuarios </span> <span class="float-right"><i class="mdi mdi-chevron-right"></i></span></a>
+                                    <ul class="list-unstyled">
+                                        <li><a href="@Url.Action("Usuarios","Administracion")">Mantenimiento Usuarios</a></li>
+                                        @*<li><a href="@Url.Action("","Administracion")">Generar Reporte Clientes</a></li>*@
+                                    </ul>
+                                </li>
+                            }
+                        }
+
+                        @*
+                            --> ROLES
+                        *@
+                        @{
+                            // -> VISTA ITEM DE MENU SOLO ADMINISTRADORES
+                            if (Convert.ToUInt32(Session["Privilegio"]) == 1)
+                            {
+                                <li class="has_sub">
+                                    <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-account-key"></i> <span> Roles </span> <span class="float-right"><i class="mdi mdi-chevron-right"></i></span></a>
+                                    <ul class="list-unstyled">
+                                        <li><a href="@Url.Action("Roles","Administracion")">Mantenimiento Roles</a></li>
+                                    </ul>
+                                </li>
+                            }
+                        }
+
+                        @*
+                            --> CLIENTES
+                        *@
+                        @{
+                            // -> VISTA ITEM DE MENU PARA TODOS LOS EMPLEADOS ADMINISTRATIVOS
+                            if (Convert.ToUInt32(Session["Privilegio"]) >= 1 && Convert.ToUInt32(Session["Privilegio"]) <= 4)
+                            {
+                                <li class="has_sub">
+                                    <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-account-star"></i> <span> Clientes </span> <span class="float-right"><i class="mdi mdi-chevron-right"></i></span></a>
+                                    <ul class="list-unstyled">
+                                        <li><a href="@Url.Action("ConsultaClientesRegistrados","Administracion")">Consultar Clientes</a></li>
+                                    </ul>
+                                </li>
+                            }
+                        }
+
+                        @*
+                            --> EMPLEADOS
+                        *@
+                        @{
+                            // -> VISTA ITEM DE MENU PARA TODOS LOS EMPLEADOS ADMINISTRATIVOS
+                            if (Convert.ToUInt32(Session["Privilegio"]) >= 1 && Convert.ToUInt32(Session["Privilegio"]) <= 3)
+                            {
+                                <li class="has_sub">
+                                    <a href="javascript:void(0);" class="waves-effect"><i class="typcn typcn-user-outline"></i> <span> Empleados </span> <span class="float-right"><i class="mdi mdi-chevron-right"></i></span></a>
+                                    <ul class="list-unstyled">
+                                        <li><a href="@Url.Action("ConsultaEmpleadosRegistrados","Administracion")">Consultar Empleados</a></li>
+                                    </ul>
+                                </li>
+                            }
+                        }
+
+                        @*
+                            --> CATEGORIAS DE PRODUCTOS
+                        *@
+                        @{
+                            // -> VISTA ITEM DE MENU ADMINISTRADORES, PRESIDENCIA, GERENCIA Y ATENCION AL CLIENTE
+                            if (Convert.ToUInt32(Session["Privilegio"]) >= 1 && Convert.ToUInt32(Session["Privilegio"]) <= 4)
+                            {
+                                <li class="has_sub">
+                                    <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-archive"></i> <span> Categor&iacute;as </span> <span class="float-right"><i class="mdi mdi-chevron-right"></i></span></a>
+                                    <ul class="list-unstyled">
+                                        <li><a href="@Url.Action("CategoriasProductos","Administracion")">Mantenimiento de Categor&iacute;as</a></li>
+                                    </ul>
+                                </li>
+                            }
+                        }
+
+                        @*
+                            --> MARCAS DE PRODUCTOS
+                        *@
+                        @{
+                            // -> VISTA ITEM DE MENU ADMINISTRADORES, PRESIDENCIA, GERENCIA Y ATENCION AL CLIENTE
+                            if (Convert.ToUInt32(Session["Privilegio"]) >= 1 && Convert.ToUInt32(Session["Privilegio"]) <= 4)
+                            {
+                                <li class="has_sub">
+                                    <a href="javascript:void(0);" class="waves-effect"><i class="ti-receipt"></i> <span> Marcas </span> <span class="float-right"><i class="mdi mdi-chevron-right"></i></span></a>
+                                    <ul class="list-unstyled">
+                                        <li><a href="@Url.Action("MarcasProductos","Administracion")">Mantenimiento de Marcas</a></li>
+                                    </ul>
+                                </li>
+                            }
+                        }
+
+                        @*
+                            --> GARANTIAS DE PRODUCTOS
+                        *@
+                        @{
+                            // -> VISTA ITEM DE MENU ADMINISTRADORES, PRESIDENCIA, GERENCIA Y ATENCION AL CLIENTE
+                            if (Convert.ToUInt32(Session["Privilegio"]) >= 1 && Convert.ToUInt32(Session["Privilegio"]) <= 4)
+                            {
+                                <li class="has_sub">
+                                    <a href="javascript:void(0);" class="waves-effect"><i class="dripicons-store"></i> <span> Garant&iacute;as </span> <span class="float-right"><i class="mdi mdi-chevron-right"></i></span></a>
+                                    <ul class="list-unstyled">
+                                        <li><a href="@Url.Action("GarantiaProductos","Administracion")">Mantenimiento de Garant&iacute;as</a></li>
+                                    </ul>
+                                </li>
+                            }
+                        }
+
+                        @*
+                            --> PRODUCTOS
+                        *@
+                        @{
+                            // -> VISTA ITEM DE MENU ADMINISTRADORES, PRESIDENCIA, GERENCIA Y ATENCION AL CLIENTE
+                            if (Convert.ToUInt32(Session["Privilegio"]) >= 1 && Convert.ToUInt32(Session["Privilegio"]) <= 4)
+                            {
+                                <li class="has_sub">
+                                    <a href="javascript:void(0);" class="waves-effect"><i class="dripicons-basket"></i> <span> Productos </span> <span class="float-right"><i class="mdi mdi-chevron-right"></i></span></a>
+                                    <ul class="list-unstyled">
+                                        <li><a href="@Url.Action("Productos","Administracion")">Mantenimiento de Productos</a></li>
+                                        <li><a href="@Url.Action("ListadoProductosSinStock","Administracion")">Consultar Productos Sin Stock</a></li>
+                                    </ul>
+                                </li>
+                            }
+                        }
+
+                        @*
+                            --> PEDIDOS
+                        *@
+                        @{
+                            // -> VISTA ITEM DE MENU ADMINISTRADORES, PRESIDENCIA, GERENCIA Y ATENCION AL CLIENTE
+                            if (Convert.ToUInt32(Session["Privilegio"]) >= 1 && Convert.ToUInt32(Session["Privilegio"]) <= 4)
+                            {
+                                <li class="has_sub">
+                                    <a href="javascript:void(0);" class="waves-effect"><i class="dripicons-location"></i> <span> Pedidos </span> <span class="float-right"><i class="mdi mdi-chevron-right"></i></span></a>
+                                    <ul class="list-unstyled">
+                                        <li><a href="@Url.Action("ListadoPedidosProcesados","Administracion")">Gestionar Pedidos</a></li>
+                                        <li><a href="@Url.Action("ListadoPedidosEnProceso","Administracion")">Consulta Pedidos En Proceso</a></li>
+                                        <li><a href="@Url.Action("ListadoPedidosEnviados","Administracion")">Consulta Pedidos Enviados</a></li>
+                                        <li><a href="@Url.Action("ListadoPedidosCancelados","Administracion")">Consulta Pedidos Cancelados</a></li>
+                                        <li><a href="@Url.Action("ListadoPedidosEntregados","Administracion")">Consulta Pedidos Entregados</a></li>
+                                    </ul>
+                                </li>
+                            }
+                        }
+
+
+                        @*
+                            --> VENTAS
+                        *@
+                        @{
+                            // -> VISTA ITEM DE MENU ADMINISTRADORES, PRESIDENCIA, GERENCIA Y ATENCION AL CLIENTE
+                            if (Convert.ToUInt32(Session["Privilegio"]) >= 1 && Convert.ToUInt32(Session["Privilegio"]) <= 4)
+                            {
+                                <li class="has_sub">
+                                    <a href="javascript:void(0);" class="waves-effect"><i class="dripicons-cart"></i> <span> Ventas </span> <span class="float-right"><i class="mdi mdi-chevron-right"></i></span></a>
+                                    <ul class="list-unstyled">
+                                        <li><a href="@Url.Action("ListadoComprasProcesadasClientes","Administracion")">Consulta de Ventas</a></li>
+                                        <li><a href="@Url.Action("ListadoDetallesComprasProcesadasClientes","Administracion")">Consulta Detalle de Ventas</a></li>
+                                        <li><a href="@Url.Action("ProblemasVentasClientes","Administracion")">Problemas de Ventas</a></li>
+                                    </ul>
+                                </li>
+                            }
+                        }
+
+                        @*
+                            --> PROBLEMAS DE PLATAFORMA
+                        *@
+                        <li class="has_sub">
+                            <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-apple-finder"></i> <span> ¿Problemas? </span> <span class="float-right"><i class="mdi mdi-chevron-right"></i></span></a>
+                            <ul class="list-unstyled">
+                                @{
+                                    // -> VISTA ITEM DE MENU SOLO ADMINISTRADORES
+                                    if (Session["Privilegio"].ToString() == "1")
+                                    {
+                                        <li><a href="@Url.Action("ProblemasPlataforma","Administracion")">Gestionar Problemas</a></li>
+                                        <li><a href="@Url.Action("ProblemasPlataformaActivos","Administracion")">Consultar Problemas Activos</a></li>
+                                        <li><a href="@Url.Action("ProblemasPlataformaEnCurso","Administracion")">Consultar Problemas En Curso</a></li>
+                                        <li><a href="@Url.Action("ProblemasPlataformaResueltos","Administracion")">Consultar Problemas Resueltos</a></li>
+                                        <li><a href="@Url.Action("ProblemasPlataformaCerrados","Administracion")">Consultar Problemas Cerrados</a></li>
+                                    }
+                                    if (Convert.ToUInt32(Session["Privilegio"]) >= 2 && Convert.ToUInt32(Session["Privilegio"]) <= 4) 
+                                    {
+                                        <li><a href="@Url.Action("RegistroProblemasPlataformaGeneral","Administracion")">Registrar Problemas</a></li>
+                                    }
+                                }
+
+                            </ul>
+                        </li>
+
+
+
+                    </ul>
+                </div>
+                <div class="clearfix"></div>
+            </div> <!-- end sidebarinner -->
+        </div>
+        <!-- Left Sidebar End -->
+        <!-- Start right Content here -->
+
+        <div class="content-page">
+            <!-- Start content -->
+            <div class="content">
+
+                <!-- Top Bar Start -->
+                <div class="topbar-main">
+
+                    <nav class="navbar-custom">
+
+                        <ul class="list-inline float-right mb-0">
+                            <li style="color: #fff; font-size: .8rem;" class="list-inline-item dropdown notification-list logo">
+                                @{
+                                    // VALIDACIONES DE SALUDO Y HORA ACTUAL DE SISTEMA
+                                    string FormatoObtenerHora = "HH";
+                                    string SaludoNoche = "Buenas Noches";
+                                    string SaludoManiana = "Buenos Días";
+                                    string SaludoTarde = "Buenas Tardes";
+                                    var ObtenerHora = DateTime.Now.ToString(FormatoObtenerHora);
+                                    var ConversionHora = Convert.ToInt32(ObtenerHora);
+                                    // VALIDACION SEGUN HORARIO
+                                    if (ConversionHora >= 18 && ConversionHora <= 23 || ConversionHora >= 0 && ConversionHora < 4)
+                                    {
+                                        @SaludoNoche
+                                    }
+                                    if (ConversionHora >= 4 && ConversionHora < 12)
+                                    {
+                                        @SaludoManiana
+                                    }
+                                    if (ConversionHora >= 12 && ConversionHora < 18)
+                                    {
+                                        @SaludoTarde
+                                    }
+                                }
+                                @*IMPRESION SEGUN HORARIO -> ICONO GIF DIA/NOCHE*@
+                                @{ if (ConversionHora >= 18 && ConversionHora <= 23 || ConversionHora >= 0 && ConversionHora < 6)
+                                    { <img class="img-fluid" style=" width: 2.9rem; height: auto; padding: 0;" src="@imgsrc/images/icon-gif/fog-night.svg" /> }
+                                    if (ConversionHora >= 6 && ConversionHora <= 17)
+                                    { <img class="img-fluid" style=" width: 2.9rem; height: auto; padding: 0;" src="@imgsrc/images/icon-gif/fog-day.svg" /> }
+                                }
+
+                            </li>
+
+                            <li style="color: #fff; font-size: .8rem;" class="list-inline-item dropdown notification-list logo">
+                                <div id="reloj"></div>
+                            </li>
+
+                            <li class="list-inline-item dropdown notification-list logo"></li>
+
+                            @*
+                            <li class="list-inline-item dropdown notification-list">
+                                <a class="nav-link dropdown-toggle arrow-none waves-effect" data-toggle="dropdown" href="#" role="button"
+                                   aria-haspopup="false" aria-expanded="false">
+                                    <i class="dripicons-bell noti-icon"></i>
+                                    <span class="badge badge-success noti-icon-badge">2</span>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right dropdown-arrow dropdown-menu-lg">
+                                    <!-- item-->
+                                    <div class="dropdown-item noti-title">
+                                        <h5><span class="badge badge-danger float-right">87</span>Notification</h5>
+                                    </div>
+
+                                    <!-- item-->
+                                    <a href="javascript:void(0);" class="dropdown-item notify-item">
+                                        <div class="notify-icon bg-primary"><i class="mdi mdi-cart-outline"></i></div>
+                                        <p class="notify-details"><b>Your order is placed</b><small class="text-muted">Dummy text of the printing and typesetting industry.</small></p>
+                                    </a>
+
+                                    <!-- item-->
+                                    <a href="javascript:void(0);" class="dropdown-item notify-item">
+                                        <div class="notify-icon bg-success"><i class="mdi mdi-message"></i></div>
+                                        <p class="notify-details"><b>New Message received</b><small class="text-muted">You have 87 unread messages</small></p>
+                                    </a>
+
+                                    <!-- item-->
+                                    <a href="javascript:void(0);" class="dropdown-item notify-item">
+                                        <div class="notify-icon bg-warning"><i class="mdi mdi-glass-cocktail"></i></div>
+                                        <p class="notify-details"><b>Your item is shipped</b><small class="text-muted">It is a long established fact that a reader will</small></p>
+                                    </a>
+
+                                    <!-- All-->
+                                    <a href="javascript:void(0);" class="dropdown-item notify-item border-top">
+                                        View All
+                                    </a>
+
+                                </div>
+                            </li>
+                            *@
+
+                            <li class="list-inline-item dropdown notification-list">
+                                <a class="nav-link dropdown-toggle arrow-none waves-effect nav-user" data-toggle="dropdown" href="#" role="button"
+                                   aria-haspopup="false" aria-expanded="false">
+                                    <img src="@imgsrc/images/FotosPerfil/@Session["FotoPerfil"]" alt="user" class="rounded-circle">
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right profile-dropdown ">
+                                    <!-- item-->
+                                    <div class="dropdown-item noti-title">
+                                        <h5>Bienvenido(a)</h5>
+                                    </div>
+                                    <a class="dropdown-item" href="@Url.Action("MiPerfil","Administracion")"><i class="mdi mdi-account-circle m-r-5 text-muted"></i> Mi Perfil</a>
+                                    <a class="dropdown-item" href="@Url.Action("Index","Home")"><i class="mdi mdi-cart m-r-5 text-muted"></i> Ir a Tienda</a>
+                                    <a class="dropdown-item" href="#"><i class="mdi mdi-help m-r-5 text-muted"></i> F.A.Q</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="@Url.Action("CerrarSesion","Home")"><i class="mdi mdi-logout m-r-5 text-muted"></i> Cerrar Sesi&oacute;n</a>
+                                </div>
+                            </li>
+                        </ul>
+
+                        <ul class="list-inline menu-left mb-0">
+                            <li class="float-left">
+                                <button class="button-menu-mobile open-left waves-light waves-effect">
+                                    <i class="mdi mdi-menu"></i>
+                                </button>
+                            </li>
+                            @*BUSCADOR POSIBLEMENTE SE USE A FUTURO*@
+                            @*
+                                <li class="hide-phone app-search">
+                                    <form role="search" class="">
+                                        <input type="text" placeholder="Search..." class="form-control">
+                                        <a href=""><i class="fas fa-search"></i></a>
+                                    </form>
+                                </li>*@
+                        </ul>
+
+                        <div class="clearfix"></div>
+                    </nav>
+                </div>
+                <!-- Top Bar End -->
+                <div class="page-content-wrapper">
+                    @*
+                        -> CONTENIDO DINAMICO PANEL DE ADMINISTRACION
+                    *@
+                    @RenderBody()
+                </div>
+            </div> <!-- content -->
+
+            <footer class="footer">
+                © Copyright 2022 Arquitectos Almacenes S.A de C.V
+            </footer>
+
+        </div>
+        <!-- End Right content here -->
+
+    </div>
+    @*
+        -> SCRIPTS DE PANEL DE ADMINISTRACION TIENDA EN LINEA
+        * NO TOCAR CONFIGURACIONES EXISTENTES
+          SI SE DESEAN AGREGAR NUEVOS ELEMENTOS, REFERENCIARLOS GLOBALMENTE
+          SEGUN SEA EL CASO.
+          *
+    *@
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/Scripts/assets/js/jquery.min.js")
+    @Scripts.Render("~/Scripts/assets/js/popper.min.js")
+    @Scripts.Render("~/Scripts/assets/js/bootstrap.min.js")
+    @Scripts.Render("~/Scripts/assets/js/modernizr.min.js")
+    @Scripts.Render("~/Scripts/assets/js/assets/js/detect.js")
+    @Scripts.Render("~/Scripts/assets/js/fastclick.js")
+    @Scripts.Render("~/Scripts/assets/js/jquery.slimscroll.js")
+    @Scripts.Render("~/Scripts/assets/js/jquery.blockUI.js")
+    @Scripts.Render("~/Scripts/assets/js/waves.js")
+    @Scripts.Render("~/Scripts/assets/js/jquery.nicescroll.js")
+    @Scripts.Render("~/Scripts/assets/js/jquery.scrollTo.min.js")
+    @Scripts.Render("~/Scripts/assets/plugins/chart.js/chart.min.js")
+    @Scripts.Render("~/Scripts/assets/js/app.js")
+    @Scripts.Render("~/Scripts/loadingoverlay/loadingoverlay.min.js")
+    @Scripts.Render("~/Scripts/jquery-validation/jquery.validate.min.js")
+    @Scripts.Render("~/Scripts/validacionformularios.js")
+    @Scripts.Render("~/Scripts/assets/plugins/sweet-alert2/sweetalert2.min.js")
+    @Scripts.Render("~/Scripts/assets/plugins/alertify/js/alertify.js")
+    @* Plugins js *@
+    @Scripts.Render("~/Scripts/assets/plugins/timepicker/moment.js")
+    @Scripts.Render("~/Scripts/assets/plugins/timepicker/tempusdominus-bootstrap-4.js")
+    @Scripts.Render("~/Scripts/assets/plugins/timepicker/bootstrap-material-datetimepicker.js")
+    @Scripts.Render("~/Scripts/assets/plugins/clockpicker/jquery-clockpicker.min.js")
+    @Scripts.Render("~/Scripts/assets/plugins/colorpicker/jquery-asColor.js")
+    @Scripts.Render("~/Scripts/assets/plugins/colorpicker/jquery-asGradient.js")
+    @Scripts.Render("~/Scripts/assets/plugins/colorpicker/jquery-asColorPicker.min.js")
+    @Scripts.Render("~/Scripts/assets/plugins/select2/select2.min.js")
+    @Scripts.Render("~/Scripts/assets/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js")
+    @Scripts.Render("~/Scripts/assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js")
+    @Scripts.Render("~/Scripts/assets/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js")
+    @Scripts.Render("~/Scripts/assets/plugins/bootstrap-touchspin/js/jquery.bootstrap-touchspin.min.js")
+    @Scripts.Render("~/Scripts/assets/pages/modal-animation.js")
+    @Scripts.Render("~/Scripts/assets/pages/form-advanced.js")
+    @Scripts.Render("~/Scripts/assets/plugins/datatables/jquery.dataTables.min.js")
+    @Scripts.Render("~/Scripts/assets/plugins/datatables/dataTables.bootstrap4.min.js")
+    @Scripts.Render("~/Scripts/assets/plugins/datatables/dataTables.buttons.min.js")
+    @Scripts.Render("~/Scripts/assets/plugins/datatables/buttons.bootstrap4.min.js")
+    @Scripts.Render("~/Scripts/assets/plugins/datatables/jszip.min.js")
+    @Scripts.Render("~/Scripts/assets/plugins/datatables/pdfmake.min.js")
+    @Scripts.Render("~/Scripts/assets/plugins/datatables/vfs_fonts.js")
+    @Scripts.Render("~/Scripts/assets/plugins/datatables/buttons.html5.min.js")
+    @Scripts.Render("~/Scripts/assets/plugins/datatables/buttons.print.min.js")
+    @Scripts.Render("~/Scripts/assets/plugins/datatables/buttons.colVis.min.js")
+    @Scripts.Render("~/Scripts/assets/plugins/datatables/dataTables.responsive.min.js")
+    @Scripts.Render("~/Scripts/assets/plugins/datatables/responsive.bootstrap4.min.js")
+    @Scripts.Render("~/Scripts/assets/plugins/dropify/js/dropify.min.js")
+    @Scripts.Render("~/Scripts/assets/pages/dropify.init.js")
+    @Scripts.Render("~/Scripts/HoraSistema.js")
+    @Scripts.Render("~/Scripts/assets/plugins/magnific-popup/jquery.magnific-popup.min.js")
+    @Scripts.Render("~/Scripts/assets/pages/lightbox.js")
+    @Scripts.Render("~/Scripts/IconosClimaAPI.js")
+    @RenderSection("scripts", required: false)
+
+</body>
+</html>

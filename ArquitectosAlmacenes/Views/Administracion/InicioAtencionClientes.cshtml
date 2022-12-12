@@ -1,0 +1,366 @@
+﻿@{
+    string imgsrc = System.Configuration.ConfigurationManager.AppSettings["ServidorFotos"];
+}
+@{
+    ViewBag.Title = "InicioAtencionClientes";
+    Layout = "~/Views/Shared/_Administracion.cshtml";
+    // BLOQUEAR SISTEMA, SI POSEE PROCESO DE RECUPERACION DE CUENTAS ACTIVO
+    if (Session["ComprobarRecuperacion"] != null)
+    {
+        bool HabilitarSistema = Convert.ToBoolean(Session["ComprobarRecuperacion"]);
+        if (HabilitarSistema)
+        {
+            <script>
+                location.href = "@Url.Action("CambioCredencialesAcceso","Home")"
+            </script>
+        }
+    }
+}
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="page-title-box">
+                <div class="btn-group float-right">
+                    <ol class="breadcrumb hide-phone p-0 m-0">
+                        <li class="breadcrumb-item active"><a href="#">Inicio</a></li>
+                    </ol>
+                </div>
+                <h4 class="page-title">Panel Administraci&oacute;n</h4>
+            </div>
+        </div>
+    </div>
+    <!-- end page title end breadcrumb -->
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div id="weather_wrapper">
+                <div class="weatherCard">
+                    <div class="currentTemp">
+                        <span id="imgclima"></span>
+                        <span class="temp" id="temperatura"></span>
+                        <span class="location" id="ubicacion"></span>
+                    </div>
+                    <div class="currentWeather">
+                        @{
+                            string FormatoObtenerHora = "HH";
+                            var ObtenerHora = DateTime.Now.ToString(FormatoObtenerHora);
+                            var ConversionHora = Convert.ToInt32(ObtenerHora);
+                            @*IMPRESION SEGUN HORARIO -> ICONO GIF DIA/NOCHE*@
+                            if (ConversionHora >= 17 && ConversionHora < 18)
+                            { <img id="tiempo_gifclima" src="@imgsrc/images/Mt.FujiJapan-sunset.gif" /> }
+                            if (ConversionHora >= 18 && ConversionHora <= 23 || ConversionHora >= 0 && ConversionHora < 6)
+                            { <img id="tiempo_gifclima" src="@imgsrc/images/Mt.FujiJapan-night.gif" /> }
+                            if (ConversionHora >= 6 && ConversionHora < 11 || ConversionHora >= 12 && ConversionHora < 17)
+                            { <img id="tiempo_gifclima" src="@imgsrc/images/Mt.FujiJapan-day.gif" /> }
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <i class="fas fa-history me-1"></i>
+                    Historial de Ventas
+                </div>
+                <div class="card-body">
+                    <div class="row align-items-end">
+                        <div class="col-sm-2">
+                            <div class="mb-2">
+                                <label class="form-label">Fecha de Inicio</label>
+                                <input class="form-control" id="txtfechainicio" name="fechainicio" type="text" />
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="mb-2">
+                                <label class="form-label">Fecha Finalizaci&oacute;n</label>
+                                <input class="form-control" id="txtfechafin" name="fechafin" type="text" />
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="mb-2">
+                                <label class="form-label">ID de Transacci&oacute;n</label>
+                                <input class="form-control" id="txtidtransaccion" name="idtransaccion" type="text" />
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="mb-2 d-grid">
+                                <button class="btn-primary" id="btnbuscar" type="button"><i class="fas fa-search"></i> Buscar</button>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <table id="datatable-buttons" class="table table-striped dt-responsive nowrap table-hover" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th><i class="typcn typcn-export-outline"></i> Fecha Venta</th>
+                                        <th><i class="typcn typcn-group-outline"></i> Cliente</th>
+                                        <th><i class="typcn typcn-input-checked-outline"></i> Producto</th>
+                                        <th><i class="typcn typcn-leaf"></i> Precio</th>
+                                        <th><i class="typcn typcn-lightbulb"></i> Cantidad</th>
+                                        <th><i class="typcn typcn-link-outline"></i> Total</th>
+                                        <th><i class="typcn typcn-key-outline"></i> ID Transaccion</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @section scripts{
+
+        <script>
+        $(document).ready(function () {
+        // REPORTE DE VENTAS
+        var tabladata;
+        var filaseleccionada;
+        $(document).ready(function () {
+            // MOSTRAR CALENDARIO PERSONALIZADO
+            $("#txtfechainicio").bootstrapMaterialDatePicker({ dateFormat: "dd/mm/yy" }).bootstrapMaterialDatePicker('setDate', new Date())
+            $("#txtfechafin").bootstrapMaterialDatePicker({ dateFormat: "dd/mm/yy" }).bootstrapMaterialDatePicker('setDate', new Date())
+
+            // BUSQUEDA DE VENTAS [REPORTE VENTAS]
+            var Url = '@Url.Action("ListaReporte","Administracion")' + "?fechainicio=" + $("#txtfechainicio").val() +
+                "&fechafin=" + $("#txtfechafin").val() + "&idtransaccion=" + $("#txtidtransaccion").val()
+
+            tabladata = $("#datatable-buttons").DataTable({
+                responsive: true,
+                ordering: true,
+                dom: 'BfrZltip',
+                buttons: [
+                    'copyHtml5',
+                    'excelHtml5',
+                    'csvHtml5',
+                    'pdfHtml5',
+                    'print',
+                ],
+                "ajax": {
+                    url: Url,
+                    type: "GET",
+                    dataType: "JSON"
+                },
+                "columns": [
+                    { "data": "FechaVenta" },
+                    { "data": "Cliente" },
+                    { "data": "Producto" },
+                    { "data": "Precio" },
+                    { "data": "Cantidad" },
+                    { "data": "Total" },
+                    { "data": "IdTransaccion" }
+                ],
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.12.1/i18n/es-ES.json"
+                }
+            });
+        })
+        // EJECUCION BOTON BUSCAR
+        $("#btnbuscar").on("click", function () {
+            var nueva_url = '@Url.Action("ListaReporte", "Administracion")' + "?fechainicio=" + $("#txtfechainicio").val() +
+                "&fechafin=" + $("#txtfechafin").val() + "&idtransaccion=" + $("#txtidtransaccion").val()
+            tabladata.ajax.url(nueva_url).load();
+        })
+
+
+            @{
+                string ApiKeyClimatica = "65df6868e6a724921cd07e8a77105c8a";
+            }
+
+            let HoraActualSistema = @ConversionHora;
+            var API_KEY = "@ApiKeyClimatica";
+            function getWeather(latitude, longtitude) {
+                $.ajax({
+                    url: 'http://api.openweathermap.org/data/2.5/weather',
+                    data: {
+                        lat: latitude,
+                        lon: longtitude,
+                        units: 'metric',
+                        APPID: API_KEY
+                    },
+                    success: data => {
+                        // UBICACION CIUDAD
+                        $("#ubicacion").text(data.name + ", El Salvador");
+                        // TEMPERATURA ACTUAL
+                        var TemperaturaActual = data.main.temp;
+                        $("#temperatura").text(TemperaturaActual.toFixed(1) + " °C").addClass(".temp");
+                        if (HoraActualSistema >= 6 && HoraActualSistema < 18) {
+                            // ICONOS DE DIA
+                            if (data.weather[0].description == "overcast clouds") {
+                                OvercastClouds_ImgDia();
+                            } else if (data.weather[0].description == "broken clouds") {
+                                BrokenClouds_ImgDia();
+                            } else if (data.weather[0].description == "clear sky") {
+                                ClearSky_ImgDia();
+                            } else if (data.weather[0].description == "few clouds") {
+                                FewClouds_ImgDia();
+                            } else if (data.weather[0].description == "scattered clouds") {
+                                ScatteredClouds_ImgDia();
+                            } else if (data.weather[0].description == "shower rain") {
+                                ShowerRain_ImgDia();
+                            } else if (data.weather[0].description == "rain") {
+                                Rain_ImgDia();
+                            } else if (data.weather[0].description == "thunderstorm") {
+                                Thunderstorm_ImgDia();
+                            } else if (data.weather[0].description == "mist") {
+                                Mist_ImgDia();
+                            } else if (data.weather[0].description == "thunderstorm with light rain") {
+                                ThunderstormWithLightRain_ImgDia();
+                            } else if (data.weather[0].description == "thunderstorm with rain") {
+                                ThunderstormWithRain_ImgDia();
+                            } else if (data.weather[0].description == "thunderstorm with heavy rain") {
+                                ThunderstormWithHeavyRain_ImgDia();
+                            } else if (data.weather[0].description == "light thunderstorm") {
+                                LightThunderstorm_ImgDia();
+                            } else if (data.weather[0].description == "heavy thunderstorm") {
+                                HeavyThunderstorm_ImgDia();
+                            } else if (data.weather[0].description == "ragged thunderstorm") {
+                                RaggedThunderstorm_ImgDia();
+                            } else if (data.weather[0].description == "thunderstorm with light drizzle") {
+                                ThunderstormWithLightDrizzle_ImgDia();
+                            } else if (data.weather[0].description == "thunderstorm with drizzle") {
+                                ThunderstormWithDrizzle_ImgDia();
+                            } else if (data.weather[0].description == "thunderstorm with heavy drizzle") {
+                                ThunderstormWithHeavyDrizzle_ImgDia();
+                            } else if (data.weather[0].description == "drizzle") {
+                                Drizzle_ImgDia();
+                            } else if (data.weather[0].description == "heavy intensity drizzle") {
+                                HeavyIntensityDrizzle_ImgDia();
+                            } else if (data.weather[0].description == "light intensity drizzle rain") {
+                                LightIntensityDrizzleRain_ImgDia();
+                            } else if (data.weather[0].description == "drizzle rain") {
+                                DrizzleRain_ImgDia();
+                            } else if (data.weather[0].description == "heavy intensity drizzle rain") {
+                                HeavyIntensityDrizzleRain_ImgDia();
+                            } else if (data.weather[0].description == "shower rain and drizzle") {
+                                ShowerRainAndDrizzle_ImgDia();
+                            } else if (data.weather[0].description == "heavy shower rain and drizzle") {
+                                HeavyShowerRainAndDrizzle_ImgDia();
+                            } else if (data.weather[0].description == "shower drizzle") {
+                                ShowerDrizzle_ImgDia();
+                            } else if (data.weather[0].description == "light rain") {
+                                LightRain_ImgDia();
+                            } else if (data.weather[0].description == "moderate rain") {
+                                ModerateRain_ImgDia();
+                            } else if (data.weather[0].description == "heavy intensity rain") {
+                                HeavyIntensityRain_ImgDia();
+                            } else if (data.weather[0].description == "very heavy rain") {
+                                VeryHeavyRain_ImgDia();
+                            } else if (data.weather[0].description == "extreme rain") {
+                                ExtremeRain_ImgDia();
+                            } else if (data.weather[0].description == "light intensity shower rain") {
+                                LightIntensityShowerRain_ImgDia();
+                            } else if (data.weather[0].description == "heavy intensity shower rain") {
+                                HeavyIntensityShowerRain_ImgDia();
+                            } else if (data.weather[0].description == "ragged shower rain") {
+                                RaggedShowerRain_ImgDia();
+                            } else if (data.weather[0].description == "Smoke" || data.weather[0].description == "smoke") {
+                                Smoke_ImgDia();
+                            } else if (data.weather[0].description == "Haze" || data.weather[0].description == "haze") {
+                                Haze_ImgDia();
+                            } else if (data.weather[0].description == "fog") {
+                                Fog_ImgDia();
+                            } else if (data.weather[0].description == "light intensity drizzle") {
+                                LightIntensityDrizzle_ImgDia();
+                            }
+                        } else if (HoraActualSistema >= 18 && HoraActualSistema <= 23 || HoraActualSistema >= 0 && HoraActualSistema < 6) {
+                            // ICONOS DE NOCHE
+                            if (data.weather[0].description == "overcast clouds") {
+                                OvercastClouds_ImgNoche();
+                            } else if (data.weather[0].description == "broken clouds") {
+                                BrokenClouds_ImgNoche();
+                            } else if (data.weather[0].description == "clear sky") {
+                                ClearSky_ImgNoche();
+                            } else if (data.weather[0].description == "few clouds") {
+                                FewClouds_ImgNoche();
+                            } else if (data.weather[0].description == "scattered clouds") {
+                                ScatteredClouds_ImgNoche();
+                            } else if (data.weather[0].description == "shower rain") {
+                                ShowerRain_ImgNoche();
+                            } else if (data.weather[0].description == "rain") {
+                                Rain_ImgNoche();
+                            } else if (data.weather[0].description == "thunderstorm") {
+                                Thunderstorm_ImgNoche();
+                            } else if (data.weather[0].description == "mist") {
+                                Mist_ImgNoche();
+                            } else if (data.weather[0].description == "thunderstorm with light rain") {
+                                ThunderstormWithLightRain_ImgNoche();
+                            } else if (data.weather[0].description == "thunderstorm with rain") {
+                                ThunderstormWithRain_ImgNoche();
+                            } else if (data.weather[0].description == "thunderstorm with heavy rain") {
+                                ThunderstormWithHeavyRain_ImgNoche();
+                            } else if (data.weather[0].description == "light thunderstorm") {
+                                LightThunderstorm_ImgNoche();
+                            } else if (data.weather[0].description == "heavy thunderstorm") {
+                                HeavyThunderstorm_ImgNoche();
+                            } else if (data.weather[0].description == "ragged thunderstorm") {
+                                RaggedThunderstorm_ImgNoche();
+                            } else if (data.weather[0].description == "thunderstorm with light drizzle") {
+                                ThunderstormWithLightDrizzle_ImgNoche();
+                            } else if (data.weather[0].description == "thunderstorm with drizzle") {
+                                ThunderstormWithDrizzle_ImgNoche();
+                            } else if (data.weather[0].description == "thunderstorm with heavy drizzle") {
+                                ThunderstormWithHeavyDrizzle_ImgNoche();
+                            } else if (data.weather[0].description == "drizzle") {
+                                Drizzle_ImgNoche();
+                            } else if (data.weather[0].description == "heavy intensity drizzle") {
+                                HeavyIntensityDrizzle_ImgNoche();
+                            } else if (data.weather[0].description == "light intensity drizzle rain") {
+                                LightIntensityDrizzleRain_ImgNoche();
+                            } else if (data.weather[0].description == "drizzle rain") {
+                                DrizzleRain_ImgNoche();
+                            } else if (data.weather[0].description == "heavy intensity drizzle rain") {
+                                HeavyIntensityDrizzleRain_ImgNoche();
+                            } else if (data.weather[0].description == "shower rain and drizzle") {
+                                ShowerRainAndDrizzle_ImgNoche();
+                            } else if (data.weather[0].description == "heavy shower rain and drizzle") {
+                                HeavyShowerRainAndDrizzle_ImgNoche();
+                            } else if (data.weather[0].description == "shower drizzle") {
+                                ShowerDrizzle_ImgNoche();
+                            } else if (data.weather[0].description == "light rain") {
+                                LightRain_ImgNoche();
+                            } else if (data.weather[0].description == "moderate rain") {
+                                ModerateRain_ImgNoche();
+                            } else if (data.weather[0].description == "heavy intensity rain") {
+                                HeavyIntensityRain_ImgNoche();
+                            } else if (data.weather[0].description == "very heavy rain") {
+                                VeryHeavyRain_ImgNoche();
+                            } else if (data.weather[0].description == "extreme rain") {
+                                ExtremeRain_ImgNoche();
+                            } else if (data.weather[0].description == "light intensity shower rain") {
+                                LightIntensityShowerRain_ImgNoche();
+                            } else if (data.weather[0].description == "heavy intensity shower rain") {
+                                HeavyIntensityShowerRain_ImgNoche();
+                            } else if (data.weather[0].description == "ragged shower rain") {
+                                RaggedShowerRain_ImgNoche();
+                            } else if (data.weather[0].description == "Smoke" || data.weather[0].description == "smoke") {
+                                Smoke_ImgNoche();
+                            } else if (data.weather[0].description == "Haze" || data.weather[0].description == "haze") {
+                                Haze_ImgNoche();
+                            } else if (data.weather[0].description == "fog") {
+                                Fog_ImgNoche();
+                            } else if (data.weather[0].description == "light intensity drizzle") {
+                                LightIntensityDrizzle_ImgNoche();
+                            }
+                        }
+                    }
+                })
+            }
+            getWeather(13.6894, -89.1872);
+
+        }) // CIERRE  $(document).ready(function () })
+
+        </script>
+
+    }
+

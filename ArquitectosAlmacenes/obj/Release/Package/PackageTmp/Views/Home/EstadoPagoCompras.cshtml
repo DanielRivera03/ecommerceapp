@@ -1,0 +1,72 @@
+﻿
+@{
+    ViewBag.Title = "EstadoPagoCompras";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string imgsrc = System.Configuration.ConfigurationManager.AppSettings["ServidorFotos"];
+    // BLOQUEAR SISTEMA, SI POSEE PROCESO DE RECUPERACION DE CUENTAS ACTIVO
+    if (Session["ComprobarRecuperacion"] != null)
+    {
+        bool HabilitarSistema = Convert.ToBoolean(Session["ComprobarRecuperacion"]);
+        if (HabilitarSistema)
+        {
+            <script>
+                location.href = "@Url.Action("CambioCredencialesAcceso","Home")"
+            </script>
+        }
+    }
+}
+<div class="page-content">
+    <div class="holder breadcrumbs-wrap mt-0">
+        <div class="container">
+            <ul class="breadcrumbs">
+                <li><a href="@Url.Action("Index")">Inicio</a></li>
+                <li><span>Estado Transacci&oacute;n Pagos</span></li>
+            </ul>
+        </div>
+    </div>
+    <div class="holder mt-0 mb-4 mb-lg-10">
+        <div class="container">
+            <div class="page404-bg">
+                <div class="page404-text">
+                    @{
+                        if ((bool)ViewData["Status"])
+                        {
+                            <div class="txt1"><img style="max-width: 200px" class="img-fluid img-thumbnail" src="@imgsrc/images/icon-gif/money-bag.gif" /></div>
+                            <div class="txt2 text-success">Gracias por su compra</div>
+                            <p>
+                                Agradecemos su preferencia hacia nuestra tienda. Por favor tome en cuenta lo siguiente:<br>
+                                <strong>Recibir&aacute; su compra en un per&iacute;odo m&aacute;ximo de 72 horas</strong>
+                                <strong>Para cancelar su pedido, comun&iacute;quese inmediatamente con nuesta l&iacute;nea de atenci&oacute;n al cliente</strong>
+                                <hr />
+                                <strong>ID de Transacci&oacute;n: @ViewData["IdTransaccion"]</strong> <br>
+                                Su compra fue procesada y gestionada con &eacute;xito.<br>
+
+                            </p>
+                        }
+                        else
+                        {
+                            <div class="txt1"><img style="max-width: 200px" class="img-fluid img-thumbnail" src="@imgsrc/images/icon-gif/warning.gif" /></div>
+                            <div class="txt2 text-danger">Uppss... Lo Sentimos</div>
+                            <p>
+                                Lamentablemente ha ocurrido un problema. No te preocupes, algunas de las causas son:<br>
+                                El enlace en el cual estas consultando, ha expirado y no existe informaci&oacute;n que mostrar<br>
+                                El pago de tu orden ha fallado, verifica que cuentas con los fondos suficientes<br>
+
+                            </p>
+                        }
+                    }
+
+                </div>
+                <svg id="morphing" xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
+                    <g transform="translate(50,50)">
+                        <path class="p" d="M93.5441 2.30824C127.414 -1.02781 167.142 -4.63212 188.625 21.7114C210.22 48.1931 199.088 86.5178 188.761 119.068C179.736 147.517 162.617 171.844 136.426 186.243C108.079 201.828 73.804 212.713 44.915 198.152C16.4428 183.802 6.66731 149.747 1.64848 118.312C-2.87856 89.9563 1.56309 60.9032 19.4066 38.3787C37.3451 15.7342 64.7587 5.14348 93.5441 2.30824Z" />
+                    </g>
+                </svg>
+            </div>
+            <div class="page404-info text-center">
+                <a href="@Url.Action("Index")" class="btn btn-gradient-primary">Regresar al inicio</a>
+            </div>
+        </div>
+    </div>
+</div>
+

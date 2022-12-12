@@ -1,0 +1,703 @@
+﻿@{
+    ViewBag.Title = "Inicio";
+    string imgsrc = System.Configuration.ConfigurationManager.AppSettings["ServidorFotos"];
+    // BLOQUEAR SISTEMA, SI POSEE PROCESO DE RECUPERACION DE CUENTAS ACTIVO
+    if (Session["ComprobarRecuperacion"] != null)
+    {
+        bool HabilitarSistema = Convert.ToBoolean(Session["ComprobarRecuperacion"]);
+        if (HabilitarSistema)
+        {
+            <script>
+                location.href = "@Url.Action("CambioCredencialesAcceso","Home")"
+            </script>
+        }
+    }
+}
+<!-- Main Slider -->
+<div class="holder fullwidth full-nopad mt-0">
+    <div class="container">
+        <div class="bnslider-wrapper">
+            <div class="bnslider bnslider--lg keep-scale" id="bnslider-001" data-slick='{"arrows": true, "dots": true}' data-autoplay="false" data-speed="12000" data-start-width="1917" data-start-height="764" data-start-mwidth="1550" data-start-mheight="1000">
+                <div class="bnslider-slide slick-slide is-pause" data-autoplay="true" data-video-type="video" data-slick-index="2" aria-hidden="true" style="width: 1903px; position: relative; left: -3806px; top: 0px; z-index: 998; opacity: 0; transition: opacity 500ms ease 0s;" id="slick-slide02">
+                    <div class="video-wrap">
+                        <video playsinline="" loop="" preload="auto">
+                            <source src="https://cdn.shopify.com/s/files/1/0201/0942/6742/files/video-girl.mp4?v=1594287483" type="video/mp4">
+                        </video>
+                        <div class="video-control visible">
+                            <div class="video-play js-video-slider-play"><i class="icon-play"></i></div>
+                            <div class="video-stop js-video-slider-stop"><i class="icon-pause"></i></div>
+                        </div>
+                    </div>
+                    <div class="bnslider-text-wrap bnslider-overlay ">
+                        <div class="bnslider-text-content txt-middle txt-center txt-middle-m txt-center-m">
+                            <div class="bnslider-text-content-flex ">
+                                <div class="bnslider-vert " style="padding: 0px">
+                                    <div class="bnslider-text order-1 mt-sm bnslider-text--md text-center data-ini" data-animation="fadeInUp" data-animation-delay="800" data-fontcolor="#282828" data-fontweight="700" data-fontline="1.5"><span style="color: #8c7ae6; text-shadow: 2px 2px 0px #fff, 6px 6px 0px rgba(0,0,0,0.15); ">Belleza a tu alcance</span></div>
+                                    <div class="bnslider-text order-2 mt-sm bnslider-text--md text-center data-ini" data-animation="fadeInUp" data-animation-delay="800" data-fontcolor="#282828" data-fontweight="700" data-fontline="1.5"><span style="color: #2c3e50; text-shadow: 2px 2px 0px #fff, 6px 6px 0px rgba(0,0,0,0.15); font-size: 2.5rem; ">Conf&iacute;a en los expertos</span></div>
+                                    <div class="btn-wrap text-center  order-4 mt-md" data-animation="fadeIn" data-animation-delay="2000" style="opacity: 1;">
+                                        <a href="@Url.Action("ProductosCategoriaBelleza")" target="_self" class="btn btn-gradient-primary">
+                                            <i class="icon-search-1"></i> Ver Productos
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bnslider-slide slick-slide is-pause" data-autoplay="true" data-video-type="video" data-slick-index="2" aria-hidden="true" style="width: 1903px; position: relative; left: -3806px; top: 0px; z-index: 998; opacity: 0; transition: opacity 500ms ease 0s;" id="slick-slide02">
+                    <div class="video-wrap">
+                        <video playsinline="" loop="" preload="auto">
+                            <source src="https://cdn.shopify.com/videos/c/o/v/69afcb8d36414635a1aff8db0f311b22.mp4" type="video/mp4">
+                        </video>
+                        <div class="video-control visible">
+                            <div class="video-play js-video-slider-play"><i class="icon-play"></i></div>
+                            <div class="video-stop js-video-slider-stop"><i class="icon-pause"></i></div>
+                        </div>
+                    </div>
+                    <div class="bnslider-text-wrap bnslider-overlay ">
+                        <div class="bnslider-text-content txt-middle txt-center txt-middle-m txt-center-m">
+                            <div class="bnslider-text-content-flex ">
+                                <div class="bnslider-vert " style="padding: 0px">
+                                    <div class="bnslider-text order-1 mt-sm bnslider-text--md text-center data-ini" data-animation="fadeInUp" data-animation-delay="800" data-fontcolor="#282828" data-fontweight="700" data-fontline="1.5"><span style="text-shadow: 2px 2px 0px #FFFFFF, 5px 4px 0px rgba(0,0,0,0.15);; "></span></div>
+                                    <div class="bnslider-text order-1 mt-sm bnslider-text--md text-center data-ini" data-animation="fadeInUp" data-animation-delay="800" data-fontcolor="#282828" data-fontweight="700" data-fontline="1.5"><span style="text-shadow: 2px 2px 0px #FFFFFF, 5px 4px 0px rgba(0,0,0,0.15); font-size: 3rem;"></span></div>
+                                    <div class="btn-wrap text-center  order-4 mt-md" data-animation="fadeIn" data-animation-delay="2000" style="opacity: 1;">
+                                        @*<a href="#" target="_self" class="btn">
+                                                Ver Productos
+                                            </a>*@
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bnslider-slide">
+                    <div class="bnslider-image-mobile lazyload" data-bgset="https://cdn.shopify.com/s/files/1/0556/1761/8226/files/People_shoes_4K_Ultra_HD_close-up_1366x768_67bde49e-b3ad-4734-8125-626905527c5e.jpg?v=1665809876"></div>
+                    <div class="bnslider-image lazyload" data-bgset="https://cdn.shopify.com/s/files/1/0556/1761/8226/files/People_shoes_4K_Ultra_HD_close-up_1366x768_67bde49e-b3ad-4734-8125-626905527c5e.jpg?v=1665809876"></div>
+                    <div class="bnslider-text-wrap bnslider-overlay ">
+                        <div class="bnslider-text-content txt-middle txt-right txt-middle-m txt-center-m">
+                            <div class="bnslider-text-content-flex ">
+                                <div class="bnslider-vert w-s-60 w-ms-100" style="padding: 0px">
+                                    <div class="bnslider-text order-1 mt-sm bnslider-text--md text-center data-ini" data-animation="fadeInUp" data-animation-delay="800" data-fontcolor="#282828" data-fontweight="700" data-fontline="1.5"><span style="color: #8c7ae6; text-shadow: 2px 2px 0px #fff, 6px 6px 0px rgba(0,0,0,0.15); ">¿Buscas Calzado Nuevo?</span></div>
+                                    <div class="btn-wrap text-center  order-4 mt-md" data-animation="fadeIn" data-animation-delay="2000" style="opacity: 1;">
+                                        <a href="@Url.Action("ProductosCategoriaCalzado")" target="_blank" class="btn btn-gradient-primary">
+                                            <i class="icon-search-1"></i> Ver Productos
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bnslider-slide">
+                    <div class="bnslider-image-mobile lazyload" data-bgset="https://cdn.shopify.com/s/files/1/0556/1761/8226/files/wallpaperbetter.com_1920x1080_a84fb34a-235c-4988-a031-46db1f6cc55a.jpg?v=1665810175"></div>
+                    <div class="bnslider-image lazyload" data-bgset="https://cdn.shopify.com/s/files/1/0556/1761/8226/files/wallpaperbetter.com_1920x1080_a84fb34a-235c-4988-a031-46db1f6cc55a.jpg?v=1665810175"></div>
+                    <div class="bnslider-text-wrap bnslider-overlay ">
+                        <div class="bnslider-text-content txt-middle txt-left txt-middle-m txt-center-m">
+                            <div class="bnslider-text-content-flex ">
+                                <div class="bnslider-vert w-s-60 w-ms-100" style="padding: 0px">
+                                    <div class="bnslider-text order-1 mt-0 bnslider-text--md text-center data-ini" data-animation="fadeInUp" data-animation-delay="800" data-fontcolor="#282828" data-fontweight="700" data-fontline="1.5"><span style="color: #8c7ae6; text-shadow: 2px 2px 0px #fff, 6px 6px 0px rgba(0,0,0,0.15); ">Arquitectos Almacenes S.A de C.V</span></div>
+                                    <div class="bnslider-text order-2 mt-sm bnslider-text--xs text-center data-ini" data-animation="fadeInUp" data-animation-delay="1000" data-fontcolor="#fff" data-fontweight="400" data-fontline="1.5">Confianza y Calidad Garantizada</div>
+                                    <div class="btn-wrap text-center  order-4 mt-md" data-animation="fadeIn" data-animation-delay="2000" style="opacity: 1;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="bnslider-arrows container-fluid">
+                <div></div>
+            </div>
+            <div class="bnslider-dots container-fluid"></div>
+        </div>
+    </div>
+</div>
+<!-- //Main Slider -->
+@*
+    -> CATEGORIAS PROMOCIONALES DE BIENVENIDA
+*@
+
+
+<div class="holder holder-mt-xsmall">
+    <div class="container-fluid px-0">
+        <div class="row bnr-grid vert-margin-small">
+            <div class="col-18 col-sm-6">
+                <a href="@Url.Action("ProductosCategoriaLineaBlanca")" target="_self" class="bnr-wrap">
+                    <div class="bnr custom-caption image-hover-scale bnr--bottom bnr--center" data-fontratio=5.7>
+                        <div class="bnr-img image-container" style="padding-bottom: 85.318%">
+                            <img data-srcset="https://cdn.shopify.com/s/files/1/0556/2092/7767/files/bannerp1.jpg?v=1666704987" class="lazyload fade-up" alt="">
+                        </div>
+                        <div class="bnr-caption" style="padding: 4% 4%; width: 100%;">
+                            <div class="bnr-caption-bg btn-gradient-info" style="padding: 6% 6%; width: fit-content;">
+                                <div class="bnr-text3 mt-sm order-1 inherit" style="color:#fff; font-size:0.15em; font-weight:700; line-height:1em">LINEA BLANCA</div>
+
+                                <span class="bnr-caption-bg-color" style="background:#fff; opacity:1"></span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-18 col-sm-6">
+                <a href="@Url.Action("ProductosCategoriaJuguetes")" target="_self" class="bnr-wrap d-flex align-items-center h-100">
+                    <div class="bnr custom-caption image-hover-scale bnr--middle bnr--center " data-fontratio=5.7>
+                        <div class="bnr-img image-container" style="padding-bottom: 85.318%">
+                            <img data-srcset="https://cdn.shopify.com/s/files/1/0556/2092/7767/files/bannerp2.jpg?v=1666705095" class="lazyload fade-up" alt="">
+                        </div>
+                        <div class="bnr-caption" style="padding: 4% 4%; width: 100%;">
+                            <div class="bnr-caption-bg btn-gradient-success" style="padding: 6% 6%; width: fit-content;">
+                                <div class="bnr-text3 mt-sm order-1 inherit" style="color:#fff; font-size:0.15em; font-weight:700; line-height:1em">JUGUETERIA</div>
+                                <span class="bnr-caption-bg-color" style="background:#fff; opacity:1"></span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-18 col-sm-6">
+                <a href="@Url.Action("ProductosCategoriaRelojeria")" target="_self" class="bnr-wrap">
+                    <div class="bnr custom-caption image-hover-scale bnr--bottom bnr--center " data-fontratio=5.7>
+                        <div class="bnr-img  image-container" style="padding-bottom: 85.318%">
+                            <img data-srcset="https://cdn.shopify.com/s/files/1/0556/2092/7767/files/bannerp3.jpg?v=1666705207" class="lazyload fade-up" alt="">
+                        </div>
+                        <div class="bnr-caption" style="padding: 4% 4%; width: 100%;">
+                            <div class="bnr-caption-bg btn-gradient-warning" style="padding: 6% 6%; width: fit-content;">
+                                <div class="bnr-text3 mt-sm order-1 inherit" style=" color:#fff; font-size:0.15em; font-weight:700; line-height:1em">RELOJERIA</div>
+                                <span class="bnr-caption-bg-color" style="background:#fff; opacity:1"></span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*
+    -> BANNER PROMOCIONAL PRODUCTO DESTACADO DE BIENVENIDA
+*@
+
+
+<div style="margin-top: .7rem;" class="holder holder-mt-medium fullwidth full-nopad" id="sectionFullBanner">
+    <div class="container">
+        <div class="bnr-wrap">
+            <div class="bnr custom-caption bnr--middle bnr--left bnr--fullwidth overflow-hidden" data-fontratio=19.2>
+                <div data-jarallax class="bnr-img jarallax" data-parallax="scroll">
+                    <img src="https://cdn.shopify.com/s/files/1/0556/2092/7767/files/bannerpromocionalrecomendacion_dd682613-3ed9-46d0-979d-bbb7b720eb4f.jpg?v=1666677410" class="jarallax-img" alt="">
+                </div>
+                <div class="bnr-caption text-left" style="padding: 4% 20%; ">
+                    <div class="bnr-caption-inside w-s-70 w-ms-100">
+                        <div class="bnr-text3 heading-font mt-0 order-1 inherit" style=" color: #ffffff; font-size: 0.8em; font-weight: 600; line-height: 1em; text-shadow: 2px 2px 0px #fff, 6px 6px 0px rgba(0,0,0,0.15);">PlayStation 5</div>
+                        <div class="bnr-text3 heading-font mt-xs order-2 inherit" style=" color: #ffffff; font-size: 0.8em; font-weight: 600; line-height: 1em; text-shadow: 2px 2px 0px #fff, 6px 6px 0px rgba(0,0,0,0.15);">Nuevo Ingreso</div>
+                        <div class="bnr-btn inherit mt-lg order-3"><a href="@imgsrc/Home/DetallesProductos?idproducto=6" target="_self" class="btn btn--lg btn-gradient-purple" style="background-color:#000000;" data-bgcolor="#000000" data-hover-bgcolor="#9653f5"><i class="icon-return"></i> Ver Producto</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*
+
+    -> PRODUCTOS DE ARQUITECTOS ALMACENES S.A DE C.V
+
+*@
+<div class="holder">
+    <div class="container">
+        <!-- Two columns -->
+        <!-- Page Title -->
+        <div class="page-title text-center">
+            <h1><i class="icon-trolley"></i> Productos</h1>
+        </div>
+        <!-- /Page Title -->
+
+        <div class="alert btn-gradient-light">
+            <strong><i class="icon-gift-card"></i> Estimado(a) Cliente</strong>. Reciba una cordial bienvenida. Le recordamos que puede filtrar su b&uacute;squeda de acuerdo a categor&iacute;as y marcas de productos.
+        </div>
+
+        <div class="row mt-3">
+            <!-- Left column -->
+            <div class="col-lg-4 aside aside--left filter-col filter-mobile-col filter-col--sticky js-filter-col filter-col--opened-desktop" data-grid-tab-content>
+                <div class="filter-col-content filter-mobile-content">
+                    <div class="sidebar-block_title">
+                        <span><i class="icon-filter"></i> Filtros de B&uacute;squeda</span>
+                    </div>
+
+                    @*
+                        -> FILTRO DE CATEGORIAS DE PRODUCTOS
+                    *@
+                    <div style="margin:1rem 0 0 0;" class="sidebar-block filter-group-block open">
+                        <div class="sidebar-block_title">
+                            <span><i class="icon-box-2"></i> Categor&iacute;as</span>
+                            <span class="toggle-arrow"><span></span><span></span></span>
+                        </div>
+                        <div class="sidebar-block_content">
+                            <div id="contenedor_categoria">
+
+                            </div>
+                        </div>
+                    </div>
+
+                    @*
+                        -> FILTRO DE MARCAS DE PRODUCTOS
+                    *@
+
+                    <div class="sidebar-block filter-group-block open">
+                        <div class="sidebar-block_title">
+                            <span><i class="icon-online-shopping"></i> Marcas</span>
+                            <span class="toggle-arrow"><span></span><span></span></span>
+                        </div>
+                        <div class="sidebar-block_content">
+                            <div id="contenedor_marca">
+
+                            </div>
+                        </div>
+                    </div>
+
+                    @*
+                        -> TODOS LOS PRODUCTOS [TIENDA EN LINEA]
+                    *@
+
+                    <div class="sidebar-block filter-group-block open">
+                        <div class="sidebar-block_title">
+                        </div>
+                        <div class="sidebar-block_content">
+                            <button id="btnaplicarfiltro" class="btn btn-gradient-primary waves-effect btn-block" type="button"><i class="icon-scissors"></i> Aplicar Filtros</button>
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+            </div>
+
+            <!-- /Left column -->
+            <!-- Center column -->
+            <div class="col-lg aside">
+                <div class="prd-grid-wrap">
+                    <!-- Products Grid -->
+                    <div class="row row-cols-1 row-cols-lg-3 row-cols-md-2 g-4 justify-content-center" id="contenedor_producto" data-grid-tab-content>
+                    </div>
+                </div>
+                <!-- /Center column -->
+            </div>
+            <!-- /Two columns -->
+        </div>
+    </div>
+</div>
+
+@*
+    -> BANNER PROMOCIONAL NUEVA TEMPORADA [BANNER GIGANTE]
+*@
+
+
+<div class="holder holder-mt-small fullwidth full-nopad">
+    <div class="container">
+        <div class="bnr-wrap bnr-">
+            <div class="bnr custom-caption  bnr--middle bnr--left bnr--fullwidth" data-fontratio=19.2>
+                <div class="bnr-img  image-container" style="padding-bottom: 43.33%">
+                    <img src="https://cdn.shopify.com/s/files/1/0556/2092/7767/files/banner-cosmetics-full.webp?v=1666050173" data-src="https://cdn.shopify.com/s/files/1/0556/2092/7767/files/banner-cosmetics-full.webp?v=1666050173" class="lazyload fade-up" alt="">
+                </div>
+                <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+                     viewBox="0 0 150 150"
+                     class="circle_decor circle_decor--tl" style="z-index:1;enable-background:new 0 0 150 150; transform: translate(-71%, -71%) rotate(-50deg); opacity:0.4; mix-blend-mode:normal; fill:#a813ed;     width:65%"
+                     xml:space="preserve">
+                <defs>
+                <filter x="0" y="0" width="100%" height="100%" id="dropshadow11" filterUnits="userSpaceOnUse">
+                <feGaussianBlur in="SourceAlpha" stdDeviation="2" />
+                <feOffset dx="-3" dy="0" result="offsetblur" />
+                <feMerge>
+                <feMergeNode />
+                <feMergeNode in="SourceGraphic" />
+                <feMergeNode in="SourceGraphic" />
+          </feMerge>
+      </filter>
+                <filter x="0" y="0" width="100%" height="100%" id="dropshadow22" filterUnits="userSpaceOnUse">
+                <feGaussianBlur in="SourceAlpha" stdDeviation="2" />
+                <feOffset dx="3" dy="0" result="offsetblur" />
+                <feMerge>
+                <feMergeNode />
+                <feMergeNode in="SourceGraphic" />
+                <feMergeNode in="SourceGraphic" />
+          </feMerge>
+      </filter>
+                <clipPath id="circle_decor_mask11">
+                <circle r="73.5" cx="75" cy="75" />
+      </clipPath>
+  </defs>
+                <path fill="#55C1AE" d="M74.933,148.5c-9.9,0-19.533-1.95-28.583-5.783c-8.75-3.699-16.6-9-23.333-15.734
+                          c-6.75-6.731-12.034-14.582-15.733-23.332C3.45,94.6,1.5,84.967,1.5,75.066c0-9.9,1.95-19.533,5.783-28.583
+                          c3.7-8.75,9-16.6,15.733-23.333S37.6,11.116,46.35,7.417c9.05-3.833,18.684-5.783,28.583-5.783c9.901,0,19.534,1.95,28.584,5.783
+                          c8.75,3.7,16.6,9,23.332,15.733c6.733,6.733,12.032,14.583,15.733,23.333c3.832,9.067,5.783,18.684,5.783,28.583
+                          c0,9.9-1.951,19.534-5.783,28.584c-3.701,8.75-9,16.6-15.733,23.332c-6.732,6.733-14.582,12.033-23.332,15.733
+                          C94.467,146.55,84.834,148.5,74.933,148.5z M75,13.783C41.25,13.783,13.783,41.25,13.783,75S41.25,136.217,75,136.217
+                          S136.217,108.75,136.217,75S108.75,13.783,75,13.783z" />
+                <circle r="5.8" cx="75" cy="7.8" fill-opacity="0.25" style="filter:url(#dropshadow11)" clip-path="url(#circle_decor_mask11)" />
+                <circle r="5.8" cx="74" cy="142.5" fill-opacity="0.25" style="filter:url(#dropshadow22)" clip-path="url(#circle_decor_mask11)" />
+                <path fill="#55C1AE" d="M81.101,7.712c0,3.346-2.761,6.059-6.164,6.059l0,0c-3.404,0-6.164-2.713-6.164-6.059l0,0
+                          c0-3.345,2.76-6.058,6.164-6.058l0,0C78.34,1.654,81.101,4.367,81.101,7.712L81.101,7.712z" />
+                <path fill="#55C1AE" d="M81.177,142.363c0,3.346-2.761,6.06-6.164,6.06l0,0c-3.404,0-6.164-2.714-6.164-6.06l0,0
+                          c0-3.345,2.76-6.058,6.164-6.058l0,0C78.416,136.306,81.177,139.019,81.177,142.363L81.177,142.363z" />
+</svg>
+                <div class="bnr-caption text-left" style="padding: 4% 4%; ">
+                    <div class="bnr-caption-inside w-s-100 w-ms-100">
+                        <div class="bnr-text3 heading-font  mt-lg order-1  inherit" style=" color:#ffffff; font-size:0.4em; font-weight:600; line-height:1em"><span style="font-size:450%">2023</span>NUEVA COLECCION</div>
+                        <div class="bnr-text3 heading-font  mt-0 order-2  inherit " style=" color:#ffffff; font-size:0.7em; font-weight:700; line-height:1.5em;">JOYERIA DAMAS Y CABALLEROS</div>
+                        <div class="bnr-btn inherit mt-sm order-3"><a href="@Url.Action("ProductosCategoriaJoyeria")" target="_self" class="btn btn btn-gradient-warning btn--lg"><i class="icon-search-1"></i> Ver Productos</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+@*
+    -> MARCAS PROMOCIONALES [CARRUSEL]
+*@
+
+<div class="holder">
+    <div class="container">
+        <ul class="brand-carousel slick-arrows-aside-simple js-brand-carousel">
+            <li>
+                <a href="#" target="_self" class="d-block image-container" title="Brand" style="padding-bottom: 37.5%;">
+                    <img class="lazyload fade-up" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="https://cdn.shopify.com/s/files/1/0556/1761/8226/files/Loreal_logo.png?v=1665812001" alt="Brand">
+                </a>
+            </li>
+            <li>
+                <a href="#" target="_self" class="d-block image-container" title="Brand" style="padding-bottom: 37.5%;">
+                    <img class="lazyload fade-up" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="https://cdn.shopify.com/s/files/1/0556/1761/8226/files/58482500cef1014c0b5e49cf.png?v=1665812001" alt="Brand">
+                </a>
+            </li>
+            <li>
+                <a href="#" target="_self" class="d-block image-container" title="Brand" style="padding-bottom: 37.5%;">
+                    <img class="lazyload fade-up" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="https://cdn.shopify.com/s/files/1/0556/1761/8226/files/5a1c3612f65d84088faf13fd.png?v=1665812370" alt="Brand">
+                </a>
+            </li>
+            <li>
+                <a href="#" target="_self" class="d-block image-container" title="Brand" style="padding-bottom: 37.5%;">
+                    <img class="lazyload fade-up" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="https://cdn.shopify.com/s/files/1/0556/1761/8226/files/5848242ecef1014c0b5e49c8.png?v=1665812001" alt="Brand">
+                </a>
+            </li>
+            <li>
+                <a href="#" target="_self" class="d-block image-container" title="Brand" style="padding-bottom: 50%;">
+                    <img class="lazyload fade-up" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="https://cdn.shopify.com/s/files/1/0556/1761/8226/files/pngwing.com.png?v=1665812833" alt="Brand">
+                </a>
+            </li>
+            <li>
+                <a href="#" target="_self" class="d-block image-container" title="Brand" style="padding-bottom: 55%;">
+                    <img class="lazyload fade-up" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="https://cdn.shopify.com/s/files/1/0556/1761/8226/files/MAC-Cosmetics-Logo.png?v=1665812002" alt="Brand">
+                </a>
+            </li>
+            <li>
+                <a href="#" target="_self" class="d-block image-container" title="Brand" style="padding-bottom: 62%;">
+                    <img class="lazyload fade-up" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="https://cdn.shopify.com/s/files/1/0556/1761/8226/files/Puma_Logo.png?v=1665812001" alt="Brand">
+                </a>
+            </li>
+            <li>
+                <a href="#" target="_self" class="d-block image-container" title="Brand" style="padding-bottom: 62%;">
+                    <img class="lazyload fade-up" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="https://cdn.shopify.com/s/files/1/0556/1761/8226/files/5847f80ecef1014c0b5e48a7.png?v=1665812536" alt="Brand">
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+
+@*
+    -> BANNER PROMOCIONALES
+*@
+
+<div class="holder holder-mt-xsmall">
+    <div class="container">
+        <div class="row bnr-grid vert-margin-small">
+            <div class="col-18 col-sm-6">
+                <a href="javascript:void(0)" class="bnr-wrap">
+                    <div class="bnr custom-caption image-hover-scale bnr--bottom bnr--left " data-fontratio=5.7>
+                        <div class="bnr-img  image-container" style="padding-bottom: 145.02%">
+                            <img src="https://cdn.shopify.com/s/files/1/0556/2092/7767/files/Sin_titulo-1.jpg?v=1666052065" data-srcset="https://cdn.shopify.com/s/files/1/0556/2092/7767/files/Sin_titulo-1.jpg?v=1666052065" class="lazyload fade-up" alt="">
+                        </div>
+                        <div class="bnr-caption" style="padding: 11% 13%; width: 100%;">
+                            <div class="bnr-text3  mt-sm order-1" style=" color:#ffffff; font-size:0.85em; font-weight:800; line-height:1em">Todo a tu alcance</div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-18 col-sm-6">
+                <a href="javascript:void(0)" class="bnr-wrap">
+                    <div class="bnr custom-caption image-hover-scale bnr--bottom bnr--center " data-fontratio=5.7>
+                        <div class="bnr-img  image-container" style="padding-bottom: 145.02%">
+                            <img src="https://cdn.shopify.com/s/files/1/0556/2092/7767/files/banner3.jpg?v=1666052257" data-srcset="https://cdn.shopify.com/s/files/1/0556/2092/7767/files/banner3.jpg?v=1666052257" class="lazyload fade-up" alt="">
+                        </div>
+                        <div class="bnr-caption" style="padding: 12% 4%; width: 100%;">
+                            <div class="bnr-text3 bnr-text-has-bg mt-sm order-1 text-center" style="padding: 3% 5%; color:#282828; font-size:0.55em; font-weight:700; line-height:1em">COMPRA SEGURA<span class="bnr-text-bg" style="background:#ffffff;opacity: 1"></span></div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-18 col-sm-6">
+                <a href="javascript:void(0)" class="bnr-wrap">
+                    <div class="bnr custom-caption image-hover-scale bnr--middle bnr--center " data-fontratio=5.7>
+                        <div class="bnr-img  image-container" style="padding-bottom: 145.02%">
+                            <img src="https://cdn.shopify.com/s/files/1/0556/2092/7767/files/banner-cosmetics-03.webp?v=1666051548" data-srcset="https://cdn.shopify.com/s/files/1/0556/2092/7767/files/banner-cosmetics-03.webp?v=1666051548" class="lazyload fade-up" alt="">
+                        </div>
+                        <div class="bnr-caption" style="padding: 4% 4%; width: 100%;">
+                            <div class="bnr-text3 mt-sm order-1" style="color:#ffffff; font-size:0.5em; font-weight:600; line-height:1em">Noches de Compras</div>
+                            <div class="bnr-text3 bnr-text-has-bg mt-sm order-2 text-center" style="padding: 3% 3%; color:#ffffff; font-size:0.5em; font-weight:700; line-height:1em;">SABADOS<span class="bnr-text-bg" style="background:#a813ed;opacity: 1"></span></div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="holder holder-mt-medium fullwidth full-nopad" id="sectionFullBanner">
+    <div class="container">
+        <div class="bnr-wrap">
+            <div class="bnr custom-caption bnr--middle bnr--left bnr--fullwidth overflow-hidden" data-fontratio=19.2>
+                <div data-jarallax class="bnr-img jarallax">
+                    <img src="https://cdn.shopify.com/s/files/1/0556/2092/7767/files/banner-viping-fullwidth.webp?v=1666556868" class="jarallax-img" alt="">
+                </div>
+                <div class="bnr-caption text-left" style="padding: 4% 20%; ">
+                    <div class="bnr-caption-inside w-s-70 w-ms-100">
+                        <div class="bnr-text3 heading-font mt-0 order-1 inherit" style=" color:#ffffff; font-size:0.8em; font-weight:600; line-height:1em">Simplicidad</div>
+                        <div class="bnr-text3 heading-font mt-xs order-2 inherit" style=" color:#ffffff; font-size:0.8em; font-weight:600; line-height:1em;">Calidad, Seguridad</div>
+                        <div class="bnr-btn inherit mt-lg order-3"><a href="javascript:void(0)" target="_self" class="btn btn--lg btn-gradient-purple" style="background-color:#000000;" data-bgcolor="#000000" data-hover-bgcolor="#9653f5">Arquitectos Almacenes S.A de C.V</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+
+    <script>
+            // EJECUCION AL INICIAR DOCUMENTO
+            $(document).ready(function () {
+                MostrarProductos(0, 0);
+                MostrarCategorias();
+            });
+        // LISTAR TODAS LAS CATEGORIAS
+        function MostrarCategorias() {
+            jQuery.ajax({
+                url: "@Url.Action("ListaCategorias","Home")",
+                type: "get",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+                    $("#contenedor_categoria").LoadingOverlay("hide");
+                    $("<div>").addClass("form-check").append(
+                        $("<input>").addClass("form-check-input").attr({ "type": "radio", "name": "categoria", "value": "0", "id": "cx", "checked": "checked" }),
+                        $("<label>").addClass("form-check-label").text("Todos").attr({ "for": "cx"})
+                    ).appendTo("#contenedor_categoria")
+                    $.each(response.data, function (i, element) {
+                        $("<div>").addClass("form-check").append(
+                            $("<input>").addClass("form-check-input").attr({ "type": "radio", "name": "categoria", "value": element.IdCategorias, "id": "c" + i }),
+                            $("<label>").addClass("form-check-label").text(element.CodigoCategoria).attr({ "for": "c" + i })
+                        ).appendTo("#contenedor_categoria")
+                    })
+                    MostrarMarca();
+                },
+                beforeSend: function () {
+                    $("#contenedor_categoria").LoadingOverlay("show");
+                }
+            })
+        }
+
+        // LISTAR TODAS LAS MARCAS
+        function MostrarMarca() {
+            var _idcategoria = $("input[name=categoria]:checked").val()
+            jQuery.ajax({
+                url: "@Url.Action("ListaMarcaPorCategoria", "Home")",
+                type: "POST",
+                data: JSON.stringify({ idcategoria : _idcategoria}),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+                    $("#contenedor_marca").html("");
+                    $("#contenedor_marca").LoadingOverlay("hide");
+                    $("<div>").addClass("form-check").append(
+                        $("<input>").addClass("form-check-input").attr({ "type": "radio", "name": "marca", "value": "0", "id": "mx", "checked": "checked" }),
+                        $("<label>").addClass("form-check-label").text("Todos").attr({ "for": "mx"})
+                    ).appendTo("#contenedor_marca")
+                    $.each(response.data, function (i, element) {
+                        $("<div>").addClass("form-check").append(
+                            $("<input>").addClass("form-check-input").attr({ "type": "radio", "name": "marca", "value": element.IdMarcas, "id": "m" + i }),
+                            $("<label>").addClass("form-check-label").text(element.Descripcion).attr({ "for": "m" + i })
+                        ).appendTo("#contenedor_marca")
+                    })
+                },
+                beforeSend: function () {
+                    $("#contenedor_marca").LoadingOverlay("show");
+                }
+            })
+        }
+
+        // LISTAR TODAS LAS MARCAS ASOCIADAS A [XXXX] CATEGORIA
+        $(document).on("change", "input[name=categoria]", function () {
+            MostrarMarca();
+            var _idcategoria = $("input[name=categoria]:checked").val()
+            var _idmarca = $("input[name=marca]:checked").val()
+            MostrarProductosFiltro(_idcategoria, _idmarca)
+        })
+
+        // MOSTRAR TODOS LOS PRODUCTOS REGISTRADOS -> LIMITADO A 30 ELEMENTOS MAXIMO
+        function MostrarProductos(_idcategoria, _idmarca) {
+            jQuery.ajax({
+                url: "@Url.Action("ListarProductosInicioClientes", "Home")",
+                type: "POST",
+                data: JSON.stringify({ idcategoria : _idcategoria, idmarca : _idmarca}),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+                    $("#contenedor_producto").html("");
+                    $("#contenedor_producto").LoadingOverlay("hide");
+
+                    $.each(response.data, function (i, element) {
+                        // FORMATO DOLAR USD -> PRECIOS PRODUCTOS
+                        const FormatoDolar_USD = element.Precio.toLocaleString("en", {
+                            style: "currency",
+                            currency: "USD"
+                        });
+                        $("<div>").addClass("col mb-5").append(
+                            $("<div>").addClass("card h-100").append(
+                                $("<div>").addClass("prd-img-area").append(
+                                    $("<a>").addClass("prd-img image-hover-scale image-container").append(
+                                        $("<img>").addClass("js-prd-img lazyload fade-up").attr({ "src": "@imgsrc/images/FotosProductos/" + element.NombreImagen }),
+                                    ),
+                                ),
+                                $("<div>").addClass("card-body p-4").append(
+                                    $("<div>").addClass("text-center").append(
+                                        $("<h5>").addClass("prd-title").text(element.Nombre),
+                                        $("<h5>").addClass("prd-tag").text(element.oMarcas.Descripcion),
+                                        $("<h5>").addClass("price-new").text(FormatoDolar_USD + " USD"),
+                                    )
+                                ),
+                                $("<div>").addClass("card-footer p-0 pt-0 border-top-0 bg-transparent").append(
+                                        $("<div>").addClass("d-grid gap-2").append(
+                                           // SI USUARIO HA INICIADO SESION
+                                            @if (Session["UsuarioUnico"] != null)
+                                            {
+                                                @:$("<div>").addClass("col-sm-12").css({ "width": "100%" }).append(
+                                                    @:$("<button>").addClass("btn mt-auto btn-gradient-primary waves-effect waves-light agregarcarrito prd-tag").data("idproducto", element.IdProducto).text("Agregar al Carrito ").append('<i class="icon-currency"></i>'),
+                                                @:),
+
+                                            }
+                                            $("<div>").addClass("col-sm-12").css({ "width": "100%","margin": "1rem auto" }).append(
+                                                $("<a>").addClass("btn btn-gradient-info waves-effect waves-light mt-auto prd-tag").attr({ "href": "@Url.Action("DetallesProductos","Home")" + "?idproducto=" + element.IdProducto }).text("Visualizar ").append('<i class="icon-zoom-plus"></i>')
+                                            ),
+                                        )
+                                    )
+
+                            )
+                        ).appendTo("#contenedor_producto")
+
+                    })
+                },
+                beforeSend: function () {
+                    $("#contenedor_producto").LoadingOverlay("show");
+                }
+            })
+        }
+
+        // MOSTRAR TODOS LOS PRODUCTOS REGISTRADOS -> LIMITADO A 30 ELEMENTOS MAXIMO
+        function MostrarProductosFiltro(_idcategoria, _idmarca) {
+            jQuery.ajax({
+                url: "@Url.Action("ListarProductos", "Home")",
+                type: "POST",
+                data: JSON.stringify({ idcategoria : _idcategoria, idmarca : _idmarca}),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+                    $("#contenedor_producto").html("");
+                    $("#contenedor_producto").LoadingOverlay("hide");
+
+                    $.each(response.data, function (i, element) {
+                        // FORMATO DOLAR USD -> PRECIOS PRODUCTOS
+                        const FormatoDolar_USD = element.Precio.toLocaleString("en", {
+                            style: "currency",
+                            currency: "USD"
+                        });
+                        $("<div>").addClass("col mb-5").append(
+                            $("<div>").addClass("card h-100").append(
+                                $("<div>").addClass("prd-img-area").append(
+                                    $("<a>").addClass("prd-img image-hover-scale image-container").append(
+                                        $("<img>").addClass("js-prd-img lazyload fade-up").attr({ "src": "@imgsrc/images/FotosProductos/" + element.NombreImagen }),
+                                    ),
+                                ),
+                                $("<div>").addClass("card-body p-4").append(
+                                    $("<div>").addClass("text-center").append(
+                                        $("<h5>").addClass("prd-title").text(element.Nombre),
+                                        $("<h5>").addClass("prd-tag").text(element.oMarcas.Descripcion),
+                                        $("<h5>").addClass("price-new").text(FormatoDolar_USD + " USD"),
+                                    )
+                                ),
+                                $("<div>").addClass("card-footer p-0 pt-0 border-top-0 bg-transparent").append(
+                                        $("<div>").addClass("d-grid gap-2").append(
+                                           // SI USUARIO HA INICIADO SESION
+                                            @if (Session["UsuarioUnico"] != null)
+                                            {
+                                                @:$("<div>").addClass("col-sm-12").css({ "width": "100%" }).append(
+                                                    @:$("<button>").addClass("btn mt-auto btn-gradient-primary waves-effect waves-light agregarcarrito prd-tag").data("idproducto", element.IdProducto).text("Agregar al Carrito ").append('<i class="icon-currency"></i>'),
+                                                @:),
+
+                                            }
+                                            $("<div>").addClass("col-sm-12").css({ "width": "100%","margin": "1rem auto" }).append(
+                                                $("<a>").addClass("btn btn-gradient-info waves-effect waves-light mt-auto prd-tag").attr({ "href": "@Url.Action("DetallesProductos","Home")" + "?idproducto=" + element.IdProducto }).text("Visualizar ").append('<i class="icon-zoom-plus"></i>')
+                                            ),
+                                        )
+                                    )
+
+                            )
+                        ).appendTo("#contenedor_producto")
+
+                    })
+                },
+                beforeSend: function () {
+                    $("#contenedor_producto").LoadingOverlay("show");
+                }
+            })
+        }
+
+        // APLICAR FILTROS SOLAMENTE AL HACER CLIC EN EL BOTON [SEGUN X CATEGORIA - X MARCA ASOCIADA]
+        $("#btnaplicarfiltro").click(function () {
+            var _idcategoria = $("input[name=categoria]:checked").val()
+            var _idmarca = $("input[name=marca]:checked").val()
+            MostrarProductosFiltro(_idcategoria, _idmarca)
+        })
+
+
+        // AGREGAR PRODUCTOS AL CARRITO DE COMPRAS
+        $(document).on("click", "button.agregarcarrito", function () {
+            jQuery.ajax({
+                    url: '@Url.Action("AgregarCarrito","Home")',
+                    type: 'post',
+                    data: JSON.stringify({idproducto : $(this).data("idproducto") }),
+                    dataType: 'json',
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        if (data.respuesta) {
+                            // POR SER PAGINA MAESTRA, SE ENCUENTRAN REFERENCIADOS TODOS SUS ELEMENTOS Y METODOS
+                            MostrarCantidadCarrito();
+                            MostrarSumatoriaProductosCarrito();
+                            // MENSAJE USUARIOS
+                            alertify.logPosition("button right");
+                            alertify.success("<strong><i class='icon-credit-card1'></i> Producto agregado en el carrito de compras</strong>");
+                        } else {
+                            alertify.logPosition("button right");
+                            alertify.error("<strong><i class='icon-cart'></i> " + data.mensaje + "</strong>");
+                        }
+                    }
+                });
+        })
+
+
+
+    </script>
+}

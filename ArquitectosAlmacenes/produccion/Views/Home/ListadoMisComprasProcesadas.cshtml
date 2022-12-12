@@ -1,0 +1,128 @@
+﻿@model List<CapaEntidad.Venta>
+@{
+    ViewBag.Title = "ListadoMisComprasProcesadas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string imgsrc = System.Configuration.ConfigurationManager.AppSettings["ServidorFotos"];
+    string direccionproduccion_detallesventas = "https://bsite.net/";
+    // BLOQUEAR SISTEMA, SI POSEE PROCESO DE RECUPERACION DE CUENTAS ACTIVO
+    if (Session["ComprobarRecuperacion"] != null)
+    {
+        bool HabilitarSistema = Convert.ToBoolean(Session["ComprobarRecuperacion"]);
+        if (HabilitarSistema)
+        {
+            <script>
+                location.href = "@Url.Action("CambioCredencialesAcceso","Home")"
+            </script>
+        }
+    }
+}
+
+<div class="page-content">
+    <div class="holder breadcrumbs-wrap mt-0">
+        <div class="container">
+            <ul class="breadcrumbs">
+                <li><a href="@Url.Action("Index")">Inicio</a></li>
+                <li><span>Mi Perfil</span></li>
+                <li><span>Mis Compras</span></li>
+            </ul>
+        </div>
+    </div>
+    <div class="holder">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 aside aside--left">
+                    <div class="list-group">
+                        <div class="list-group">
+                            <a href="@Url.Action("PerfilClientes")" class="list-group-item">Mi Cuenta</a>
+                            <a href="@Url.Action("ListadoMisComprasProcesadas")" class="list-group-item active btn-gradient-success">Mis Compras</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-14 aside">
+                    <h1 class="mb-3">Historial Compras Procesadas</h1>
+                    <div class="alert btn-gradient-light">
+                        <strong>Estimado(a) Cliente @Session["Nombres"] @Session["Apellidos"]</strong>. S&iacute; posee alg&uacute;n inconveniente con su compra puede reportarlo
+                        en nuestra gesti&oacute;n de problemas de pedidos de clientes. <a href="@Url.Action("ReporteProblemasPedidosClientes")">Haga clic aqu&iacute; para ser redirigido</a>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-order-history">
+                            <thead>
+                                @{
+                                    if (Model.Count > 0)
+                                    {
+                                        <tr class="btn-gradient-light">
+                                            <th scope="col"># </th>
+                                            <th scope="col">ID</th>
+                                            <th scope="col">Cantidad </th>
+                                            <th scope="col">Estado</th>
+                                            <th scope="col">Monto ($)</th>
+                                            <th>Fecha</th>
+                                            <th scope="col"></th>
+                                        </tr>
+                                    }
+                                }
+
+                            </thead>
+                            <tbody>
+
+                                @{
+                                    if (Model.Count > 0)
+                                    {
+                                        int ContadorPedidos = 0;
+                                        // SI EXISTEN ELEMENTOS = MOSTRAR TODOS LOS ARTICULOS PROCESADOS Y COMPRADOS POR CLIENTES
+                                        foreach (var item in Model)
+                                        {
+                                            ContadorPedidos++;
+                                            <tr>
+                                                <td>@ContadorPedidos</td>
+                                                <td><b>@item.IdTransaccion</b></td>
+                                                <td>@item.TotalProducto</td>
+                                                <td><span style="padding: .2rem .6rem .2rem .6rem;" class="btn-gradient-success rounded-1">Procesado</span></td>
+                                                <td><span class="color">@item.MontoTotal.ToString("C") USD</span></td>
+                                                <td>@item.ConversionFechaVenta</td>
+                                                @* ---- PRUEBAS LOCALES ------**@
+                                                @*<td><a href="@imgsrc@Url.Action("ListadoDetallesMisComprasProcesadas")?idventa=@item.IdVenta" class="btn btn--grey btn--sm">VISUALIZAR</a></td>*@
+                                                @* ---- PRODUCCION ----**@
+                                                <td><a href="@direccionproduccion_detallesventas@Url.Action("ListadoDetallesMisComprasProcesadas")?idventa=@item.IdVenta" class="btn btn--grey btn--sm">VISUALIZAR</a></td>
+                                            </tr>
+
+                                        }
+                                    }
+
+                                    // SI NO EXISTEN REGISTROS, MOSTRAR MENSAJE PERSONALIZADO EN SU DEFECTO
+                                    if (Model.Count <= 0)
+                                    {
+                                        <div class="holder mt-0 mb-4 mb-lg-10">
+                                            <div class="container">
+                                                <div class="page404-bg">
+                                                    <div class="page404-text">
+                                                        <div class="txt1">4<i class="icon-old-sweater"></i>4</div>
+                                                        <div class="txt2">Lo sentimos, a&uacute;n no hay compras procesadas</div>
+                                                    </div>
+                                                    <svg id="morphing" xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
+                                                        <g transform="translate(50,50)">
+                                                            <path class="p" d="M93.5441 2.30824C127.414 -1.02781 167.142 -4.63212 188.625 21.7114C210.22 48.1931 199.088 86.5178 188.761 119.068C179.736 147.517 162.617 171.844 136.426 186.243C108.079 201.828 73.804 212.713 44.915 198.152C16.4428 183.802 6.66731 149.747 1.64848 118.312C-2.87856 89.9563 1.56309 60.9032 19.4066 38.3787C37.3451 15.7342 64.7587 5.14348 93.5441 2.30824Z" />
+                                                        </g>
+                                                    </svg>
+                                                </div>
+                                                <div class="page404-info text-center">
+                                                    <a href="@Url.Action("Index")" class="btn btn-gradient-warning">Regresar Al Inicio</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+
+                                }
+
+
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

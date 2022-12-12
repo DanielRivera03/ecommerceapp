@@ -1,0 +1,131 @@
+﻿@{
+    string imgsrc = System.Configuration.ConfigurationManager.AppSettings["ServidorFotos"];
+}
+@{
+    ViewBag.Title = "Registro Nuevos Clientes";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="page-content">
+    <div class="holder breadcrumbs-wrap mt-0">
+        <div class="container">
+            <ul class="breadcrumbs">
+                <li><a href="@Url.Action("Index")">Inicio</a></li>
+                <li><span>Registro Nuevos Clientes</span></li>
+            </ul>
+        </div>
+    </div>
+    <div class="holder">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-18 col-lg-12">
+                    <h2 class="text-center"><img class="img-fluid" style="width: 45px;" src="@imgsrc/images/icon-gif/20-love-heart-lineal.gif" /> Registro Nuevos Clientes</h2>
+                    <p>Estimado(a) cliente, reciba una cordial bienvenida de parte de Arquitectos Almacenes S.A de C.V. Lo invitamos a que forme parte de nuestra familia de clientes
+                    y goze de todos los beneficios de serlo. Para ello complete todos los campos y rev&iacute;se su correo electr&oacute;nico, siguiendo las instrucciones ah&iacute; descritas.
+                    
+                    <strong>Le recordamos que usted no puede ingresar un correo y usuario &uacute;nico ya existentes. Por favor tome nota de ello.</strong></p>
+                    <div class="form-wrapper">
+                        <form method="post" autocomplete="off">
+                            @* ID DE USUARIO REGISTRADO **@
+                            <input id="txtid" type="hidden" value="0" />
+                            <div class="row">
+                                <div class="col-sm-9">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" name="txtnombres" id="txtnombres" placeholder="Ingrese sus nombres...">
+                                    </div>
+                                </div>
+                                <div class="col-sm-9">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" name="txtapellidos" id="txtapellidos" placeholder="Ingrese sus apellidos...">
+                                    </div>
+                                </div>
+                                <div class="col-sm-9">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" name="txtusuariounico" id="txtusuariounico" placeholder="Ingrese sus usuario &uacute;nico...">
+                                    </div>
+                                </div>
+                                <div class="col-sm-9">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" name="txtcorreo" id="txtcorreo" placeholder="Ingrese su correo electr&oacute;nico...">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button class="btn btn-gradient-warning" type="button" onclick="Guardar()">Finalizar Proceso</button>
+                            </div>
+                            <!-- MENSAJE ERROR -->
+                            @{
+                                if (ViewBag.Error != null)
+                                {
+                                    <div class="form-floating mb-3">
+                                        <div class="alert alert-danger" role="alert">
+                                            <img class="img-fluid" style="width: 45px;" src="@imgsrc/images/icon-gif/21-avatar-outline.gif" /> @ViewBag.Error
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    @*----- EJECUCION DE MANTENIMIENTOS AJAX -----*@
+<script>
+        // GUARDAR NUEVOS USUARIOS
+    function Guardar() {
+        var Usuario = {
+            IdUsuario: $("#txtid").val(),
+            Nombres: $("#txtnombres").val(),
+            Apellidos: $("#txtapellidos").val(),
+            Correo: $("#txtcorreo").val(),
+            Usuario: $("#txtusuariounico").val(),
+        }
+        jQuery.ajax({
+            url: '@Url.Action("RegistroNuevosClientes", "Home")',
+            type: "POST",
+            data: JSON.stringify({ objeto: Usuario }),
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            // REGISTRO DE NUEVOS CLIENTES
+            success: function (data) {
+                $(".page-content").LoadingOverlay("hide"); // OCULTAR PANTALLA DE ESPERA
+                if (Usuario.IdUsuario == 0) {
+                    if (data.resultado != 0) {
+                        Usuario.IdUsuario = data.resultado;
+                        AlertaUsuarioMostrar("Registro Exitoso", "Su cuenta ha sido creada con éxito. Por favor revise su correo y siga las instrucciones", "success");
+                        // LIMPIAR VALORES AL MOMENTO DE REGISTRO EXITOSO
+                        $("#txtnombres").val(""); $("#txtapellidos").val(""); $("#txtcorreo").val(""); $("#txtusuariounico").val("");
+                    } else {
+                        alertify.logPosition("bottom left");
+                        alertify.error("<strong><i class='ion-alert-circled'></i></strong> " + data.mensaje);
+                    }
+                }
+            },
+            error: function (data) {
+                $("#mensajeError").text("Lo sentimos, en estos momentos no podemos procesar tu solicitud.");
+                $("#mensajeError").show(); // MOSTRAR MENSAJES DE ERRORES
+            },
+            // REALIZAR EJECUCION DURANTE LA EJECUCION DEL PROCESAMIENTO DATOS FORMULARIOS --> MOSTRAR PANTALLA DE ESPERA
+            beforeSend: function () {
+                $(".page-content").LoadingOverlay("show", {
+                    imageResizeFactor: 2,
+                    text: "Espere un momento...",
+                    size: 12
+                })
+            }
+        });
+    }
+
+    // FUNCION PARA MOSTRAR ALERTAS A USUARIOS -> SWEETALERT
+    function AlertaUsuarioMostrar(titulo, descripcion, icono) {
+        swal(
+            titulo, // ENCABEZADO 
+            descripcion, // CUERPO
+            icono // ICONO DE ALERTA
+        );
+    }
+</script>
+}
+

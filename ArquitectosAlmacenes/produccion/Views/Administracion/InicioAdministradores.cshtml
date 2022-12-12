@@ -1,0 +1,681 @@
+﻿@{
+    string imgsrc = System.Configuration.ConfigurationManager.AppSettings["ServidorFotos"];
+}
+@{
+    ViewBag.Title = "Portal Administrativo";
+    Layout = "~/Views/Shared/_Administracion.cshtml";
+    // BLOQUEAR SISTEMA, SI POSEE PROCESO DE RECUPERACION DE CUENTAS ACTIVO
+    if (Session["ComprobarRecuperacion"] != null)
+    {
+        bool HabilitarSistema = Convert.ToBoolean(Session["ComprobarRecuperacion"]);
+        if (HabilitarSistema)
+        {
+            <script>
+                location.href = "@Url.Action("CambioCredencialesAcceso","Home")"
+            </script>
+        }
+    }
+}
+
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="page-title-box">
+                <div class="btn-group float-right">
+                    <ol class="breadcrumb hide-phone p-0 m-0">
+                        <li class="breadcrumb-item active"><a href="#">Inicio</a></li>
+                    </ol>
+                </div>
+                <h4 class="page-title">Panel Administraci&oacute;n</h4>
+            </div>
+        </div>
+    </div>
+    <!-- end page title end breadcrumb -->
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div id="weather_wrapper">
+                <div class="weatherCard">
+                    <div class="currentTemp">
+                        <span id="imgclima"></span>
+                        <span class="temp" id="temperatura"></span>
+                        <span class="location" id="ubicacion"></span>
+                    </div>
+                    <div class="currentWeather">
+                        @{
+                            string FormatoObtenerHora = "HH";
+                            var ObtenerHora = DateTime.Now.ToString(FormatoObtenerHora);
+                            var ConversionHora = Convert.ToInt32(ObtenerHora);
+                            @*IMPRESION SEGUN HORARIO -> ICONO GIF DIA/NOCHE*@
+                            if (ConversionHora >= 17 && ConversionHora < 18)
+                            { <img id="tiempo_gifclima" src="@imgsrc/images/Valley-sunset.gif" /> }
+                            if (ConversionHora >= 18 && ConversionHora <= 23 || ConversionHora >= 0 && ConversionHora < 6)
+                            { <img id="tiempo_gifclima" src="@imgsrc/images/Valley-night.gif" /> }
+                            if (ConversionHora >= 6 && ConversionHora < 11 || ConversionHora >= 12 && ConversionHora < 17)
+                            { <img id="tiempo_gifclima" src="@imgsrc/images/Valley-day.gif" /> }
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="icon-contain">
+                                        <div class="row">
+                                            <div class="col-2 align-self-center">
+                                                <i class="ion-person-add text-gradient-success"></i>
+                                            </div>
+                                            <div class="col-10 text-right">
+                                                <h5 id="totalusuarios" class="mt-0 mb-1">0</h5>
+                                                <p class="mb-0 font-12 text-muted">Usuarios Registrados</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="card">
+                                <div class="card-body justify-content-center">
+                                    <div class="icon-contain">
+                                        <div class="row">
+                                            <div class="col-2 align-self-center">
+                                                <i class="ion-bag text-gradient-danger"></i>
+                                            </div>
+                                            <div class="col-10 text-right">
+                                                <h5 id="totalproductos" class="mt-0 mb-1">0</h5>
+                                                <p class="mb-0 font-12 text-muted">Productos Registrados</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="icon-contain">
+                                        <div class="row">
+                                            <div class="col-2 align-self-center">
+                                                <i class="ion-ios7-folder text-gradient-warning"></i>
+                                            </div>
+                                            <div class="col-10 text-right">
+                                                <h5 id="totalgarantias" class="mt-0 mb-1">0</h5>
+                                                <p class="mb-0 font-12 text-muted">Garant&iacute;as Registradas</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="card ">
+                                <div class="card-body">
+                                    <div class="icon-contain">
+                                        <div class="row">
+                                            <div class="col-2 align-self-center">
+                                                <i class="ion-person-stalker text-gradient-primary"></i>
+                                            </div>
+                                            <div class="col-10 text-right">
+                                                <h5 id="totalclientes" class="mt-0 mb-1">0</h5>
+                                                <p class="mb-0 font-12 text-muted">Clientes Registrados</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xl-6 col-lg-6">
+
+            <div class="card">
+                <div class="card-body">
+                    <a href="javascript:void(0)" class="btn btn-gradient-pink float-right">Total Productos Por Categor&iacute;as</a>
+                    <h5 class="header-title mb-4 mt-0">Total Productos Registrados</h5>
+                    <h4 id="totalproductosgrafico" class="mb-4">0</h4>
+                    <p class="font-14 text-muted mb-4">
+                        <i class="mdi mdi-message-reply text-danger mr-2 font-18"></i>
+                        Consolidado de todos los productos registrados por categor&iacute;a.
+                    </p>
+                    <canvas id="bar-data" height="132"></canvas>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="col-xl-6 col-lg-6">
+
+            <div class="card">
+                <div class="card-body">
+                    <a href="javascript:void(0)" class="btn btn-gradient-purple float-right">ENE - DIC 2022</a>
+                    <h5 class="header-title mb-4 mt-0">Total Ingresos</h5>
+                    <h4 id="totalingresosgrafico" class="mb-4">0</h4>
+                    <p class="font-14 text-muted mb-4">
+                        <i class="mdi mdi-message-reply text-danger mr-2 font-18"></i>
+                        Consolidado de ingresos percibidos en el a&ntilde;o corriente.
+                    </p>
+                    <canvas id="bar-data1" height="132"></canvas>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <i class="fas fa-history me-1"></i>
+                    Historial de Ventas
+                </div>
+                <div class="card-body">
+                    <div class="row align-items-end">
+                        <div class="col-sm-2">
+                            <div class="mb-2">
+                                <label class="form-label">Fecha de Inicio</label>
+                                <input class="form-control" id="txtfechainicio" name="fechainicio" type="text" />
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="mb-2">
+                                <label class="form-label">Fecha Finalizaci&oacute;n</label>
+                                <input class="form-control" id="txtfechafin" name="fechafin" type="text" />
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="mb-2">
+                                <label class="form-label">ID de Transacci&oacute;n</label>
+                                <input class="form-control" id="txtidtransaccion" name="idtransaccion" type="text" />
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="mb-2 d-grid">
+                                <button class="btn-primary" id="btnbuscar" type="button"><i class="fas fa-search"></i> Buscar</button>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <table id="datatable-buttons" class="table table-striped dt-responsive nowrap table-hover" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th><i class="typcn typcn-export-outline"></i> Fecha Venta</th>
+                                        <th><i class="typcn typcn-group-outline"></i> Cliente</th>
+                                        <th><i class="typcn typcn-input-checked-outline"></i> Producto</th>
+                                        <th><i class="typcn typcn-leaf"></i> Precio</th>
+                                        <th><i class="typcn typcn-lightbulb"></i> Cantidad</th>
+                                        <th><i class="typcn typcn-link-outline"></i> Total</th>
+                                        <th><i class="typcn typcn-key-outline"></i> ID Transaccion</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    @section scripts{
+
+        <script>
+        $(document).ready(function () {
+            // MOSTRAR DATOS CARTA DE PRESENTACION DASHBOARD ADMINISTRADORES
+            jQuery.ajax({
+                url: '@Url.Action("VistaDashBoard", "Administracion")',
+                type: "GET",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    var objeto = data.resultado;
+                    $("#totalusuarios").text(objeto.TotalUsuarios)
+                    $("#totalproductos").text(objeto.TotalProductos)
+                    $("#totalproductosgrafico").text(objeto.TotalProductos)
+                    $("#totalgarantias").text(objeto.TotalGarantias)
+                    $("#totalclientes").text(objeto.TotalClientes)
+                },
+            });
+
+
+
+
+        // REPORTE DE VENTAS
+        var tabladata;
+        var filaseleccionada;
+        $(document).ready(function () {
+            // MOSTRAR CALENDARIO PERSONALIZADO
+            $("#txtfechainicio").bootstrapMaterialDatePicker({ dateFormat: "dd/mm/yy" }).bootstrapMaterialDatePicker('setDate', new Date())
+            $("#txtfechafin").bootstrapMaterialDatePicker({ dateFormat: "dd/mm/yy" }).bootstrapMaterialDatePicker('setDate', new Date())
+
+            // BUSQUEDA DE VENTAS [REPORTE VENTAS]
+            var Url = '@Url.Action("ListaReporte","Administracion")' + "?fechainicio=" + $("#txtfechainicio").val() +
+                "&fechafin=" + $("#txtfechafin").val() + "&idtransaccion=" + $("#txtidtransaccion").val()
+
+            tabladata = $("#datatable-buttons").DataTable({
+                responsive: true,
+                ordering: true,
+                dom: 'BfrZltip',
+                buttons: [
+                    'copyHtml5',
+                    'excelHtml5',
+                    'csvHtml5',
+                    'pdfHtml5',
+                    'print',
+                ],
+                "ajax": {
+                    url: Url,
+                    type: "GET",
+                    dataType: "JSON"
+                },
+                "columns": [
+                    { "data": "FechaVenta" },
+                    { "data": "Cliente" },
+                    { "data": "Producto" },
+                    { "data": "Precio" },
+                    { "data": "Cantidad" },
+                    { "data": "Total" },
+                    { "data": "IdTransaccion" }
+                ],
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.12.1/i18n/es-ES.json"
+                }
+            });
+        })
+        // EJECUCION BOTON BUSCAR
+        $("#btnbuscar").on("click", function () {
+            var nueva_url = '@Url.Action("ListaReporte", "Administracion")' + "?fechainicio=" + $("#txtfechainicio").val() +
+                "&fechafin=" + $("#txtfechafin").val() + "&idtransaccion=" + $("#txtidtransaccion").val()
+            tabladata.ajax.url(nueva_url).load();
+        })
+
+
+
+            @{
+                string ApiKeyClimatica = "65df6868e6a724921cd07e8a77105c8a";
+            }
+
+            let HoraActualSistema = @ConversionHora;
+            var API_KEY = "@ApiKeyClimatica";
+            function getWeather(latitude, longtitude) {
+                $.ajax({
+                    url: 'http://api.openweathermap.org/data/2.5/weather',
+                    data: {
+                        lat: latitude,
+                        lon: longtitude,
+                        units: 'metric',
+                        APPID: API_KEY
+                    },
+                    success: data => {
+                        // UBICACION CIUDAD
+                        $("#ubicacion").text(data.name + ", El Salvador");
+                        // TEMPERATURA ACTUAL
+                        var TemperaturaActual = data.main.temp;
+                        $("#temperatura").text(TemperaturaActual.toFixed(1) + " °C").addClass(".temp");
+                        if (HoraActualSistema >= 6 && HoraActualSistema < 18) {
+                            // ICONOS DE DIA
+                            if (data.weather[0].description == "overcast clouds") {
+                                OvercastClouds_ImgDia();
+                            } else if (data.weather[0].description == "broken clouds") {
+                                BrokenClouds_ImgDia();
+                            } else if (data.weather[0].description == "clear sky") {
+                                ClearSky_ImgDia();
+                            } else if (data.weather[0].description == "few clouds") {
+                                FewClouds_ImgDia();
+                            } else if (data.weather[0].description == "scattered clouds") {
+                                ScatteredClouds_ImgDia();
+                            } else if (data.weather[0].description == "shower rain") {
+                                ShowerRain_ImgDia();
+                            } else if (data.weather[0].description == "rain") {
+                                Rain_ImgDia();
+                            } else if (data.weather[0].description == "thunderstorm") {
+                                Thunderstorm_ImgDia();
+                            } else if (data.weather[0].description == "mist") {
+                                Mist_ImgDia();
+                            } else if (data.weather[0].description == "thunderstorm with light rain") {
+                                ThunderstormWithLightRain_ImgDia();
+                            } else if (data.weather[0].description == "thunderstorm with rain") {
+                                ThunderstormWithRain_ImgDia();
+                            } else if (data.weather[0].description == "thunderstorm with heavy rain") {
+                                ThunderstormWithHeavyRain_ImgDia();
+                            } else if (data.weather[0].description == "light thunderstorm") {
+                                LightThunderstorm_ImgDia();
+                            } else if (data.weather[0].description == "heavy thunderstorm") {
+                                HeavyThunderstorm_ImgDia();
+                            } else if (data.weather[0].description == "ragged thunderstorm") {
+                                RaggedThunderstorm_ImgDia();
+                            } else if (data.weather[0].description == "thunderstorm with light drizzle") {
+                                ThunderstormWithLightDrizzle_ImgDia();
+                            } else if (data.weather[0].description == "thunderstorm with drizzle") {
+                                ThunderstormWithDrizzle_ImgDia();
+                            } else if (data.weather[0].description == "thunderstorm with heavy drizzle") {
+                                ThunderstormWithHeavyDrizzle_ImgDia();
+                            } else if (data.weather[0].description == "drizzle") {
+                                Drizzle_ImgDia();
+                            } else if (data.weather[0].description == "heavy intensity drizzle") {
+                                HeavyIntensityDrizzle_ImgDia();
+                            } else if (data.weather[0].description == "light intensity drizzle rain") {
+                                LightIntensityDrizzleRain_ImgDia();
+                            } else if (data.weather[0].description == "drizzle rain") {
+                                DrizzleRain_ImgDia();
+                            } else if (data.weather[0].description == "heavy intensity drizzle rain") {
+                                HeavyIntensityDrizzleRain_ImgDia();
+                            } else if (data.weather[0].description == "shower rain and drizzle") {
+                                ShowerRainAndDrizzle_ImgDia();
+                            } else if (data.weather[0].description == "heavy shower rain and drizzle") {
+                                HeavyShowerRainAndDrizzle_ImgDia();
+                            } else if (data.weather[0].description == "shower drizzle") {
+                                ShowerDrizzle_ImgDia();
+                            } else if (data.weather[0].description == "light rain") {
+                                LightRain_ImgDia();
+                            } else if (data.weather[0].description == "moderate rain") {
+                                ModerateRain_ImgDia();
+                            } else if (data.weather[0].description == "heavy intensity rain") {
+                                HeavyIntensityRain_ImgDia();
+                            } else if (data.weather[0].description == "very heavy rain") {
+                                VeryHeavyRain_ImgDia();
+                            } else if (data.weather[0].description == "extreme rain") {
+                                ExtremeRain_ImgDia();
+                            } else if (data.weather[0].description == "light intensity shower rain") {
+                                LightIntensityShowerRain_ImgDia();
+                            } else if (data.weather[0].description == "heavy intensity shower rain") {
+                                HeavyIntensityShowerRain_ImgDia();
+                            } else if (data.weather[0].description == "ragged shower rain") {
+                                RaggedShowerRain_ImgDia();
+                            } else if (data.weather[0].description == "Smoke" || data.weather[0].description == "smoke") {
+                                Smoke_ImgDia();
+                            } else if (data.weather[0].description == "Haze" || data.weather[0].description == "haze") {
+                                Haze_ImgDia();
+                            } else if (data.weather[0].description == "fog") {
+                                Fog_ImgDia();
+                            } else if (data.weather[0].description == "light intensity drizzle") {
+                                LightIntensityDrizzle_ImgDia();
+                            }
+                        } else if (HoraActualSistema >= 18 && HoraActualSistema <= 23 || HoraActualSistema >= 0 && HoraActualSistema < 6) {
+                            // ICONOS DE NOCHE
+                            if (data.weather[0].description == "overcast clouds") {
+                                OvercastClouds_ImgNoche();
+                            } else if (data.weather[0].description == "broken clouds") {
+                                BrokenClouds_ImgNoche();
+                            } else if (data.weather[0].description == "clear sky") {
+                                ClearSky_ImgNoche();
+                            } else if (data.weather[0].description == "few clouds") {
+                                FewClouds_ImgNoche();
+                            } else if (data.weather[0].description == "scattered clouds") {
+                                ScatteredClouds_ImgNoche();
+                            } else if (data.weather[0].description == "shower rain") {
+                                ShowerRain_ImgNoche();
+                            } else if (data.weather[0].description == "rain") {
+                                Rain_ImgNoche();
+                            } else if (data.weather[0].description == "thunderstorm") {
+                                Thunderstorm_ImgNoche();
+                            } else if (data.weather[0].description == "mist") {
+                                Mist_ImgNoche();
+                            } else if (data.weather[0].description == "thunderstorm with light rain") {
+                                ThunderstormWithLightRain_ImgNoche();
+                            } else if (data.weather[0].description == "thunderstorm with rain") {
+                                ThunderstormWithRain_ImgNoche();
+                            } else if (data.weather[0].description == "thunderstorm with heavy rain") {
+                                ThunderstormWithHeavyRain_ImgNoche();
+                            } else if (data.weather[0].description == "light thunderstorm") {
+                                LightThunderstorm_ImgNoche();
+                            } else if (data.weather[0].description == "heavy thunderstorm") {
+                                HeavyThunderstorm_ImgNoche();
+                            } else if (data.weather[0].description == "ragged thunderstorm") {
+                                RaggedThunderstorm_ImgNoche();
+                            } else if (data.weather[0].description == "thunderstorm with light drizzle") {
+                                ThunderstormWithLightDrizzle_ImgNoche();
+                            } else if (data.weather[0].description == "thunderstorm with drizzle") {
+                                ThunderstormWithDrizzle_ImgNoche();
+                            } else if (data.weather[0].description == "thunderstorm with heavy drizzle") {
+                                ThunderstormWithHeavyDrizzle_ImgNoche();
+                            } else if (data.weather[0].description == "drizzle") {
+                                Drizzle_ImgNoche();
+                            } else if (data.weather[0].description == "heavy intensity drizzle") {
+                                HeavyIntensityDrizzle_ImgNoche();
+                            } else if (data.weather[0].description == "light intensity drizzle rain") {
+                                LightIntensityDrizzleRain_ImgNoche();
+                            } else if (data.weather[0].description == "drizzle rain") {
+                                DrizzleRain_ImgNoche();
+                            } else if (data.weather[0].description == "heavy intensity drizzle rain") {
+                                HeavyIntensityDrizzleRain_ImgNoche();
+                            } else if (data.weather[0].description == "shower rain and drizzle") {
+                                ShowerRainAndDrizzle_ImgNoche();
+                            } else if (data.weather[0].description == "heavy shower rain and drizzle") {
+                                HeavyShowerRainAndDrizzle_ImgNoche();
+                            } else if (data.weather[0].description == "shower drizzle") {
+                                ShowerDrizzle_ImgNoche();
+                            } else if (data.weather[0].description == "light rain") {
+                                LightRain_ImgNoche();
+                            } else if (data.weather[0].description == "moderate rain") {
+                                ModerateRain_ImgNoche();
+                            } else if (data.weather[0].description == "heavy intensity rain") {
+                                HeavyIntensityRain_ImgNoche();
+                            } else if (data.weather[0].description == "very heavy rain") {
+                                VeryHeavyRain_ImgNoche();
+                            } else if (data.weather[0].description == "extreme rain") {
+                                ExtremeRain_ImgNoche();
+                            } else if (data.weather[0].description == "light intensity shower rain") {
+                                LightIntensityShowerRain_ImgNoche();
+                            } else if (data.weather[0].description == "heavy intensity shower rain") {
+                                HeavyIntensityShowerRain_ImgNoche();
+                            } else if (data.weather[0].description == "ragged shower rain") {
+                                RaggedShowerRain_ImgNoche();
+                            } else if (data.weather[0].description == "Smoke" || data.weather[0].description == "smoke") {
+                                Smoke_ImgNoche();
+                            } else if (data.weather[0].description == "Haze" || data.weather[0].description == "haze") {
+                                Haze_ImgNoche();
+                            } else if (data.weather[0].description == "fog") {
+                                Fog_ImgNoche();
+                            } else if (data.weather[0].description == "light intensity drizzle") {
+                                LightIntensityDrizzle_ImgNoche();
+                            }
+                        }
+                    }
+                })
+            }
+            getWeather(13.6894, -89.1872);
+
+        }) // CIERRE  $(document).ready(function () })
+
+        // CONTADOR DE PRODUCTOS POR CATEGORIAS
+            jQuery.ajax({
+                url: '@Url.Action("ConteoProductosPorCategorias", "Administracion")',
+                type: "GET",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    var objeto = data.resultado;
+                    var ctx = document.getElementById("bar-data").getContext('2d');
+
+
+                    var gradientStroke1 = ctx.createLinearGradient(0, 0, 0, 300);
+                    gradientStroke1.addColorStop(0, '#5ecbf6');
+                    gradientStroke1.addColorStop(1, '#8d44ad');
+
+                    var cornerRadius = 20;
+
+                    var myChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: ['Joyeria', 'Relojeria', 'Calzado', 'Tecnologia', 'Linea Blanca', 'Electrodomesticos', 'Belleza', 'Juguetes'],
+                            datasets: [{
+                                label: 'Cantidad: ',
+                                data: [objeto.TotalJoyeria, objeto.TotalRelojeria, objeto.TotalCalzado, objeto.TotalTecnologia, objeto.TotalLineaBlanca,
+                                objeto.TotalElectrodomesticos, objeto.TotalBelleza, objeto.TotalJuguetes],
+                                borderColor: gradientStroke1,
+                                backgroundColor: gradientStroke1,
+                                hoverBackgroundColor: gradientStroke1,
+                                pointRadius: 0,
+                                fill: false,
+                                borderWidth: 0
+                            },]
+                        },
+
+                        options: {
+
+                            legend: {
+                                position: 'bottom',
+                                display: false
+                            },
+                            tooltips: {
+                                displayColors: true,
+                                intersect: true,
+                            },
+                            scales: {
+                                xAxes: [{
+                                    ticks: {
+                                        max: 100,
+                                        min: 20,
+                                        stepSize: 10
+                                    },
+                                    gridLines: {
+                                        display: false,
+                                        color: "#FFFFFF"
+                                    },
+                                    ticks: {
+                                        display: true,
+                                        fontFamily: "'Rubik', sans-serif"
+                                    },
+
+                                }],
+                                yAxes: [{
+                                    gridLines: {
+                                        color: '#fff',
+                                        display: false,
+                                    },
+                                    ticks: {
+                                        display: true,
+                                        fontFamily: "'Rubik', sans-serif"
+                                    },
+
+                                }]
+                            },
+                        }
+                    });
+
+
+                    $(document).ready(function () {
+                        $(".boxscroll").niceScroll({ cursorborder: "", cursorcolor: "#eff3f6", boxzoom: true });
+                    });
+                },
+            });
+
+        // CONTADOR DE VENTAS POR MES
+            jQuery.ajax({
+                url: '@Url.Action("ConteoVentasPorMes", "Administracion")',
+                type: "GET",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    var objeto = data.resultado;
+                    const FormatoDolar_USD = objeto.TotalIngresos.toLocaleString("en", {
+                        style: "currency",
+                        currency: "USD"
+                    });
+                    $("#totalingresosgrafico").text(FormatoDolar_USD + " USD")
+                    var ctx = document.getElementById("bar-data1").getContext('2d');
+
+
+                    var gradientStroke1 = ctx.createLinearGradient(0, 0, 0, 300);
+                    gradientStroke1.addColorStop(0, '#5ecbf6');
+                    gradientStroke1.addColorStop(1, '#8d44ad');
+
+                    var cornerRadius = 20;
+
+                    var myChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago','Sep','Oct','Nov','Dic'],
+                            datasets: [{
+                                label: 'Total: $: ',
+                                data: [objeto.TotalEnero, objeto.TotalFebrero, objeto.TotalMarzo, objeto.TotaAbril, objeto.TotalMayo, objeto.TotalJunio, objeto.TotalJulio
+                                    , objeto.TotalAgosto, objeto.TotalSeptiembre, objeto.TotalOctubre, objeto.TotalNoviembre, objeto.TotalDiciembre],
+                                borderColor: gradientStroke1,
+                                backgroundColor: gradientStroke1,
+                                hoverBackgroundColor: gradientStroke1,
+                                pointRadius: 0,
+                                fill: false,
+                                borderWidth: 0
+                            },]
+                        },
+
+                        options: {
+
+                            legend: {
+                                position: 'bottom',
+                                display: false
+                            },
+                            tooltips: {
+                                displayColors: false,
+                                intersect: false,
+                            },
+                            scales: {
+                                xAxes: [{
+                                    ticks: {
+                                        max: 100,
+                                        min: 20,
+                                        stepSize: 10
+                                    },
+                                    gridLines: {
+                                        display: false,
+                                        color: "#FFFFFF"
+                                    },
+                                    ticks: {
+                                        display: true,
+                                        fontFamily: "'Rubik', sans-serif"
+                                    },
+
+                                }],
+                                yAxes: [{
+                                    gridLines: {
+                                        color: '#fff',
+                                        display: false,
+                                    },
+                                    ticks: {
+                                        display: true,
+                                        fontFamily: "'Rubik', sans-serif"
+                                    },
+
+                                }]
+                            },
+                        }
+                    });
+
+
+                    $(document).ready(function () {
+                        $(".boxscroll").niceScroll({ cursorborder: "", cursorcolor: "#eff3f6", boxzoom: true });
+                    });
+                },
+            });
+
+
+
+
+        </script>
+
+    }
+

@@ -1,0 +1,101 @@
+﻿@{
+    string imgsrc = System.Configuration.ConfigurationManager.AppSettings["ServidorFotos"];
+}
+@{
+    ViewBag.Title = "Cambiar Credenciales Acceso";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    // NO PERMITIR ACCESO, SI VARIABLE TEMPORAL NO EXISTE EN ESTE CONTEXTO
+    if(TempData["IdUsuario"] == null) { 
+        <script>
+            location.href = "@Url.Action("SesionExpiradaUsuarios")"
+        </script>
+    }
+}
+<div class="page-content">
+    <div class="holder breadcrumbs-wrap mt-0">
+        <div class="container">
+            <ul class="breadcrumbs">
+                <li><a href="@Url.Action("Index")">Inicio</a></li>
+                <li><span>Recuperaci&oacute;n de Cuentas</span></li>
+            </ul>
+        </div>
+    </div>
+    <div class="holder">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-18 col-lg-12">
+                    <h2 class="text-center">Recuperaci&oacute;n de Cuentas Usuarios</h2>
+                    <p>
+                        Estimado(a) usuario, hemos detectado que necesita realizar el cambio de su contrase&ntilde;a que le fue enviado a su correo electr&oacute;nico. Por favor ingrese
+                        una nueva contrase&ntilde;a para finalizar el proceso de recuperaci&oacute;n de cuentas, y as&iacute; seguir navegando con total tranquilidad en nuestro portal.
+                    </p>
+                    <div class="form-wrapper">
+                        <form action="@Url.Action("CambioCredencialesAcceso","Home")" method="post" autocomplete="off">
+                            <div class="form-group">
+                                <input class="form-control" type="hidden" value="@TempData["IdUsuario"]" name="idusuario" />
+                                <input class="form-control" type="hidden" value="@Session["Correo"]" name="correo" />
+                            </div>
+                            <div class="form-group">
+                                <input type="password" class="form-control" name="nuevaclave" id="nuevaclaves" placeholder="Ingrese su nueva contrase&ntilde;a...">
+                                <span id="passstrength"></span>
+                            </div>
+                            <div class="form-group">
+                                <input type="password" class="form-control" name="confirmarclave" placeholder="Repita su nueva contrase&ntilde;a...">
+                            </div>
+                            <div class="text-center">
+                                <button class="btn btn-gradient-warning" id="finalizarproceso" type="submit">Finalizar Proceso</button>
+                            </div>
+                            <!-- MENSAJE ERROR -->
+                            @{
+                                if (ViewBag.Error != null)
+                                {
+                                    <div class="form-floating mb-3">
+                                        <div class="alert alert-danger" role="alert">
+                                            <img class="img-fluid" style="width: 45px;" src="@imgsrc/images/icon-gif/21-avatar-outline.gif" /> @ViewBag.Error
+                                        </div>
+                                    </div>
+                                }
+                                if (ViewBag.Success != null)
+                                {
+                                    <div class="form-floating mb-3">
+                                        <div class="alert btn-gradient-success rounded-pill" role="alert">
+                                            <img class="img-fluid" style="width: 45px;" src="@imgsrc/images/icon-gif/21-avatar-outline.gif" /> @ViewBag.Success
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script>
+        $('#nuevaclaves').keyup(function (e) {
+            var strongRegex = new RegExp("^(?=.{8,})(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*$", "g");
+            var mediumRegex = new RegExp("^(?=.{7,})(((?=.*[A-Z])(?=.*[a-z]))|((?=.*[A-Z])(?=.*[0-9]))|((?=.*[a-z])(?=.*[0-9]))).*$", "g");
+            var enoughRegex = new RegExp("(?=.{8,}).*", "g");
+            if (false == enoughRegex.test($(this).val())) {
+                $('#passstrength').html('<div class="alert alert-danger alert-dismissible fade show"> <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg> <strong>Error!</strong> 8 car&aacute;teres m&iacute;nimo.</div>');
+                $('#finalizarproceso').prop('disabled', true);
+            } else if (strongRegex.test($(this).val())) {
+                $('#passstrength').className = 'ok';
+                $('#passstrength').html('<div class="alert alert-success alert-dismissible fade show"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>	<strong>Excelente!</strong> Su contrase&ntilde;a es muy segura.</div>');
+                $('#finalizarproceso').prop('disabled', false);
+            } else if (mediumRegex.test($(this).val())) {
+                $('#passstrength').className = 'alert';
+                $('#passstrength').html('<div class="alert alert-secondary alert-dismissible fade show"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg><strong>Perfecto!</strong> Su contrase&ntilde;a es segura.</div>');
+                $('#finalizarproceso').prop('disabled', false);
+            } else {
+                $('#passstrength').className = 'error';
+                $('#passstrength').html('<div class="alert alert-warning alert-dismissible fade show"> <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg><strong>Precauci&oacute;n!</strong> Su contrase&ntilde;a es muy d&eacute;bil.</div>');
+                $('#finalizarproceso').prop('disabled', true);
+            }
+            return true;
+        });
+    </script>    
+}
+
+
