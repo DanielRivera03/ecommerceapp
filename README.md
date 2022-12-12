@@ -262,6 +262,15 @@ clientes.
 </ul>Accesos validados dentro de la plataforma, por favor tome nota de cada uno de los roles de usuario asignados.</p>
 
 
+<h2>¿Datos usuario compra?</h2>
+
+Para realizar una compra en la demo en vivo, por favor ingrese las siguientes credenciales en el cliente PayPal:
+
+Usuario: sb-mid1u15170403@personal.example.com
+
+Contraseña: KoA+18)@
+
+
 
 <h2>Modelo Entidad Relación (m-ER) Base de Datos</h2>
 
