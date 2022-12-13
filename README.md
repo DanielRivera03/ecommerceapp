@@ -1,7 +1,8 @@
-# Ecommerce App - Arquitectos Almacenes
+# Tienda en Línea + Panel Administrativo - Arquitectos Almacenes
 
 ![ezgif-5-ed6a6a2e5d](https://user-images.githubusercontent.com/44457989/206928465-f9c6c61a-8a7d-4b6c-80a5-fc4e8142e851.gif)
 
+<img src="https://drive.google.com/file/d/1U2aPhbwnkfrdkPD6C61n4YcKOq5tMUmf/view?usp=share_link">
 
 <h1>Configuración Inicial</h1>
 
@@ -238,7 +239,7 @@ clientes.
 
 </p>
 
-<p>Este sistema a nivel de código y base de datos se encuentra distribuido de la siguiente manera:<ul><li>Base de Datos (SQL SERVER):</li><ul><li>13 Tablas.</li><li>87 Procedimientos Almacenados.</li><li>33 Vistas.</li><li>1 Objeto SQL (CREATE TYPE).</li><li>2 Jobs (Eventos Automáticos).</li></ul></ul><ul><li>Sistema:</li><ul><li>Lenguaje de Programación C# (C Sharp) ASP.NET MVC5, Razor.</li><li>.NET FRAMEWORK 4.8</li><li>Patrón MVC (Modelo, Vista, Controlador).</li><li>Gestiones AJAX, JQuery, JSON.</li><li>Complementos JQuery, Javascript</li><li>Integración de Dos Plantillas Bootstrap.</li><li>Pasarela de Pagos API REST PayPal</li><li>WEBSERVICE SOAP (WCF)</li><li>Desarrollo basado en capas: Capa de Datos, Capa de Negocio y  Capa de Presentación</li><li>División de cinco roles de usuarios, los cuales son (administradores, presidencia, gerencia, atención al cliente y clientes).</li></ul></ul></p>
+<p>Este sistema a nivel de código y base de datos se encuentra distribuido de la siguiente manera:<ul><li>Base de Datos (SQL SERVER):</li><ul><li>13 Tablas.</li><li>87 Procedimientos Almacenados.</li><li>33 Vistas.</li><li>1 Objeto SQL (CREATE TYPE).</li><li>1 Función.</li><li>2 Jobs (Eventos Automáticos).</li></ul></ul><ul><li>Sistema:</li><ul><li>Lenguaje de Programación C# (C Sharp) ASP.NET MVC5, Razor.</li><li>.NET FRAMEWORK 4.8</li><li>Patrón MVC (Modelo, Vista, Controlador).</li><li>Gestiones AJAX, JQuery, JSON.</li><li>Complementos JQuery, Javascript</li><li>Integración de Dos Plantillas Bootstrap.</li><li>Pasarela de Pagos API REST PayPal</li><li>WEBSERVICE SOAP (WCF)</li><li>Desarrollo basado en capas: Capa de Datos, Capa de Negocio y  Capa de Presentación</li><li>División de cinco roles de usuarios, los cuales son (administradores, presidencia, gerencia, atención al cliente y clientes).</li></ul></ul></p>
 <p><b>Respecto a los eventos (Jobs), usted debe configurar su llamado desde el SQL SERVER AGENT y hacer referencia a los siguientes procedimientos almacenados:.</b>
 
 ![carbon (6)](https://user-images.githubusercontent.com/44457989/206932910-6cdc2fff-17b9-4059-9e73-3724a3544b1e.png)
@@ -338,6 +339,18 @@ Contraseña: KoA+18)@
 ![Captura web_11-12-2022_174012_bsite net](https://user-images.githubusercontent.com/44457989/206935915-ab2e634d-06e9-4b83-911e-86e7b3fca0fd.jpeg)
 ![Captura web_11-12-2022_174022_bsite net](https://user-images.githubusercontent.com/44457989/206935916-0b2b754b-b7f6-43d2-bcb8-879f44dbcc8c.jpeg)
 ![Captura web_11-12-2022_174034_bsite net](https://user-images.githubusercontent.com/44457989/206935917-ab171c6d-40b3-4860-986f-745a893c9726.jpeg)
+
+
+* Buscador de productos (según palabra coincidente)
+
+
+![b1](https://user-images.githubusercontent.com/44457989/207183326-83ef2517-de89-4369-b1ce-155a770658fc.png)
+
+* Buscador de productos (término de búsqueda: MABE)
+![Captura web_12-12-2022_174036_bsite net](https://user-images.githubusercontent.com/44457989/207183327-4438dbda-4039-4b19-8b01-3ad015d6a17b.jpeg)
+
+* Buscador de productos (término de búsqueda: PANTALLA)
+![Captura web_12-12-2022_17413_bsite net](https://user-images.githubusercontent.com/44457989/207183331-46a1aedb-bb03-423f-8be7-8bd9ad5abd89.jpeg)
 
 
 
