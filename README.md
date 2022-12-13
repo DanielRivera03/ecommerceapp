@@ -2,8 +2,6 @@
 
 ![ezgif-5-ed6a6a2e5d](https://user-images.githubusercontent.com/44457989/206928465-f9c6c61a-8a7d-4b6c-80a5-fc4e8142e851.gif)
 
-<img src="https://drive.google.com/file/d/1U2aPhbwnkfrdkPD6C61n4YcKOq5tMUmf/view?usp=share_link">
-
 <h1>Configuración Inicial</h1>
 
 <p>Estimado(a) visitante, reciba una cordial bienvenida a este repositorio. Antes de iniciar y ejecutar este sistema en su servidor, debe realizar algunas configuraciones correspondientes para el óptimo funcionamiento del mismo, las cuales son las siguientes:
