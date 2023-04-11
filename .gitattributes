@@ -1,3 +1,6 @@
 * linguist-vendored
 *.js linguist-vendored=false
 *.cs linguist-vendored=false
+*.cshtml linguist-vendored=false
+*.html linguist-vendored=false
+*.sql linguist-vendored=false
